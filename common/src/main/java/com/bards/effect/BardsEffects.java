@@ -1,0 +1,41 @@
+package com.bards.effect;
+
+import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.util.Identifier;
+import net.spell_engine.api.config.ConfigFile;
+import net.spell_engine.api.config.EffectConfig;
+import net.spell_engine.api.effect.CustomStatusEffect;
+import net.spell_engine.api.effect.Effects;
+import net.spell_engine.api.effect.Synchronized;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.bards.BardsMod.MOD_ID;
+
+public class BardsEffects {
+    public static final List<Effects.Entry> entries = new ArrayList<>();
+    private static Effects.Entry add(Effects.Entry entry) {
+        entries.add(entry);
+        return entry;
+    }
+
+    public static Effects.Entry ARMYS_PAEON = add(new Effects.Entry(Identifier.of(MOD_ID, "armys_paeon"),
+            "Army's Paeon",
+            "",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
+
+
+    public static void register(ConfigFile.Effects config) {
+        for (var entry : entries) {
+            Synchronized.configure(entry.effect, true);
+        }
+        Effects.register(entries, config.effects);
+
+    }
+}

@@ -1,0 +1,44 @@
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VSCode (in case you or others use it)
+.vscode/
+
+# Gradle
+.gradle/
+build/
+**/build/
+.gradle/
+!gradle-wrapper.jar
+
+# Run directories
+run/
+fabric/run/
+forge/run/
+
+# Minecraft cache
+src/main/generated/.cache
+common/src/main/generated/.cache
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Misc IDE
+*.swp
+*.swo
+
+# Crash reports
+hs_err_pid*
+replay_pid*
+
+# Mod Dev Specific
+classes/
+bin/
