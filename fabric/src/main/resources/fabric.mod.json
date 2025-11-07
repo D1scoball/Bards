@@ -20,6 +20,9 @@
     ],
     "client": [
       "com.bards.fabric.client.FabricModClient"
+    ],
+    "fabric-datagen": [
+      "com.bards.datagen.BardsDataGenerator"
     ]
   },
   "mixins": [

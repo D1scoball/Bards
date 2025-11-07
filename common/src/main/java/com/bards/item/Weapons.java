@@ -9,7 +9,6 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.WeaponConfig;
 import net.spell_engine.api.item.Equipment;
 import net.spell_engine.api.item.weapon.Weapon;

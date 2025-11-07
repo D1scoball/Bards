@@ -3,6 +3,7 @@ package com.bards;
 import com.bards.config.Default;
 import com.bards.config.TweaksConfig;
 import com.bards.effect.BardsEffects;
+import com.bards.item.Armors;
 import com.bards.item.BardBooks;
 import com.bards.item.Group;
 import com.bards.item.Weapons;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.spell_engine.api.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 
@@ -58,12 +60,12 @@ public final class BardsMod {
 
     public static void registerItems() {
         Group.BARDS = FabricItemGroup.builder()
-                .icon(() -> new ItemStack(Weapons.diamond_rapier.item().asItem()))
+                .icon(() -> new ItemStack(Armors.troubadourArmorSet.armorSet().head.asItem()))
                 .displayName(Text.translatable("itemGroup.bards_rpg.general"))
                 .build();
         Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.BARDS);
         BardBooks.register();
-
+        Armors.register(itemConfig.value.armor_sets);
         Weapons.register(itemConfig.value.weapons);
         itemConfig.save();
     }
@@ -72,5 +74,7 @@ public final class BardsMod {
         BardsEffects.register(effectsConfig.value);
         effectsConfig.save();
     }
-
+    public static Identifier id(String path) {
+        return Identifier.of(MOD_ID, path);
+    }
 }
