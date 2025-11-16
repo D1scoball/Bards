@@ -7,6 +7,7 @@ import net.spell_engine.api.config.EffectConfig;
 import net.spell_engine.api.effect.CustomStatusEffect;
 import net.spell_engine.api.effect.Effects;
 import net.spell_engine.api.effect.Synchronized;
+import net.spell_engine.api.effect.TickingStatusEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,26 @@ public class BardsEffects {
         entries.add(entry);
         return entry;
     }
+
+    public static Effects.Entry BALLAD = add(new Effects.Entry(Identifier.of(MOD_ID, "ballad"),
+            "Ballad",
+            "",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
+
+    public static Effects.Entry TROUBADOURS_MINUET = add(new Effects.Entry(Identifier.of(MOD_ID, "troubadours_minuet"),
+            "Troubadours Minuet",
+            "",
+            new TickingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff).interval(30),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
 
     public static Effects.Entry ARMYS_PAEON = add(new Effects.Entry(Identifier.of(MOD_ID, "armys_paeon"),
             "Army's Paeon",

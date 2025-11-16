@@ -1,0 +1,65 @@
+{
+  "school": "spell_power:healing",
+  "range": 0.0,
+  "tier": 3,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "animation": "spell_engine:one_handed_area_charge",
+      "sound": {
+        "id": ""
+      }
+    }
+  },
+  "release": {
+    "animation": "spell_engine:one_handed_area_release",
+    "sound": {
+      "id": ""
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "vertical_range_multiplier": 0.5
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.6,
+          "knockback": 0.5
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_spark_burst",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 30.0,
+          "min_speed": 0.2,
+          "max_speed": 0.7,
+          "color_rgba": 4294954239
+        }
+      ]
+    },
+    {
+      "action": {
+        "type": "COOLDOWN",
+        "cooldown": {
+          "actives": {
+            "duration_multiplier": 0.8
+          }
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.2,
+    "cooldown": {
+      "duration": 10.0
+    }
+  }
+}

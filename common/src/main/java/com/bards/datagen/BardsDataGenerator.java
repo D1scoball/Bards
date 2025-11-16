@@ -124,24 +124,24 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                     BardTags.LYRES
             );
             var twoModels = getOrCreateTagBuilder(BardTags.TWO_MODEL_INSTRUMENT);
-            twoModels.addTag(BardTags.LUTES);
-            twoModels.addTag(BardTags.LYRES);
+            twoModels.addOptionalTag(BardTags.LUTES);
+            twoModels.addOptionalTag(BardTags.LYRES);
 
             var spellInfinityTag = getOrCreateTagBuilder(SpellEngineItemTags.ENCHANTABLE_SPELL_INFINITY);
-            spellInfinityTag.addTag(BardTags.LUTES);
-            spellInfinityTag.addTag(BardTags.LYRES);
+            spellInfinityTag.addOptionalTag(BardTags.LUTES);
+            spellInfinityTag.addOptionalTag(BardTags.LYRES);
             var spellHasteTag = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.HASTE);
-            spellHasteTag.addTag(BardTags.LUTES);
-            spellHasteTag.addTag(BardTags.LYRES);
+            spellHasteTag.addOptionalTag(BardTags.LUTES);
+            spellHasteTag.addOptionalTag(BardTags.LYRES);
             var criticalDamageTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.CRITICAL_DAMAGE);
-            criticalDamageTag.addTag(BardTags.LUTES);
-            criticalDamageTag.addTag(BardTags.LYRES);
+            criticalDamageTag.addOptionalTag(BardTags.LUTES);
+            criticalDamageTag.addOptionalTag(BardTags.LYRES);
             var spellPowerTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.SPELL_POWER_GENERIC);
-            spellPowerTag.addTag(BardTags.LUTES);
-            spellPowerTag.addTag(BardTags.LYRES);
+            spellPowerTag.addOptionalTag(BardTags.LUTES);
+            spellPowerTag.addOptionalTag(BardTags.LYRES);
             var unbreakingTag = getOrCreateTagBuilder(ItemTags.DURABILITY_ENCHANTABLE);
-            unbreakingTag.addTag(BardTags.LUTES);
-            unbreakingTag.addTag(BardTags.LYRES);
+            unbreakingTag.addOptionalTag(BardTags.LUTES);
+            unbreakingTag.addOptionalTag(BardTags.LYRES);
         }
     }
 

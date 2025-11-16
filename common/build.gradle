@@ -2,6 +2,14 @@ architectury {
     common rootProject.enabled_platforms.split(',')
 }
 
+fabricApi {
+    configureDataGeneration() {
+        client = true
+        modId = "bards_rpg"
+        outputDirectory = project(':common').file('src/main/generated')
+    }
+}
+
 // Dummy platform for common compile
 def platform = "fabric";
 

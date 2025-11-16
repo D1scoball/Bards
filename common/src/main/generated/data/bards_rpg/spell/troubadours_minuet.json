@@ -1,0 +1,66 @@
+{
+  "school": "spell_power:healing",
+  "range": 0.0,
+  "tier": 2,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "animation": "spell_engine:one_handed_area_charge",
+      "sound": {
+        "id": ""
+      }
+    }
+  },
+  "release": {
+    "particles_scaled_with_ranged": [
+      {
+        "particle_id": "spell_engine:area_circle_1",
+        "origin": "GROUND",
+        "shape": "LINE_VERTICAL",
+        "count": 1.0,
+        "max_speed": 0.0,
+        "color_rgba": 4294954239,
+        "scale": 0.8,
+        "follow_entity": true
+      }
+    ]
+  },
+  "deliver": {
+    "type": "STASH_EFFECT",
+    "stash_effect": {
+      "id": "bards_rpg:troubadours_minuet",
+      "duration": 8.0,
+      "triggers": [
+        {
+          "type": "EFFECT_TICK",
+          "effect": {
+            "id": "bards_rpg:troubadours_minuet"
+          }
+        }
+      ],
+      "consume": 0
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.5,
+          "knockback": 0.0
+        }
+      }
+    }
+  ],
+  "area_impact": {
+    "force_indirect": true,
+    "radius": 5.0
+  },
+  "cost": {
+    "exhaust": 0.2,
+    "cooldown": {
+      "duration": 10.0
+    }
+  }
+}

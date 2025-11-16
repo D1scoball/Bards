@@ -1,11 +1,16 @@
 package com.bards.content;
 
+import com.bards.effect.BardsEffects;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.api.util.TriState;
 import net.spell_engine.client.gui.SpellTooltip;
+import net.spell_engine.client.util.Color;
+import net.spell_engine.fx.SpellEngineParticles;
 import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
@@ -61,10 +66,9 @@ public class BardsSpells {
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.HEALING;
-        spell.range = 0;
+        spell.range = 5;
         spell.tier = 1;
         spell.group = GROUP_PRIMARY;
-
 
         return new Entry(id, spell, title, description, null);
     }
@@ -73,12 +77,40 @@ public class BardsSpells {
         var id = Identifier.of(MOD_ID, "troubadours_minuet");
         var title = "Troubadour's Minuet";
         var description = "";
+        var effect = BardsEffects.TROUBADOURS_MINUET;
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.HEALING;
         spell.range = 0;
         spell.tier = 2;
 
+        spell.learn = new Spell.Learn();
+
+        spell.active.cast.duration = 0.5F;
+        spell.active.cast.animation = "spell_engine:one_handed_area_charge";
+        spell.active.cast.sound =  new Sound("");
+
+        spell.release.particles_scaled_with_ranged = new ParticleBatch[]{
+                new ParticleBatch(SpellEngineParticles.area_circle_1.id().toString(),
+                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.GROUND,
+                        1, 0.0F, 0.F)
+                        .scale(0.8F)
+                        .followEntity(true).color(Color.HOLY.toRGBA())
+        };
+
+        var stashTrigger = SpellBuilder.Triggers.effectTick(effect.id.toString());
+        SpellBuilder.Deliver.stash(spell, effect.id.toString(), 8.0F, List.of(stashTrigger));
+        spell.deliver.stash_effect.consume = 0;
+
+        var impact = SpellBuilder.Impacts.damage(0.5F, 0F);
+        spell.impacts = List.of(impact);
+        var areaImpact = new Spell.AreaImpact();
+        areaImpact.radius = 5F;
+        areaImpact.force_indirect = true;
+        spell.area_impact = areaImpact;
+
+        SpellBuilder.Cost.exhaust(spell, 0.2F);
+        SpellBuilder.Cost.cooldown(spell, 10);
 
         return new Entry(id, spell, title, description, null);
     }
@@ -93,6 +125,45 @@ public class BardsSpells {
         spell.range = 0;
         spell.tier = 3;
 
+        spell.learn = new Spell.Learn();
+
+        spell.active.cast.duration = 0.5F;
+        spell.active.cast.animation = "spell_engine:one_handed_area_charge";
+        spell.active.cast.sound =  new Sound("");
+        //spell.active.cast.particles = new ParticleBatch[] {};
+
+        spell.target.type = Spell.Target.Type.AREA;
+        spell.target.area = new Spell.Target.Area();
+        spell.target.area.vertical_range_multiplier = 0.5F;
+
+        spell.release = new Spell.Release();
+        spell.release.animation = "spell_engine:one_handed_area_release";
+        spell.release.sound = new Sound("");
+
+        var damage = SpellBuilder.Impacts.damage(0.6F, 0.5F);
+        damage.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.BURST
+                        ).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        30, 0.2F, 0.7F)
+                        .color(Color.HOLY.toRGBA())
+        };
+        //damage.sound = new Sound("");
+
+        Spell.Impact cooldown = new Spell.Impact();
+        cooldown.action = new Spell.Impact.Action();
+        cooldown.action.type = net.spell_engine.api.spell.Spell.Impact.Action.Type.COOLDOWN;
+        cooldown.action.cooldown = new Spell.Impact.Action.Cooldown();
+        cooldown.action.cooldown.actives = new Spell.Impact.Action.Cooldown.Modify();
+        cooldown.action.cooldown.actives.duration_multiplier = 0.8F;
+
+        spell.impacts = List.of(damage, cooldown);
+
+        SpellBuilder.Cost.exhaust(spell, 0.2F);
+        SpellBuilder.Cost.cooldown(spell, 10);
 
         return new Entry(id, spell, title, description, null);
     }
@@ -101,12 +172,43 @@ public class BardsSpells {
         var id = Identifier.of(MOD_ID, "armys_paeon");
         var title = "Army's Paeon";
         var description = "";
+        var effect = BardsEffects.ARMYS_PAEON;
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.HEALING;
         spell.range = 0;
         spell.tier = 4;
 
+        /*
+        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.sound = new Sound("");
+        spell.release.particles = new ParticleBatch[]{
+                new ParticleBatch(SpellEngineParticles.MagicParticles.get(
+                        SpellEngineParticles.MagicParticles.Shape.SPARK,
+                        SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.LAUNCH_POINT,
+                        15, 0.15F, 0.2F)
+                        .preSpawnTravel(7)
+                        .invert()
+                        .color(Color.WHITE.toRGBA())
+        };
+
+        spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
+        spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
+        spell.deliver.stash_effect.id = effect.id.toString();
+        spell.deliver.stash_effect.consume = 0;
+        var stashMeleeTrigger = new Spell.Trigger();
+        stashMeleeTrigger.type = Spell.Trigger.Type.MELEE_IMPACT;
+        stashMeleeTrigger.target_override = Spell.Trigger.TargetSelector.AOE_SOURCE;
+
+        spell.deliver.stash_effect.triggers = List.of(stashMeleeTrigger);
+
+
+        spell.impacts = List.of();
+
+        SpellBuilder.Cost.exhaust(spell, 0.2F);
+        SpellBuilder.Cost.cooldown(spell, 10);
+         */
 
         return new Entry(id, spell, title, description, null);
     }
