@@ -1,4 +1,12 @@
 {
+  "effect.bards_rpg.armys_paeon": "Army's Paeon",
+  "effect.bards_rpg.armys_paeon.description": "",
+  "effect.bards_rpg.ballad": "Ballad",
+  "effect.bards_rpg.ballad.description": "",
+  "effect.bards_rpg.troubadours_minuet": "Troubadours Minuet",
+  "effect.bards_rpg.troubadours_minuet.description": "",
+  "effect.bards_rpg.troubadours_minuet_buff": "Troubadours Minuet",
+  "effect.bards_rpg.troubadours_minuet_buff.description": "",
   "item.bards_rpg.aeternium_rapier": "Aeternium Rapier",
   "item.bards_rpg.aether_rapier": "Valkyrie Rapier",
   "item.bards_rpg.bard_spell_book": "Bard's Stories",

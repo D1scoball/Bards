@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:ruby_rapier",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:aeternium_rapier",
+      "required": false
+    }
+  ]
+}

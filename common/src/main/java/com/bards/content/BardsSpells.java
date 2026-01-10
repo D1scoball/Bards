@@ -77,11 +77,12 @@ public class BardsSpells {
         var id = Identifier.of(MOD_ID, "troubadours_minuet");
         var title = "Troubadour's Minuet";
         var description = "";
-        var effect = BardsEffects.TROUBADOURS_MINUET;
+        var stashEffect = BardsEffects.TROUBADOURS_MINUET;
+        var buffEffect = BardsEffects.TROUBADOURS_MINUET_BUFF;
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.HEALING;
-        spell.range = 0;
+        spell.range = 5;
         spell.tier = 2;
 
         spell.learn = new Spell.Learn();
@@ -90,23 +91,16 @@ public class BardsSpells {
         spell.active.cast.animation = "spell_engine:one_handed_area_charge";
         spell.active.cast.sound =  new Sound("");
 
-        spell.release.particles_scaled_with_ranged = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.area_circle_1.id().toString(),
-                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.GROUND,
-                        1, 0.0F, 0.F)
-                        .scale(0.8F)
-                        .followEntity(true).color(Color.HOLY.toRGBA())
-        };
-
-        var stashTrigger = SpellBuilder.Triggers.effectTick(effect.id.toString());
-        SpellBuilder.Deliver.stash(spell, effect.id.toString(), 8.0F, List.of(stashTrigger));
+        var stashTrigger = SpellBuilder.Triggers.effectTick(stashEffect.id.toString());
+        SpellBuilder.Deliver.stash(spell, stashEffect.id.toString(), 8.0F, List.of(stashTrigger));
         spell.deliver.stash_effect.consume = 0;
 
-        var impact = SpellBuilder.Impacts.damage(0.5F, 0F);
-        spell.impacts = List.of(impact);
+        var impact = SpellBuilder.Impacts.heal(0.3F);
+        var buff = SpellBuilder.Impacts.effectAdd(buffEffect.id.toString(),10,1,5);
+        spell.impacts = List.of(impact, buff);
         var areaImpact = new Spell.AreaImpact();
         areaImpact.radius = 5F;
-        areaImpact.force_indirect = true;
+        areaImpact.area.include_caster = true;
         spell.area_impact = areaImpact;
 
         SpellBuilder.Cost.exhaust(spell, 0.2F);
@@ -122,7 +116,7 @@ public class BardsSpells {
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.HEALING;
-        spell.range = 0;
+        spell.range = 12;
         spell.tier = 3;
 
         spell.learn = new Spell.Learn();

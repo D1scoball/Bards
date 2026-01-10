@@ -1,6 +1,7 @@
 package com.bards.datagen;
 
 import com.bards.content.BardsSpells;
+import com.bards.effect.BardsEffects;
 import com.bards.item.Armors;
 import com.bards.item.Group;
 import com.bards.item.Weapons;
@@ -74,6 +75,10 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                     translationBuilder.add(armorEntry.getKey(), armorEntry.getValue());
                 }
             });
+            BardsEffects.entries.forEach(entry -> {
+                translationBuilder.add(entry.effect.getTranslationKey(), entry.title);
+                translationBuilder.add(entry.effect.getTranslationKey() + ".description", entry.description);
+            });
         }
     }
 
@@ -136,6 +141,9 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             var criticalDamageTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.CRITICAL_DAMAGE);
             criticalDamageTag.addOptionalTag(BardTags.LUTES);
             criticalDamageTag.addOptionalTag(BardTags.LYRES);
+            var criticalChanceTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.CRITICAL_CHANCE);
+            criticalChanceTag.addOptionalTag(BardTags.LUTES);
+            criticalChanceTag.addOptionalTag(BardTags.LYRES);
             var spellPowerTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.SPELL_POWER_GENERIC);
             spellPowerTag.addOptionalTag(BardTags.LUTES);
             spellPowerTag.addOptionalTag(BardTags.LYRES);
