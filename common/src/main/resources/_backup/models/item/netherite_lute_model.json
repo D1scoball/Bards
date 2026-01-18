@@ -1,0 +1,7 @@
+{
+  "parent": "bards_rpg:item/generic_lute",
+  "textures": {
+    "0": "bards_rpg:item/netherite_lute",
+    "particle": "bards_rpg:item/netherite_lute"
+  }
+}

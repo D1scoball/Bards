@@ -1,39 +1,31 @@
 {
   "school": "spell_power:healing",
   "range": 5.0,
-  "tier": 2,
+  "tier": 1,
   "learn": {},
   "active": {
     "cast": {
-      "duration": 0.5,
+      "duration": 5.0,
+      "channel_ticks": 10,
       "animation": "spell_engine:one_handed_area_charge",
+      "movement_speed": 1.5,
       "sound": {
         "id": ""
       }
     }
   },
-  "deliver": {
-    "type": "STASH_EFFECT",
-    "stash_effect": {
-      "id": "bards_rpg:troubadours_minuet",
-      "duration": 8.0,
-      "triggers": [
-        {
-          "type": "EFFECT_TICK",
-          "effect": {
-            "id": "bards_rpg:troubadours_minuet"
-          }
-        }
-      ],
-      "consume": 0
+  "target": {
+    "type": "AREA",
+    "area": {
+      "vertical_range_multiplier": 1.5
     }
   },
   "impacts": [
     {
       "action": {
-        "type": "HEAL",
-        "heal": {
-          "spell_power_coefficient": 0.3
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.5
         }
       }
     },
@@ -41,9 +33,9 @@
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "bards_rpg:troubadours_minuet_buff",
+          "effect_id": "bards_rpg:troubadours_minuet",
           "amplifier": 1,
-          "amplifier_cap": 5,
+          "amplifier_cap": 3,
           "apply_mode": "ADD"
         }
       }

@@ -7,17 +7,26 @@ import com.bards.item.Armors;
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.Identifier;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.item.armor.Armor;
 import net.spell_engine.api.render.BuffParticleSpawner;
+import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
 
+import java.util.List;
 import java.util.function.Supplier;
+
+import static com.bards.BardsMod.MOD_ID;
 
 public class BardClient {
     public static void init() {
+        CustomModels.registerModelIds(List.of(
+                Identifier.of(MOD_ID, "projectile/magical_ballad")
+        ));
+
 
         registerArmorRenderer(Armors.entertainerArmorSet.armorSet(), CustomArmorRenderer::entertainer_armor);
         registerArmorRenderer(Armors.troubadourArmorSet.armorSet(), CustomArmorRenderer::troubadour_armor);
@@ -32,7 +41,7 @@ public class BardClient {
     }
     private static void registerEffectRenderers() {
         CustomParticleStatusEffect.register(
-                BardsEffects.TROUBADOURS_MINUET.effect,
+                BardsEffects.ARMYS_PAEON_STASH.effect,
                 new BuffParticleSpawner(
                         new ParticleBatch(
                                 SpellEngineParticles.area_circle_1.id().toString(),

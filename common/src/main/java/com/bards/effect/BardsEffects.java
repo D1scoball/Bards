@@ -37,15 +37,6 @@ public class BardsEffects {
     public static Effects.Entry TROUBADOURS_MINUET = add(new Effects.Entry(Identifier.of(MOD_ID, "troubadours_minuet"),
             "Troubadours Minuet",
             "",
-            new TickingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff).interval(30),
-            new EffectConfig(
-                    List.of(
-                    )
-            )
-    ));
-    public static Effects.Entry TROUBADOURS_MINUET_BUFF = add(new Effects.Entry(Identifier.of(MOD_ID, "troubadours_minuet_buff"),
-            "Troubadours Minuet",
-            "",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
             new EffectConfig(
                     List.of(
@@ -53,16 +44,19 @@ public class BardsEffects {
                                     SpellEngineAttributes.DAMAGE_TAKEN.id.toString(),
                                     -0.05F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
-                            ),
-                            new AttributeModifier(
-                                    SpellEngineAttributes.HEALING_TAKEN.id.toString(),
-                                    0.05F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
             )
     ));
-
+    public static Effects.Entry ARMYS_PAEON_STASH = add(new Effects.Entry(Identifier.of(MOD_ID, "armys_paeon_stash"),
+            "Army's Paeon",
+            "",
+            new TickingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff).interval(20),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
     public static Effects.Entry ARMYS_PAEON = add(new Effects.Entry(Identifier.of(MOD_ID, "armys_paeon"),
             "Army's Paeon",
             "",

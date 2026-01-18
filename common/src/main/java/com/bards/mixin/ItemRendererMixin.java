@@ -19,9 +19,9 @@ import static com.bards.BardsMod.MOD_ID;
 public class ItemRendererMixin {
     @ModifyVariable(method = "renderItem", at = @At(value = "HEAD"), argsOnly = true)
     public BakedModel useItemModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        if(stack.isIn(BardTags.TWO_MODEL_INSTRUMENT) && renderMode != ModelTransformationMode.GUI && renderMode != ModelTransformationMode.GROUND) {
+        if(stack.isIn(BardTags.TWO_MODEL_INSTRUMENT)&& renderMode != ModelTransformationMode.GUI && renderMode != ModelTransformationMode.GROUND && renderMode != ModelTransformationMode.FIXED) {
             String name = stack.getTranslationKey();
-            String name2 = name.toString().replace("item.forcemaster_rpg.","");
+            String name2 = name.toString().replace("item.bards_rpg.","");
             return ((ItemRendererAccessor)this).bard$getModels().getModelManager().getModel(ModelIdentifier.ofInventoryVariant(Identifier.of(MOD_ID, name2 + "_model")));
         }
         return value;

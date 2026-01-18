@@ -1,0 +1,26 @@
+{
+  "parent": "bards_rpg:spell_novice_bard",
+  "criteria": {
+    "cast": {
+      "conditions": {
+        "spell": "#bards_rpg:bard"
+      },
+      "trigger": "spell_engine:spell_cast"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.bards_rpg.spell_cast_bard_book.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "id": "bards_rpg:golden_lyre"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.bards_rpg.spell_cast_bard_book.title"
+    }
+  }
+}

@@ -3,6 +3,10 @@
     {
       "id": "bards_rpg:golden_rapier",
       "required": false
+    },
+    {
+      "id": "bards_rpg:golden_lyre",
+      "required": false
     }
   ]
 }

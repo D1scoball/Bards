@@ -7,6 +7,14 @@
     {
       "id": "bards_rpg:aeternium_rapier",
       "required": false
+    },
+    {
+      "id": "bards_rpg:ruby_lute",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:aeternium_lyre",
+      "required": false
     }
   ]
 }

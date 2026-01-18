@@ -30,10 +30,17 @@ import java.util.concurrent.CompletableFuture;
 public class BardsDataGenerator implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+        BardVanillaAdvancementProvider.init();
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(SpellGen::new);
         pack.addProvider(LangGenerator::new);
         pack.addProvider(ItemTagGenerator::new);
+        pack.addProvider(ModModelProvider::new);
+        pack.addProvider(BardRecipeProvider::new);
+        pack.addProvider(BardSmithingRecipeProvider::new);
+        pack.addProvider(WeaponAttributesGenerator::new);
+        pack.addProvider(BardAdvancementProvider::new);
+        pack.addProvider(BardVanillaAdvancementProvider::new);
     }
     public static class SpellGen extends SpellGenerator {
         public SpellGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -79,6 +86,15 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                 translationBuilder.add(entry.effect.getTranslationKey(), entry.title);
                 translationBuilder.add(entry.effect.getTranslationKey() + ".description", entry.description);
             });
+            // Advancements
+            for (var entry : BardAdvancementProvider.getEntries()) {
+                translationBuilder.add(entry.titleKey(), entry.title());
+                translationBuilder.add(entry.descriptionKey(), entry.description());
+            }
+            for (var entry : BardVanillaAdvancementProvider.getEntries()) {
+                translationBuilder.add(entry.titleKey(), entry.title());
+                translationBuilder.add(entry.descriptionKey(), entry.description());
+            }
         }
     }
 
