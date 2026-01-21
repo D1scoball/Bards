@@ -2,19 +2,16 @@ package com.bards.client;
 
 import com.bards.BardsMod;
 import com.bards.client.armor.CustomArmorRenderer;
+import com.bards.content.BardsSpells;
 import com.bards.effect.BardsEffects;
 import com.bards.item.Armors;
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
-import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.item.armor.Armor;
-import net.spell_engine.api.render.BuffParticleSpawner;
 import net.spell_engine.api.render.CustomModels;
-import net.spell_engine.api.spell.fx.ParticleBatch;
-import net.spell_engine.client.util.Color;
-import net.spell_engine.fx.SpellEngineParticles;
+import net.spell_engine.client.gui.SpellTooltip;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -23,6 +20,11 @@ import static com.bards.BardsMod.MOD_ID;
 
 public class BardClient {
     public static void init() {
+        for (var spell: BardsSpells.entries) {
+            if (spell.mutator() != null) {
+                SpellTooltip.addDescriptionMutator(spell.id(), spell.mutator());
+            }
+        }
         CustomModels.registerModelIds(List.of(
                 Identifier.of(MOD_ID, "projectile/magical_ballad")
         ));
@@ -40,6 +42,7 @@ public class BardClient {
         AzArmorRendererRegistry.register(armorRendererSupplier, set.head, set.chest, set.legs, set.feet);
     }
     private static void registerEffectRenderers() {
+        /*
         CustomParticleStatusEffect.register(
                 BardsEffects.ARMYS_PAEON_STASH.effect,
                 new BuffParticleSpawner(
@@ -52,5 +55,6 @@ public class BardClient {
                                 .followEntity(true)
                 ).withFrequency(30).scaleWithAmplifier(false)
         );
+         */
     }
 }

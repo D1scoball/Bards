@@ -3,13 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "bards_rpg:projectile/magical_ballad"
+		"0": "bards_rpg:spell_projectile/magical_ballad",
+		"particle": "bards_rpg:spell_projectile/magical_ballad"
 	},
 	"elements": [
 		{
-			"from": [5.5, 0, 5],
-			"to": [10.5, 5, 9],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.5, 0, 8]},
+			"from": [3.2, 9, -1],
+			"to": [13.2, 19, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.2, 9, 2]},
 			"faces": {
 				"north": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
 				"east": {"uv": [0, 5, 2, 7.5], "texture": "#0"},
@@ -20,9 +21,9 @@
 			}
 		},
 		{
-			"from": [5.5, 0, 9],
-			"to": [10.5, 5, 13],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.5, 0, 13]},
+			"from": [3.1, 8.9, 6],
+			"to": [13.3, 19.1, 14.1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.2, 9, 10]},
 			"faces": {
 				"north": {"uv": [2.5, 0, 5, 2.5], "texture": "#0"},
 				"east": {"uv": [4.5, 5, 6.5, 7.5], "texture": "#0"},

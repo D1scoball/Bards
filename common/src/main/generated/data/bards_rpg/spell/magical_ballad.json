@@ -7,7 +7,7 @@
     "cast": {
       "duration": 4.0,
       "channel_ticks": 20,
-      "animation": "spell_engine:one_handed_projectile_charge",
+      "animation": "bards_rpg:lute_channel",
       "movement_speed": 1.5,
       "sound": {
         "id": ""
@@ -32,16 +32,24 @@
     "type": "PROJECTILE",
     "projectile": {
       "launch_properties": {
+        "velocity": 1.2,
         "sound": {
           "id": ""
         }
       },
       "projectile": {
+        "homing_angle": 0.0,
+        "hitbox": {
+          "width": 2.0,
+          "height": 2.0
+        },
         "client_data": {
           "light_level": 12,
           "model": {
             "model_id": "bards_rpg:projectile/magical_ballad",
-            "scale": 3.0
+            "light_emission": "RADIATE",
+            "scale": 2.0,
+            "rotate_degrees_per_tick": 0.0
           }
         }
       }
@@ -71,6 +79,7 @@
       }
     },
     {
+      "school": "spell_power:healing",
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {

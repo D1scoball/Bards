@@ -31,7 +31,7 @@ public class WeaponAttributesGenerator implements DataProvider {
                 continue;
             }
             JsonObject json = new JsonObject();
-            json.addProperty("parent", "bettercombat" + ":rapier");
+            json.addProperty("parent", MOD_ID + ":rapier");
             Path path = pathResolver.resolveJson(entry.id());
             futures.add(DataProvider.writeToPath(writer, json, path));
         }

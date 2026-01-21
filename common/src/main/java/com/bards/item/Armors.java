@@ -3,6 +3,7 @@ package com.bards.item;
 import com.bards.BardsMod;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Items;
@@ -95,6 +96,25 @@ public class Armors {
             18,
             SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, () -> { return Ingredient.ofItems(Items.NETHERITE_INGOT); });
 
+    public static final float bard_speed_T1 = 0.03F;
+    public static final float bard_speed_T2 = 0.04F;
+    public static final float bard_speed_T3 = 0.05F;
+    public static final float bard_speed_T5 = 0.06F;
+
+    public static final float bard_spell_power_t1 = 0.15F;
+    public static final float bard_spell_power_t2 = 0.2F;
+    public static final float bard_spell_power_t3 = 0.25F;
+    public static final float bard_spell_power_t5 = 0.3F;
+
+    private static final Identifier MOVEMENT_SPEED_ID = Identifier.ofVanilla("generic.movement_speed");
+    private static AttributeModifier movementSpeed(float value) {
+        return new AttributeModifier(
+                MOVEMENT_SPEED_ID.toString(),
+                value,
+                EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+    }
+
+
     public static final Armor.Entry entertainerArmorSet = create(
             entertainers_garb,
             Identifier.of(MOD_ID, "entertainer_garb"),
@@ -102,10 +122,22 @@ public class Armors {
             1,
             Armor.CustomItem::new,
             ArmorSetConfig.with(
-                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.HELMET)),
-                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.CHESTPLATE)),
-                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.LEGGINGS)),
+                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.HELMET))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t1))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t1))
+                            .add(movementSpeed(bard_speed_T1)),
+                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.CHESTPLATE))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t1))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t1))
+                            .add(movementSpeed(bard_speed_T1)),
+                    new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.LEGGINGS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t1))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t1))
+                            .add(movementSpeed(bard_speed_T1)),
                     new ArmorSetConfig.Piece(entertainers_garb.value().getProtection(ArmorItem.Type.BOOTS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t1))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t1))
+                            .add(movementSpeed(bard_speed_T1))
             ),
             commonSettings(null))
             .translatedName("Entertainer Hat", "Entertainer Garb", "Entertainer Trousers", "Entertainer Boots");
@@ -116,10 +148,22 @@ public class Armors {
             2,
             Armor.CustomItem::new,
             ArmorSetConfig.with(
-                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.HELMET)),
-                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.CHESTPLATE)),
-                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.LEGGINGS)),
+                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.HELMET))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t2))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t2))
+                            .add(movementSpeed(bard_speed_T2)),
+                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.CHESTPLATE))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t2))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t2))
+                            .add(movementSpeed(bard_speed_T2)),
+                    new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.LEGGINGS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t2))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t2))
+                            .add(movementSpeed(bard_speed_T2)),
                     new ArmorSetConfig.Piece(troubadours_garb.value().getProtection(ArmorItem.Type.BOOTS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t2))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t2))
+                            .add(movementSpeed(bard_speed_T2))
             ),
             commonSettings(null))
             .translatedName("Troubadour Hat", "Troubadour Garb", "Troubadour Trousers", "Troubadour Boots");
@@ -130,10 +174,22 @@ public class Armors {
             3,
             Armor.CustomItem::new,
             ArmorSetConfig.with(
-                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.HELMET)),
-                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.CHESTPLATE)),
-                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.LEGGINGS)),
+                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.HELMET))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t3))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t3))
+                            .add(movementSpeed(bard_speed_T3)),
+                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.CHESTPLATE))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t3))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t3))
+                            .add(movementSpeed(bard_speed_T3)),
+                    new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.LEGGINGS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t3))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t3))
+                            .add(movementSpeed(bard_speed_T3)),
                     new ArmorSetConfig.Piece(netherite_troubadours_garb.value().getProtection(ArmorItem.Type.BOOTS))
+                            .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t3))
+                            .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t3))
+                            .add(movementSpeed(bard_speed_T3))
             ),
             commonSettings(null))
             .translatedName("Netherite Troubadour Hat", "Netherite Troubadour Garb", "Netherite Troubadour Trousers", "Netherite Troubadour Boots");
@@ -150,10 +206,22 @@ public class Armors {
                     5,
                     Armor.CustomItem::new,
                     ArmorSetConfig.with(
-                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.HELMET)),
-                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.CHESTPLATE)),
-                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.LEGGINGS)),
+                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.HELMET))
+                                    .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t5))
+                                    .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t5))
+                                    .add(movementSpeed(bard_speed_T5)),
+                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.CHESTPLATE))
+                                    .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t5))
+                                    .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t5))
+                                    .add(movementSpeed(bard_speed_T5)),
+                            new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.LEGGINGS))
+                                    .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t5))
+                                    .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t5))
+                                    .add(movementSpeed(bard_speed_T5)),
                             new ArmorSetConfig.Piece(storytellers_garb.value().getProtection(ArmorItem.Type.BOOTS))
+                                    .add(AttributeModifier.multiply(SpellSchools.ARCANE.id, bard_spell_power_t5))
+                                    .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t5))
+                                    .add(movementSpeed(bard_speed_T5))
                     ),
                     commonSettings(null))
                     .translatedName("Storyteller Hat", "Storyteller Tunic", "Storyteller Trousers", "Storyteller Boots");

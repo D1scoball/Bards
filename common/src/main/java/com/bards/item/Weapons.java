@@ -9,11 +9,13 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
+import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.WeaponConfig;
 import net.spell_engine.api.item.Equipment;
 import net.spell_engine.api.item.weapon.StaffItem;
 import net.spell_engine.api.item.weapon.Weapon;
 import net.spell_engine.api.item.weapon.SpellSwordItem;
+import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class Weapons {
 
     private static Weapon.Entry entry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults, Equipment.WeaponType category) {
         var entry = new Weapon.Entry(MOD_ID, name, material, factory, defaults, category);
+        entry.castSpell();
         if (entry.isRequiredModInstalled()) {
             entries.add(entry);
         }
@@ -53,68 +56,94 @@ public class Weapons {
     private static final String LNE = "loot_n_explore";
     private static final String ARSENAL = "arsenal";
     // Rapiers
-    private static final float rapier_attack_speed = 0;
+    private static final float rapier_attack_speed = -2.0F;
     private static Weapon.Entry rapier(String name, Weapon.CustomMaterial material, float damage) {
         return entry(name, material, SpellSwordItem::new, new WeaponConfig(damage, rapier_attack_speed), Equipment.WeaponType.SWORD);
     }
-    private static final float lute_attack_speed = -2.0F;
+    private static final float lute_attack_speed = -3.0F;
     private static Weapon.Entry lute(String name, Weapon.CustomMaterial material, float damage) {
         return entry(name, material, StaffItem::new, new WeaponConfig(damage, lute_attack_speed), Equipment.WeaponType.DAMAGE_STAFF);
     }
-    private static final float lyre_attack_speed = 0;
-    private static Weapon.Entry lyre(String name, Weapon.CustomMaterial material, float damage) {
-        return entry(name, material, StaffItem::new, new WeaponConfig(damage, lyre_attack_speed), Equipment.WeaponType.HEALING_STAFF);
+    private static final float lyre_attack_speed = -2.2F;
+    private static final float lyre_attack_damage = 3.0F;
+    private static Weapon.Entry lyre(String name, Weapon.CustomMaterial material) {
+        return entry(name, material, StaffItem::new, new WeaponConfig(lyre_attack_damage, lyre_attack_speed), Equipment.WeaponType.HEALING_STAFF);
     }
-
     /// RAPIERS
-    public static final Weapon.Entry iron_rapier = rapier("iron_rapier",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 8.3F)
-            .translatedName("Iron Rapier")
-            .loot(Equipment.LootProperties.of(1));
     public static final Weapon.Entry golden_rapier = rapier("golden_rapier",
-            Weapon.CustomMaterial.matching(ToolMaterials.GOLD, () -> Ingredient.ofItems(Items.GOLD_INGOT)), 5.2F)
+            Weapon.CustomMaterial.matching(ToolMaterials.GOLD, () -> Ingredient.ofItems(Items.GOLD_INGOT)), 2.1F)
             .translatedName("Golden Rapier")
             .loot(Equipment.LootProperties.of("golden"));
+    public static final Weapon.Entry iron_rapier = rapier("iron_rapier",
+            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 3.6F)
+            .translatedName("Iron Rapier")
+            .loot(Equipment.LootProperties.of(1));
     public static final Weapon.Entry diamond_rapier = rapier("diamond_rapier",
-            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 9.9F)
+            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 4.4F)
             .translatedName("Diamond Rapier")
             .loot(Equipment.LootProperties.of(2));
     public static final Weapon.Entry netherite_rapier = rapier("netherite_rapier",
-            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 11.5F)
+            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 5.9F)
             .translatedName("Netherite Rapier")
             .loot(Equipment.LootProperties.of(3));
     /// LUTES
+    private static final float T1_LUTE_POWER = 3.5F;
+    private static final float T2_LUTE_POWER = 4F;
+    private static final float T3_LUTE_POWER = 4.5F;
+    private static final float T4_LUTE_POWER = 5F;
+
     public static final Weapon.Entry wooden_lute = lute("wooden_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 8.3F)
+            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 4.0F)
             .translatedName("Wooden Lute")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_LUTE_POWER))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T1_LUTE_POWER))
             .loot(Equipment.LootProperties.of(1));
     public static final Weapon.Entry diamond_lute = lute("diamond_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 8.3F)
+            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 6.0F)
             .translatedName("Diamond Lute")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_LUTE_POWER))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T2_LUTE_POWER))
             .loot(Equipment.LootProperties.of(2));
     public static final Weapon.Entry netherite_lute = lute("netherite_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 11.5F)
+            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 8.0F)
             .translatedName("Netherite Lute")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T3_LUTE_POWER))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T3_LUTE_POWER))
             .loot(Equipment.LootProperties.of(3));
     /// LYRES
+    private static final float LYRE_ARCANE_POWER_MULTIPLIER = 0.5F;
+    private static final float T1_LYRE_ARCANE_POWER = (float) (Math.round((T1_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T2_LYRE_ARCANE_POWER = (float) (Math.round((T2_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T3_LYRE_ARCANE_POWER = (float) (Math.round((T3_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T4_LYRE_ARCANE_POWER = (float) (Math.round((T4_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float LYRE_HEALING_POWER_MULTIPLIER = 1.5F;
+    private static final float T1_LYRE_HEALING_POWER = (float) (Math.round((T1_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T2_LYRE_HEALING_POWER = (float) (Math.round((T2_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T3_LYRE_HEALING_POWER = (float) (Math.round((T3_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
+    private static final float T4_LYRE_HEALING_POWER = (float) (Math.round((T4_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
     public static final Weapon.Entry golden_lyre = lyre("golden_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)), 8.3F)
+            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
             .translatedName("Golden Lyre")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_LYRE_ARCANE_POWER ))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T1_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of("golden"));
     public static final Weapon.Entry diamond_lyre = lyre("diamond_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 8.3F)
+            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)))
             .translatedName("Diamond Lyre")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_LYRE_ARCANE_POWER ))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T2_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of(2));
     public static final Weapon.Entry netherite_lyre = lyre("netherite_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 11.5F)
+            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
             .translatedName("Netherite Lyre")
+            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T3_LYRE_ARCANE_POWER ))
+            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T3_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of(3));
 
 
     /// REGISTRY
-    private static final float rapier_t5_attack_damage = 9;
-    private static final float lute_t5_attack_damage = 9;
-    private static final float lyre_t5_attack_damage = 9;
+    private static final float rapier_t5_attack_damage = 6.7F;
+    private static final float lute_t5_attack_damage = 10;
     public static void register(Map<String, WeaponConfig> configs) {
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(BETTER_NETHER)) {
             var repair = ingredient("betternether:nether_ruby", FabricLoader.getInstance().isModLoaded(BETTER_NETHER), Items.NETHERITE_INGOT);
@@ -123,6 +152,8 @@ public class Weapons {
                     .loot(Equipment.LootProperties.of(4));
             lute("ruby_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage)
                     .translatedName("Ruby Lute")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .loot(Equipment.LootProperties.of(4));
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(BETTER_END)) {
@@ -130,8 +161,10 @@ public class Weapons {
             rapier("aeternium_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), rapier_t5_attack_damage)
                     .translatedName("Aeternium Rapier")
                     .loot(Equipment.LootProperties.of(4));
-            lyre("aeternium_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lyre_t5_attack_damage)
+            lyre("aeternium_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
                     .translatedName("Aeternium Lyre")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .loot(Equipment.LootProperties.of(4));
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(AETHER) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
@@ -141,9 +174,13 @@ public class Weapons {
                     .loot(Equipment.LootProperties.of("aether"));
             lute("aether_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage)
                     .translatedName("Angelic Lute")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .loot(Equipment.LootProperties.of("aether"));
-            lyre("aether_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lyre_t5_attack_damage)
+            lyre("aether_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
                     .translatedName("Valkyrie Lyre")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .loot(Equipment.LootProperties.of("aether"));
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(LNE) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
@@ -169,13 +206,17 @@ public class Weapons {
                     .rarity = Rarity.RARE;
             lute("ender_dragon_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), lute_t5_attack_damage)
                     .translatedName("Dragon Lute")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), lyre_t5_attack_damage)
+            lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)))
                     .translatedName("Siren's Lyre")
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .rarity = Rarity.RARE;
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(ARSENAL) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
@@ -186,21 +227,29 @@ public class Weapons {
                     .rarity = Rarity.RARE;
             lute("unique_lute_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.REDSTONE_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Lute of Ruby Verdict")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lute("unique_lute_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Spellthief's Lute")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), lyre_t5_attack_damage)
+            lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Apollo")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), lyre_t5_attack_damage)
+            lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Antecael")
+                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
+                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;

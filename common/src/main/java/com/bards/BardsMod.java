@@ -2,6 +2,7 @@ package com.bards;
 
 import com.bards.config.Default;
 import com.bards.config.TweaksConfig;
+import com.bards.content.CustomSpellImpacts;
 import com.bards.effect.BardsEffects;
 import com.bards.item.Armors;
 import com.bards.item.BardBooks;
@@ -53,6 +54,7 @@ public final class BardsMod {
         effectsConfig.refresh();
         villageConfig.refresh();
         tweaksConfig.refresh();
+        CustomSpellImpacts.registerCustomImpacts();
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             tweaksConfig.value.ignore_items_required_mods = true;
         }

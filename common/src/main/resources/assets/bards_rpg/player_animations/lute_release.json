@@ -1,18 +1,18 @@
 {
-    "name": "pose_lute",
+    "name": "lute_release",
     "author": "Fichte",
-    "description": "Lute Pose",
+    "description": "Lute Release",
     "emote":{
-        "isLoop": "true",
-        "returnTick": 1,
-        "beginTick":0,
-        "endTick":1,
-        "stopTick":11,
+        "isLoop": "false",
+        "returnTick": 0,
+        "beginTick":3,
+        "endTick":8,
+        "stopTick":10,
         "degrees":false,
         "moves":[
             
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -20,7 +20,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -28,7 +28,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -36,7 +36,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -44,7 +44,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -52,7 +52,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -60,7 +60,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -68,7 +68,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -76,7 +76,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -84,7 +84,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -92,7 +92,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":2,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -100,7 +100,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm":{
@@ -108,7 +108,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -116,15 +116,15 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "roll":-0.28009024262428284
+                    "roll":0.5602954030036926
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -132,15 +132,15 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "yaw":0.5806601643562317
+                    "yaw":-0.687561571598053
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -148,23 +148,15 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
-                    "pitch":-1.2178654670715332
+                    "pitch":-1.9355283975601196
                 }
             },
             {
-                "tick":1,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "y":2.0
-                }
-            },
-            {
-                "tick":10,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -172,7 +164,15 @@
                 }
             },
             {
-                "tick":1,
+                "tick":8,
+                "easing": "EASEINOUTQUAD",
+                "turn": 0,
+                "leftArm":{
+                    "y":2.0
+                }
+            },
+            {
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -180,7 +180,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -188,7 +188,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -196,7 +196,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "leftArm":{
@@ -204,7 +204,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -212,7 +212,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -220,7 +220,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -228,7 +228,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -236,7 +236,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -244,7 +244,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -252,7 +252,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -260,7 +260,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -268,7 +268,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -276,7 +276,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -284,7 +284,7 @@
                 }
             },
             {
-                "tick":1,
+                "tick":3,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
@@ -292,7 +292,7 @@
                 }
             },
             {
-                "tick":10,
+                "tick":8,
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
