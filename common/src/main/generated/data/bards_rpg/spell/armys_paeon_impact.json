@@ -44,6 +44,16 @@
           "min_speed": 0.3,
           "max_speed": 0.5,
           "color_rgba": 4292280575
+        },
+        {
+          "particle_id": "more_rpg_classes:music_note",
+          "origin": "CENTER",
+          "shape": "CIRCLE",
+          "count": 10.0,
+          "min_speed": 0.6,
+          "max_speed": 0.8,
+          "extent": 0.25,
+          "color_rgba": 4292280575
         }
       ]
     }

@@ -8,7 +8,6 @@ import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.api.spell.fx.Sound;
-import net.spell_engine.api.util.TriState;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
@@ -60,6 +59,19 @@ public class BardsSpells {
     public static final Color CYAN = Color.from(0x00ffff);
     public static final Color BRIGHT_GREEN = Color.from(0x8efea1);
 
+    private static ParticleBatch musicParticles(Integer particleCount) {
+        return new ParticleBatch(
+                "more_rpg_classes:music_note",
+                ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
+                particleCount, 0.4F, 0.5F);
+    }
+    private static ParticleBatch musicImpactParticles(Integer particleCount) {
+        return new ParticleBatch(
+                "more_rpg_classes:music_note",
+                ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                particleCount, 0.6F, 0.8F);
+    }
+
     public static final Entry troubadours_minuet = add(troubadours_minuet());
     private static Entry troubadours_minuet() {
         var id = Identifier.of(MOD_ID, "troubadours_minuet");
@@ -77,6 +89,7 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 5;
         spell.tier = 1;
+        var spellColor = BRIGHT_GREEN.toRGBA();
 
         spell.learn = new Spell.Learn();
 
@@ -84,11 +97,15 @@ public class BardsSpells {
         spell.active.cast.movement_speed = 1.5F;
         spell.active.cast.channel_ticks = 10;
         spell.active.cast.animation = "bards_rpg:lute_channel";
-        spell.active.cast.sound =  new Sound("");
+        //spell.active.cast.sound =  new Sound("");
+        spell.active.cast.particles = new ParticleBatch[] {
+                musicParticles(2).color(spellColor).extent(2.0F)
+        };
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
         spell.target.area.vertical_range_multiplier = 1.5F;
+        spell.target.area.include_caster = true;
 
         var impact = SpellBuilder.Impacts.damage(0.5F);
         var buff = SpellBuilder.Impacts.effectAdd(buffEffect.id.toString(),10,1,3);
@@ -100,8 +117,9 @@ public class BardsSpells {
                         SpellEngineParticles.MagicParticles.Motion.BURST
                 ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.3F, 0.5F)
+                        10, 0.3F, 0.5F)
                         .color(BRIGHT_GREEN.toRGBA()),
+                musicImpactParticles(4).extent(0.5F).color(spellColor)
         };
         spell.impacts = List.of(impact, buff);
 
@@ -129,19 +147,17 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 20;
         spell.tier = 2;
+        var spellColor = Color.ARCANE.toRGBA();
 
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 4.0F;
         spell.active.cast.movement_speed = 1.5F;
         spell.active.cast.animation = "bards_rpg:lute_channel";
-        spell.active.cast.sound = new Sound("");
+        //spell.active.cast.sound = new Sound("");
         spell.active.cast.channel_ticks = 20;
-        spell.active.cast.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                "more_rpg_classes:rainbow_music_note_1",
-                ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                1, 0.05F, 0.1F)
+        spell.active.cast.particles = new ParticleBatch[]{
+                musicParticles(2).color(spellColor).extent(2.0F)
         };
 
         spell.release = new Spell.Release();
@@ -151,7 +167,7 @@ public class BardsSpells {
         spell.deliver.type = Spell.Delivery.Type.PROJECTILE;
         spell.deliver.projectile = new Spell.Delivery.ShootProjectile();
         spell.deliver.projectile.launch_properties.velocity = 1.2F;
-        spell.deliver.projectile.launch_properties.sound = new Sound("");
+        //spell.deliver.projectile.launch_properties.sound = new Sound("");
 
         var projectile = new Spell.ProjectileData();
         projectile.homing_angle = 0F;
@@ -177,9 +193,10 @@ public class BardsSpells {
                         SpellEngineParticles.MagicParticles.Motion.BURST
                         ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        15, 0.1F, 0.25F).color(Color.ARCANE.toRGBA())
+                        15, 0.1F, 0.25F).color(Color.ARCANE.toRGBA()),
+                musicImpactParticles(4).extent(0.5F).color(spellColor)
         };
-        damage.sound = new Sound("");
+        //damage.sound = new Sound("");
 
         var buff = SpellBuilder.Impacts.effectAdd(BardsEffects.BALLAD.id.toString(),8,1,3);
         buff.school = SpellSchools.HEALING;
@@ -191,7 +208,8 @@ public class BardsSpells {
                                 SpellEngineParticles.MagicParticles.Motion.ASCEND
                         ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.FEET,
-                        15, 0.1F, 0.25F).color(Color.ARCANE.toRGBA())
+                        15, 0.1F, 0.25F).color(Color.ARCANE.toRGBA()),
+                musicImpactParticles(4).extent(0.5F).color(spellColor)
         };
 
         spell.impacts = List.of(damage, buff);
@@ -212,22 +230,26 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 12;
         spell.tier = 3;
+        var spellColor = CYAN.toRGBA();
 
         spell.learn = new Spell.Learn();
 
         spell.active.cast.duration = 0.5F;
         spell.active.cast.movement_speed = 1.5F;
         spell.active.cast.animation = "bards_rpg:lute_channel";
-        spell.active.cast.sound =  new Sound("");
-        //spell.active.cast.particles = new ParticleBatch[] {};
+        //spell.active.cast.sound =  new Sound("");
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
         spell.target.area.vertical_range_multiplier = 0.5F;
+        spell.target.area.include_caster = true;
 
         spell.release = new Spell.Release();
         spell.release.animation = "bards_rpg:lute_release";
-        spell.release.sound = new Sound("");
+        //spell.release.sound = new Sound("");
+        spell.release.particles = new ParticleBatch[]{
+                musicParticles(10).color(spellColor).extent(2.0F)
+        };
 
         var damage = SpellBuilder.Impacts.damage(0.6F, 0.5F);
         damage.particles = new ParticleBatch[] {
@@ -238,7 +260,8 @@ public class BardsSpells {
                         ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         30, 0.2F, 0.7F)
-                        .color(CYAN.toRGBA())
+                        .color(CYAN.toRGBA()),
+                musicImpactParticles(4).extent(0.5F).color(spellColor)
         };
         //damage.sound = new Sound("");
 
@@ -248,6 +271,9 @@ public class BardsSpells {
         cooldown.action.cooldown = new Spell.Impact.Action.Cooldown();
         cooldown.action.cooldown.actives = new Spell.Impact.Action.Cooldown.Modify();
         cooldown.action.cooldown.actives.duration_multiplier = 0.8F;
+        cooldown.particles = new ParticleBatch[] {
+                musicImpactParticles(4).extent(0.5F).color(spellColor)
+        };
 
         spell.impacts = List.of(damage, cooldown);
 
@@ -260,7 +286,7 @@ public class BardsSpells {
     private static Entry armys_paeon() {
         var id = Identifier.of(MOD_ID, "armys_paeon");
         var title = "Army's Paeon";
-        var description = "";
+        var description = "Buff nearby allies for {effect_duration} sec, enhance their strength if you damage enemies. The effect can be stacked {amplifier_cap} times.";
         var stashEffect = BardsEffects.ARMYS_PAEON_STASH;
         var buffEffect = BardsEffects.ARMYS_PAEON;
 
@@ -268,18 +294,12 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 5;
         spell.tier = 4;
+        var spellColor = GOLD.toRGBA();
 
         spell.release.animation = "bards_rpg:lute_release";
-        spell.release.sound = new Sound("");
+        //spell.release.sound = new Sound("");
         spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.MagicParticles.get(
-                        SpellEngineParticles.MagicParticles.Shape.SPARK,
-                        SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.LAUNCH_POINT,
-                        15, 0.15F, 0.2F)
-                        .preSpawnTravel(7)
-                        .invert()
-                        .color(GOLD.toRGBA())
+                musicParticles(10).color(spellColor).extent(2.0F)
         };
 
         spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
@@ -306,7 +326,8 @@ public class BardsSpells {
                         .followEntity(true)
                         .scale(1.0F)
                         .maxAge(0.6F)
-                        .color(GOLD.toRGBA())
+                        .color(GOLD.toRGBA()),
+                musicImpactParticles(4).extent(1.5F).color(spellColor)
         };
 
         spell.impacts = List.of(buff);
@@ -327,6 +348,7 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 0;
         spell.tier = 1;
+        var spellColor = GOLD.toRGBA();
 
         spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
         spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
@@ -349,6 +371,7 @@ public class BardsSpells {
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         20, 0.3F, 0.5F)
                         .color(GOLD.toRGBA()),
+                musicImpactParticles(10).extent(0.25F).color(spellColor)
         };
 
         spell.impacts = List.of(custom);
