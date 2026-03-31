@@ -1,5 +1,6 @@
 package com.bards.content;
 
+import com.bards.BardsMod;
 import com.bards.effect.BardsEffects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class ArmiesPaeonImpact implements SpellHandlers.CustomImpact {
     ) {
         double highestDamageAttribute = CustomMethods.getHighestDamageAttribute(caster);
         int effectAmplifier = caster.getStatusEffect(BardsEffects.ARMYS_PAEON.entry).getAmplifier() +1;
-        float damageMultiplier = 0.05F * effectAmplifier;
+        float damageMultiplier = BardsMod.tweaksConfig.value.armies_paeon_impact_multiplier * effectAmplifier;
 
         target.timeUntilRegen = 0;
         target.damage(target.getDamageSources().magic(), (float) (highestDamageAttribute * damageMultiplier));

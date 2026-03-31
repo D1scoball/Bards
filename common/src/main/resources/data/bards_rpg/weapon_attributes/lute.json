@@ -11,7 +11,7 @@
         "upswing": 0.5,
         "animation": "bettercombat:two_handed_slash_horizontal_right",
         "swing_sound": {
-          "id": "bettercombat:claymore_swing"
+          "id": "bards_rpg:lute_hit"
         }
       },
       {
@@ -21,7 +21,7 @@
         "upswing": 0.5,
         "animation": "bettercombat:two_handed_slam",
         "swing_sound": {
-          "id": "bettercombat:hammer_slam"
+          "id": "bards_rpg:lute_hit"
         }
       }
     ]

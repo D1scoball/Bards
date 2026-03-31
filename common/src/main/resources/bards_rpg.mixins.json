@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "com.bards.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "BardSpellAnimationMixin",
+    "ItemRendererAccessor",
+    "ItemRendererMixin",
+    "ModelLoaderMixin"
+  ],
+  "mixins": [
+    "WardensPaeanMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,24 +1,19 @@
 package com.bards.datagen;
 
+import com.bards.item.Armors;
 import com.bards.item.Weapons;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.SmithingTransformRecipeJsonBuilder;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
-
-import java.util.concurrent.CompletableFuture;
+import net.more_rpg_classes.datagen.SmithingRecipeGenerator;
 
 import static com.bards.BardsMod.MOD_ID;
 
-public class BardSmithingRecipeProvider extends FabricRecipeProvider {
+public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
 
-    public BardSmithingRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, registriesFuture);
+    public BardSmithingRecipeProvider(FabricDataOutput output) {
+        super(output, MOD_ID);
     }
 
     @Override
@@ -27,33 +22,240 @@ public class BardSmithingRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void generate(RecipeExporter exporter) {
+    public void generate() {
         // ==========================================
         // NETHERITE UPGRADES
         // ==========================================
-        SmithingTransformRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                        Ingredient.ofItems(Weapons.diamond_rapier.item()),
-                        Ingredient.ofItems(Items.NETHERITE_INGOT),
-                        RecipeCategory.COMBAT,
-                        Weapons.netherite_rapier.item())
-                .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
-                .offerTo(exporter, Identifier.of(MOD_ID, "netherite_rapier_smithing"));
-        SmithingTransformRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                        Ingredient.ofItems(Weapons.diamond_lute.item()),
-                        Ingredient.ofItems(Items.NETHERITE_INGOT),
-                        RecipeCategory.COMBAT,
-                        Weapons.netherite_lute.item())
-                .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
-                .offerTo(exporter, Identifier.of(MOD_ID, "netherite_lute_smithing"));
-        SmithingTransformRecipeJsonBuilder.create(
-                        Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                        Ingredient.ofItems(Weapons.diamond_lyre.item()),
-                        Ingredient.ofItems(Items.NETHERITE_INGOT),
-                        RecipeCategory.COMBAT,
-                        Weapons.netherite_lyre.item())
-                .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
-                .offerTo(exporter, Identifier.of(MOD_ID, "netherite_lyre_smithing"));
+        // WEAPONS
+        createSimpleSmithingRecipe(
+                "netherite_rapier",
+                Weapons.diamond_rapier.item(),
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Items.NETHERITE_INGOT,
+                Weapons.netherite_rapier.item()
+        );
+        createSimpleSmithingRecipe(
+                "netherite_lyre",
+                Weapons.diamond_lyre.item(),
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Items.NETHERITE_INGOT,
+                Weapons.netherite_lyre.item()
+        );
+        createSimpleSmithingRecipe(
+                "netherite_lute",
+                Weapons.diamond_lute.item(),
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Items.NETHERITE_INGOT,
+                Weapons.netherite_lute.item()
+        );
+        // ====================
+        // BETTERNETHER (Ruby)
+        // ====================
+        var rubyRapier = Weapons.entries.stream()
+                .filter(e -> e.id().getPath().equals("ruby_rapier"))
+                .findFirst().map(e -> e.item()).orElse(null);
+
+        if (rubyRapier != null) {
+            createSmithingTransformRecipe(
+                    "ruby_rapier",
+                    Weapons.netherite_rapier.item(),
+                    Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                    Identifier.of("betternether", "nether_ruby"),
+                    rubyRapier,
+                    "betternether"
+            );
+        }
+        var rubyLute = Weapons.entries.stream()
+                .filter(e -> e.id().getPath().equals("ruby_lute"))
+                .findFirst().map(e -> e.item()).orElse(null);
+
+        if (rubyLute != null) {
+            createSmithingTransformRecipe(
+                    "ruby_lute",
+                    Weapons.netherite_lute.item(),
+                    Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                    Identifier.of("betternether", "nether_ruby"),
+                    rubyRapier,
+                    "betternether"
+            );
+        }
+        /// ARMOR
+        // ====================
+        // ARMOR UPGRADES - TROUBADOUR TO Netherite TROUBADOUR
+        // ====================
+        createSimpleArmorSetUpgrade(
+                "smithing",
+                Armors.troubadourArmorSet.armorSet(),
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Items.NETHERITE_INGOT,
+                Armors.netheriteTroubadourArmorSet.armorSet()
+        );
+
+        // ====================
+        // ARMOR UPGRADES - Netherite Troubadour TO Storyteller
+        // ====================
+        if (Armors.storytellerArmorSet != null) {
+            // From Netherite Troubadour to Storyteller
+            /// CHANGE TO NEW CRYSTAL
+            Identifier upgradeCrystal = Identifier.of("more_rpg_classes", "ascetic_upgrade_crystal");
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_head_netherite_troubadour_head",
+                    (Item) Armors.netheriteTroubadourArmorSet.armorSet().head,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().head,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_chest_netherite_troubadour_chest",
+                    (Item) Armors.netheriteTroubadourArmorSet.armorSet().chest,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().chest,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_legs_netherite_troubadour_legs",
+                    (Item) Armors.netheriteTroubadourArmorSet.armorSet().legs,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().legs,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_feet_netherite_troubadour_feet",
+                    (Item) Armors.netheriteTroubadourArmorSet.armorSet().feet,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().feet,
+                    "armory_rpgs"
+            );
+            // ====================
+            // LOOT N EXPLORE -UPGRADES
+            // ====================
+            var glacialrapier = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("glacial_rapier"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (glacialrapier != null) {
+                createSmithingTransformRecipe(
+                        "glacial_rapier",
+                        Weapons.netherite_rapier.item(),
+                        Identifier.of("loot_n_explore", "frostmonarch_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "frozen_soul"),
+                        glacialrapier,
+                        "loot_n_explore"
+                );
+            }
+
+            var elderGuardianrapier = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("elder_guardian_rapier"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (elderGuardianrapier != null) {
+                createSmithingTransformRecipe(
+                        "elder_guardian_rapier",
+                        Weapons.netherite_rapier.item(),
+                        Identifier.of("loot_n_explore", "guardian_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "elder_guardian_eye"),
+                        elderGuardianrapier,
+                        "loot_n_explore"
+                );
+            }
+
+            var elderGuardianLyre = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("elder_guardian_lyre"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (elderGuardianLyre != null) {
+                createSmithingTransformRecipe(
+                        "elder_guardian_lyre",
+                        Weapons.netherite_lyre.item(),
+                        Identifier.of("loot_n_explore", "guardian_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "elder_guardian_eye"),
+                        elderGuardianrapier,
+                        "loot_n_explore"
+                );
+            }
+
+            var enderDragonrapier = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("ender_dragon_rapier"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (enderDragonrapier != null) {
+                createSmithingTransformRecipe(
+                        "ender_dragon_rapier",
+                        Weapons.netherite_rapier.item(),
+                        Identifier.of("loot_n_explore", "dragonslayer_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "ender_dragon_scale"),
+                        enderDragonrapier,
+                        "loot_n_explore"
+                );
+            }
+            var enderDragonLute = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("ender_dragon_lute"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (enderDragonLute != null) {
+                createSmithingTransformRecipe(
+                        "ender_dragon_lute",
+                        Weapons.netherite_lute.item(),
+                        Identifier.of("loot_n_explore", "dragonslayer_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "ender_dragon_scale"),
+                        enderDragonrapier,
+                        "loot_n_explore"
+                );
+            }
+
+            var witherrapier = Weapons.entries.stream()
+                    .filter(e -> e.id().getPath().equals("wither_rapier"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (witherrapier != null) {
+                createSmithingTransformRecipe(
+                        "wither_rapier",
+                        Weapons.netherite_rapier.item(),
+                        Identifier.of("loot_n_explore", "wither_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "wither_spine"),
+                        witherrapier,
+                        "loot_n_explore"
+                );
+            }
+            // ====================
+            // ARMOR UPGRADES - troubadour TO storyteller
+            // ====================
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_head_troubadour_head",
+                    (Item) Armors.troubadourArmorSet.armorSet().head,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().head,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_chest_troubadour_chest",
+                    (Item) Armors.troubadourArmorSet.armorSet().chest,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().chest,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_legs_troubadour_legs",
+                    (Item) Armors.troubadourArmorSet.armorSet().legs,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().legs,
+                    "armory_rpgs"
+            );
+            createSmithingTransformRecipe(
+                    "smithing_storyteller_feet_troubadour_feet",
+                    (Item) Armors.troubadourArmorSet.armorSet().feet,
+                    Identifier.of("armory_rpgs", "epic_armor_upgrade"),
+                    upgradeCrystal,
+                    (Item) Armors.storytellerArmorSet.armorSet().feet,
+                    "armory_rpgs"
+            );
+        }
     }
 }

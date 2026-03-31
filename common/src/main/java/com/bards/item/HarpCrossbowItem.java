@@ -1,0 +1,57 @@
+package com.bards.item;
+
+import com.bards.content.BardsSounds;
+import net.fabric_extras.ranged_weapon.api.CustomCrossbow;
+import net.fabric_extras.ranged_weapon.api.RangedConfig;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+
+import java.util.function.Supplier;
+
+public class HarpCrossbowItem extends CustomCrossbow {
+    public HarpCrossbowItem(Settings settings, RangedConfig config, Supplier<Ingredient> repairIngredientSupplier) {
+        super(settings, config, repairIngredientSupplier);
+    }
+
+    @Override
+    public void shootAll(World world, LivingEntity shooter, Hand hand, ItemStack stack, float speed, float divergence, LivingEntity target) {
+        super.shootAll(world, shooter, hand, stack, speed, divergence, target);
+
+        if (world.isClient()) return;
+
+        Vec3d look = shooter.getRotationVector();
+        Vec3d up = new Vec3d(0, 1, 0);
+        Vec3d right = look.crossProduct(up).normalize();
+        if (right.lengthSquared() < 1e-6) {
+            right = new Vec3d(1, 0, 0);
+        }
+
+        Vec3d eyePos = shooter.getEyePos();
+
+        for (int side = -1; side <= 1; side += 2) {
+            Vec3d spawnPos = eyePos.add(right.multiply(side * 0.5));
+            ArrowEntity arrow = new ArrowEntity(world, spawnPos.x, spawnPos.y, spawnPos.z, Items.ARROW.getDefaultStack(), stack);
+            arrow.setOwner(shooter);
+            arrow.setVelocity(look.x * speed, look.y * speed, look.z * speed);
+            if (shooter instanceof PlayerEntity player && player.getAbilities().creativeMode) {
+                arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+            }
+            arrow.setCritical(true);
+            world.spawnEntity(arrow);
+        }
+
+        world.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
+                BardsSounds.harp_crossbow_shoot.soundEvent(), SoundCategory.PLAYERS,
+                1.0F, 0.9F + world.getRandom().nextFloat() * 0.2F);
+    }
+
+}

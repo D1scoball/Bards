@@ -1,5 +1,6 @@
 package com.bards.datagen;
 
+import com.bards.item.Armors;
 import com.bards.item.Weapons;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -11,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
@@ -62,24 +64,33 @@ public class BardRecipeProvider extends FabricRecipeProvider {
                 .input('R', Items.LEATHER)
                 .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
                 .offerTo(exporter, Identifier.of(MOD_ID, "diamond_rapier"));
+        createConditionalShapedRecipe(exporter, "aeternium_rapier",
+                RecipeCategory.COMBAT,
+                "bards_rpg:aeternium_rapier",
+                new String[]{"  W", " W ", "RW "},
+                'W', "betterend:aeternium_ingot",
+                'R', "minecraft:leather",
+                "betterend");
 
         // ==========================================
         // LUTES
         // ==========================================
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, Weapons.wooden_lute.item())
-                .pattern(" WR")
-                .pattern("WRW")
+                .pattern(" AR")
+                .pattern("WRA")
                 .pattern("WW ")
                 .input('W', Items.BIRCH_PLANKS)
                 .input('R', Items.STRING)
+                .input('A', Items.STICK)
                 .criterion(hasItem(Items.STRING), conditionsFromItem(Items.STRING))
                 .offerTo(exporter, Identifier.of(MOD_ID, "wooden_lute"));
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, Weapons.diamond_lute.item())
-                .pattern(" DR")
-                .pattern("DRD")
+                .pattern(" AR")
+                .pattern("DRA")
                 .pattern("DD ")
                 .input('D', Items.DIAMOND)
                 .input('R', Items.STRING)
+                .input('A', Items.GOLD_INGOT)
                 .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
                 .offerTo(exporter, Identifier.of(MOD_ID, "diamond_lute"));
 
@@ -102,6 +113,13 @@ public class BardRecipeProvider extends FabricRecipeProvider {
                 .input('R', Items.STRING)
                 .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
                 .offerTo(exporter, Identifier.of(MOD_ID, "diamond_lyre"));
+        createConditionalShapedRecipe(exporter, "aeternium_lyre",
+                RecipeCategory.COMBAT,
+                "bards_rpg:aeternium_lyre",
+                new String[]{"WRW", "WRW", " W "},
+                'W', "betterend:aeternium_ingot",
+                'R', "betterend:crystal_shards",
+                "betterend");
 
         // MISC
         var bardBook = getOrFallback(Identifier.of(MOD_ID, "bard_spell_book"), Items.WRITTEN_BOOK);
@@ -112,5 +130,84 @@ public class BardRecipeProvider extends FabricRecipeProvider {
                 .input(Items.LAPIS_LAZULI)
                 .criterion(hasItem(Items.NOTE_BLOCK), conditionsFromItem(Items.NOTE_BLOCK))
                 .offerTo(exporter);
+
+        //// ARMOR
+        //HATS
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.entertainerArmorSet.armorSet().head)
+                .pattern("  A")
+                .pattern("BCB")
+                .pattern("B B")
+                .input('A', Items.FEATHER)
+                .input('B', ItemTags.WOOL)
+                .input('C', Items.PURPLE_DYE)
+                .criterion(hasItem(Items.FEATHER), conditionsFromItem(Items.FEATHER))
+                .offerTo(exporter, Identifier.of(Armors.entertainerArmorSet.armorSet().head.toString()));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.troubadourArmorSet.armorSet().head)
+                .pattern("  A")
+                .pattern("BCB")
+                .pattern("B B")
+                .input('A', Items.FEATHER)
+                .input('B', Items.RABBIT_HIDE)
+                .input('C', Items.GOLD_INGOT)
+                .criterion(hasItem(Items.RABBIT_HIDE), conditionsFromItem(Items.RABBIT_HIDE))
+                .offerTo(exporter, Identifier.of(Armors.troubadourArmorSet.armorSet().head.toString()));
+        //CHESTS
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.entertainerArmorSet.armorSet().chest)
+                .pattern("A A")
+                .pattern("BBB")
+                .pattern("CAC")
+                .input('A', Items.LEATHER)
+                .input('B', ItemTags.WOOL)
+                .input('C', Items.PURPLE_DYE)
+                .criterion(hasItem(Items.LEATHER), conditionsFromItem(Items.LEATHER))
+                .offerTo(exporter, Identifier.of( Armors.entertainerArmorSet.armorSet().chest.toString()));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.troubadourArmorSet.armorSet().chest)
+                .pattern("A A")
+                .pattern("BBB")
+                .pattern("CAC")
+                .input('A', Items.RABBIT_HIDE)
+                .input('B', ItemTags.WOOL)
+                .input('C', Items.GOLD_INGOT)
+                .criterion(hasItem(Items.RABBIT_HIDE), conditionsFromItem(Items.RABBIT_HIDE))
+                .offerTo(exporter, Identifier.of(Armors.troubadourArmorSet.armorSet().chest.toString()));
+        //LEGS
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.entertainerArmorSet.armorSet().legs)
+                .pattern("BAB")
+                .pattern("C C")
+                .pattern("A A")
+                .input('A', Items.LEATHER)
+                .input('B', ItemTags.WOOL)
+                .input('C', Items.PURPLE_DYE)
+                .criterion(hasItem(Items.LEATHER), conditionsFromItem(Items.LEATHER))
+                .offerTo(exporter, Identifier.of(Armors.entertainerArmorSet.armorSet().legs.toString()));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.troubadourArmorSet.armorSet().legs)
+                .pattern("BAB")
+                .pattern("C C")
+                .pattern("A A")
+                .input('A', Items.RABBIT_HIDE)
+                .input('B', ItemTags.WOOL)
+                .input('C', Items.GOLD_INGOT)
+                .criterion(hasItem(Items.RABBIT_HIDE), conditionsFromItem(Items.RABBIT_HIDE))
+                .offerTo(exporter, Identifier.of(Armors.troubadourArmorSet.armorSet().legs.toString()));
+        //FEET
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.entertainerArmorSet.armorSet().feet)
+                .pattern("C C")
+                .pattern("A A")
+                .input('A', Items.LEATHER)
+                .input('C', Items.PURPLE_DYE)
+                .criterion(hasItem(Items.LEATHER), conditionsFromItem(Items.LEATHER))
+                .offerTo(exporter, Identifier.of(Armors.entertainerArmorSet.armorSet().feet.toString()));
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.troubadourArmorSet.armorSet().feet)
+                .pattern("CBC")
+                .pattern("A A")
+                .input('A', Items.RABBIT_HIDE)
+                .input('B', Items.GOLD_INGOT)
+                .input('C', Items.LEATHER)
+                .criterion(hasItem(Items.RABBIT_HIDE), conditionsFromItem(Items.RABBIT_HIDE))
+                .offerTo(exporter, Identifier.of(Armors.troubadourArmorSet.armorSet().feet.toString()));
+    }
+    private void createConditionalShapedRecipe(RecipeExporter exporter, String name, RecipeCategory category,
+                                               String resultId, String[] pattern,
+                                               char key, String ingredientId, char key2, String ingredientId2, String requiredMod) {
     }
 }

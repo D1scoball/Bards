@@ -1,6 +1,7 @@
 package com.bards.item;
 
 import com.bards.BardsMod;
+import com.bards.content.BardsSpells;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -11,9 +12,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.WeaponConfig;
-import net.spell_engine.api.item.Equipment;
+import net.spell_engine.rpg_series.item.Equipment;
 import net.spell_engine.api.item.weapon.StaffItem;
-import net.spell_engine.api.item.weapon.Weapon;
+import net.spell_engine.rpg_series.item.Weapon;
 import net.spell_engine.api.item.weapon.SpellSwordItem;
 import net.spell_power.api.SpellSchools;
 
@@ -28,9 +29,9 @@ public class Weapons {
 
     private static Weapon.Entry entry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults, Equipment.WeaponType category) {
         var entry = new Weapon.Entry(MOD_ID, name, material, factory, defaults, category);
-        entry.castSpell();
         if (entry.isRequiredModInstalled()) {
             entries.add(entry);
+            entry.loot(Equipment.LootProperties.of(""));
         }
         return entry;
     }
@@ -186,34 +187,34 @@ public class Weapons {
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(LNE) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("ender_dragon_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Dragon's Rapier")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of("loot_n_explore:dragonclaw"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("elder_guardian_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Coral Rapier")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of( "loot_n_explore:waterbomb"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("wither_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BONE)), rapier_t5_attack_damage)
                     .translatedName("Withered Rapier")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of("loot_n_explore:wither_pulse"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("glacial_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BLUE_ICE)), rapier_t5_attack_damage)
                     .translatedName("Glacial Rapier")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of( "loot_n_explore:avalanche"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lute("ender_dragon_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), lute_t5_attack_damage)
                     .translatedName("Dragon Lute")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of(""))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)))
                     .translatedName("Siren's Lyre")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                  //  .spell(Identifier.of(""))
                     .loot(Equipment.LootProperties.of(5))
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
@@ -222,35 +223,35 @@ public class Weapons {
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(ARSENAL) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("unique_rapier_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), rapier_t5_attack_damage)
                     .translatedName("Singing Blade")
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of("arsenal:radiance_melee"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lute("unique_lute_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.REDSTONE_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Lute of Ruby Verdict")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                   // .spell(Identifier.of(BardsSpells.melody_of_the_meteor.id().toString()))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lute("unique_lute_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Spellthief's Lute")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                 //   .spell(Identifier.of(BardsSpells.spellthief.id().toString()))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Apollo")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                 //   .spell(Identifier.of("arsenal:radiance_spell"))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Antecael")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
-                    .spell(Identifier.of("arsenal:radiance_melee"))
+                  //  .spell(Identifier.of(BardsSpells.song_of_sun_and_moon.id().toString()))
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
         }

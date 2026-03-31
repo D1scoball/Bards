@@ -1,5 +1,6 @@
 package com.bards.datagen;
 
+import com.bards.content.BardsSounds;
 import com.bards.content.BardsSpells;
 import com.bards.effect.BardsEffects;
 import com.bards.item.Armors;
@@ -15,17 +16,23 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
+import net.spell_engine.api.datagen.SimpleSoundGeneratorV2;
 import net.spell_engine.api.datagen.SpellGenerator;
-import net.spell_engine.api.item.weapon.Weapon;
+import net.spell_engine.api.spell.Spell;
+import net.spell_engine.api.spell.registry.SpellRegistry;
+import net.spell_engine.api.tags.SpellTags;
+import net.spell_engine.rpg_series.item.Armor;
+import net.spell_engine.rpg_series.item.Weapon;
 import net.spell_engine.api.tags.SpellEngineItemTags;
 import net.spell_engine.rpg_series.datagen.RPGSeriesDataGen;
 import net.spell_engine.rpg_series.tags.RPGSeriesItemTags;
 import net.spell_power.api.SpellPowerTags;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+
+import static com.bards.BardsMod.MOD_ID;
 
 public class BardsDataGenerator implements DataGeneratorEntrypoint {
     @Override
@@ -41,6 +48,8 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(WeaponAttributesGenerator::new);
         pack.addProvider(BardAdvancementProvider::new);
         pack.addProvider(BardVanillaAdvancementProvider::new);
+        pack.addProvider(SoundGen::new);
+        pack.addProvider(SpellTagGenerator::new);
     }
     public static class SpellGen extends SpellGenerator {
         public SpellGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -62,8 +71,14 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
         @Override
         public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, FabricLanguageProvider.TranslationBuilder translationBuilder) {
             translationBuilder.add(Group.translationKey, "Bards");
-            translationBuilder.add("item.bards_rpg.bard_spell_book","Bard's Stories");
-            translationBuilder.add("item.bards_rpg.bard_spell_scroll","Bard Ballad");
+
+            translationBuilder.add("item." + MOD_ID + ".spell_book/bard", "Bard's Stories");
+            translationBuilder.add("item.bards_rpg.spell_book/bard.spell_binding.description",
+                    "Spell Book of Bards, using different instruments to play powerful music. The Bard improves stats and abilities of himself and party members and makes his enemies weaker .\n- Strengths: Mobility and Stat Enhancements.\n- Weaknesses: Low Armor & Damage\n- Equipment: Light Armor");
+            translationBuilder.add("item." + MOD_ID + ".spell_scroll/bard", "Bard Ballad");
+
+            translationBuilder.add("item.bards_rpg.bard_spell_book","");
+            translationBuilder.add("item.bards_rpg.bard_spell_scroll","");
             Weapons.entries.forEach(entry ->
                     translationBuilder.add(entry.item().getTranslationKey(), entry.translatedName())
             );
@@ -95,12 +110,64 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                 translationBuilder.add(entry.titleKey(), entry.title());
                 translationBuilder.add(entry.descriptionKey(), entry.description());
             }
+            // Equipment Set
+            translationBuilder.add("equipment_set." + MOD_ID + ".storyteller", "The Storyteller");
         }
     }
 
     public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
-        public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-            super(output, registriesFuture);
+        public ItemTagGenerator(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            super(dataOutput, registryLookup);
+        }
+        public void armoryTags(List<Armor.Entry> armors) {
+            this.armoryTags(armors, EnumSet.noneOf(RPGSeriesItemTags.ArmorMetaType.class));
+        }
+
+        public void armoryTags(List<Armor.Entry> armors, RPGSeriesItemTags.ArmorMetaType metaType) {
+            this.armoryTags(armors, EnumSet.of(metaType));
+        }
+
+        public void armoryTags(List<Armor.Entry> armors, EnumSet<RPGSeriesItemTags.ArmorMetaType> metaTypes) {
+            Iterator var3 = armors.iterator();
+
+            while(var3.hasNext()) {
+                Armor.Entry armor = (Armor.Entry)var3.next();
+                Armor.Set set = armor.armorSet();
+                FabricTagProvider<Item>.FabricTagBuilder headTag = this.getOrCreateTagBuilder(ItemTags.HEAD_ARMOR);
+                headTag.addOptional(set.idOf(set.head));
+                FabricTagProvider<Item>.FabricTagBuilder chestTag = this.getOrCreateTagBuilder(ItemTags.CHEST_ARMOR);
+                chestTag.addOptional(set.idOf(set.chest));
+                FabricTagProvider<Item>.FabricTagBuilder legsTag = this.getOrCreateTagBuilder(ItemTags.LEG_ARMOR);
+                legsTag.addOptional(set.idOf(set.legs));
+                FabricTagProvider<Item>.FabricTagBuilder feetTag = this.getOrCreateTagBuilder(ItemTags.FOOT_ARMOR);
+                feetTag.addOptional(set.idOf(set.feet));
+                Iterator var12;
+
+                String lootTheme = armor.lootProperties().theme();
+                if (lootTheme != null && !lootTheme.isEmpty()) {
+                    FabricTagProvider<Item>.FabricTagBuilder themeTag = this.getOrCreateTagBuilder(RPGSeriesItemTags.LootThemes.get(lootTheme));
+                    Iterator var19 = armor.armorSet().pieceIds().iterator();
+
+                    while(var19.hasNext()) {
+                        Object id = var19.next();
+                        themeTag.addOptional((Identifier)id);
+                    }
+                }
+
+                var12 = metaTypes.iterator();
+
+                while(var12.hasNext()) {
+                    RPGSeriesItemTags.ArmorMetaType metaType = (RPGSeriesItemTags.ArmorMetaType)var12.next();
+                    FabricTagProvider<Item>.FabricTagBuilder metaTag = this.getOrCreateTagBuilder(RPGSeriesItemTags.ArmorType.get(metaType));
+                    Iterator var15 = armor.armorSet().pieceIds().iterator();
+
+                    while(var15.hasNext()) {
+                        Object id = var15.next();
+                        metaTag.addOptional((Identifier)id);
+                    }
+                }
+            }
+
         }
 
         public void generateBardWeaponTags(List<Weapon.Entry> weapons, TagKey tagKey) {
@@ -121,13 +188,20 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                 }
             }
         }
+
+        List<String> armoryKeywords = List.of("storyteller");
         @Override
         protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-            var armorTagOptions = new RPGSeriesDataGen.ItemTagGenerator.ArmorOptions(true, true);
+            var armorTagOptions1 = new ArmorOptions(false, true);
+            var armorTagOptions2 = new ArmorOptions(true, true);
+            armoryTags(
+                    Armors.entries.stream().filter(entry -> armoryKeywords.stream().anyMatch(entry.name()::contains)).toList(),
+                    RPGSeriesItemTags.ArmorMetaType.MAGIC
+            );
             generateArmorTags(
-                    Armors.entries.stream().toList(),
+                    Armors.entries.stream().filter(entry -> armoryKeywords.stream().noneMatch(entry.name()::contains)).toList(),
                     RPGSeriesItemTags.ArmorMetaType.MAGIC,
-                    armorTagOptions
+                    armorTagOptions2
             );
             generateWeaponTags(Weapons.entries.stream()
                     .filter(entry -> entry.name().toLowerCase().contains("rapier"))
@@ -169,5 +243,51 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
         }
     }
 
+    public static class SoundGen extends SimpleSoundGeneratorV2 {
+        public SoundGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+            super(dataOutput, registryLookup);
+        }
+
+        @Override
+        public void generateSounds(Builder builder) {
+            builder.entries.add(new Entry(MOD_ID,
+                            BardsSounds.entries.stream()
+                                    .map(entry -> SoundEntry.withVariants(entry.id().getPath(), entry.variants()))
+                                    .toList()
+                    )
+            );
+        }
+    }
+
+    public static class SpellTagGenerator extends FabricTagProvider<Spell> {
+        public SpellTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, SpellRegistry.KEY, registriesFuture);
+        }
+
+        @Override
+        protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+            var namespace = MOD_ID;
+            var treasureTagBuilder = getOrCreateTagBuilder(SpellTags.TREASURE);
+            var processedBooks = new HashSet<BardsSpells.Book>();
+            BardsSpells.entries.forEach(entry -> {
+                if (entry.book() != null) {
+                    var bookTagKey = SpellTags.spellBook(namespace, entry.book().toString().toLowerCase());
+                    var bookTag = getOrCreateTagBuilder(bookTagKey);
+                    bookTag.addOptional(entry.id());
+                    var scrollTagKey = SpellTags.spellScroll(namespace, entry.book().toString().toLowerCase());
+                    var scrollTag = getOrCreateTagBuilder(scrollTagKey);
+                    scrollTag.addOptional(entry.id());
+                    if (processedBooks.add(entry.book())) {
+                        treasureTagBuilder.addOptionalTag(scrollTagKey);
+                    }
+                }
+                for (var group : entry.weaponGroups()) {
+                    var weaponGroupTagKey = SpellTags.weapon(namespace, group.toString().toLowerCase());
+                    var weaponGroupTag = getOrCreateTagBuilder(weaponGroupTagKey);
+                    weaponGroupTag.addOptional(entry.id());
+                }
+            });
+        }
+    }
 
 }

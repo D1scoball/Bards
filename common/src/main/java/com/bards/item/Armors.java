@@ -1,7 +1,5 @@
 package com.bards.item;
 
-import com.bards.BardsMod;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
@@ -18,8 +16,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.spell_engine.api.config.ArmorSetConfig;
 import net.spell_engine.api.config.AttributeModifier;
-import net.spell_engine.api.item.Equipment;
-import net.spell_engine.api.item.armor.Armor;
+import net.spell_engine.rpg_series.item.Equipment;
+import net.spell_engine.rpg_series.item.Armor;
 import net.spell_engine.api.spell.SpellDataComponents;
 import net.spell_power.api.SpellSchools;
 
@@ -29,6 +27,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.bards.BardsMod.MOD_ID;
+import static com.bards.compat.CompatLoadingCheck.armoryLoadCheck;
 
 public class Armors {
     public static final ArrayList<Armor.Entry> entries = new ArrayList<>();
@@ -198,7 +197,7 @@ public class Armors {
     public static Identifier storyteller_passive = Identifier.of(MOD_ID, "storyteller");
 
     public static void register(Map<String, ArmorSetConfig> configs) {
-        if (FabricLoader.getInstance().isModLoaded("armory_rpgs") || BardsMod.tweaksConfig.value.ignore_items_required_mods) {
+        if (armoryLoadCheck()) {
             storytellerArmorSet = create(
                     storytellers_garb,
                     Identifier.of(MOD_ID, "storyteller_garb"),
@@ -223,7 +222,7 @@ public class Armors {
                                     .add(AttributeModifier.multiply(SpellSchools.HEALING.id, bard_spell_power_t5))
                                     .add(movementSpeed(bard_speed_T5))
                     ),
-                    commonSettings(null))
+                    commonSettings(storyteller_passive))
                     .translatedName("Storyteller Hat", "Storyteller Tunic", "Storyteller Trousers", "Storyteller Boots");
         }
         Armor.register(configs, entries, Group.KEY);

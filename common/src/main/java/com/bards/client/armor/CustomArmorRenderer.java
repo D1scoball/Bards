@@ -1,7 +1,7 @@
 package com.bards.client.armor;
 
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRenderer;
-import mod.azure.azurelibarmor.rewrite.render.armor.AzArmorRendererConfig;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
+import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererConfig;
 import net.minecraft.util.Identifier;
 
 import static com.bards.BardsMod.MOD_ID;

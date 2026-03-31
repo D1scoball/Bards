@@ -5,13 +5,20 @@
   "learn": {},
   "active": {
     "cast": {
-      "duration": 0.5,
-      "animation": "bards_rpg:lute_channel",
-      "movement_speed": 1.5
+      "duration": 1.25,
+      "animation": {
+        "id": "spell_engine:one_handed_area_charge"
+      },
+      "movement_speed": 1.5,
+      "sound": {
+        "id": "bards_rpg:encore_channel"
+      }
     }
   },
   "release": {
-    "animation": "bards_rpg:lute_release",
+    "animation": {
+      "id": "spell_engine:one_handed_area_release"
+    },
     "particles": [
       {
         "particle_id": "more_rpg_classes:music_note",
@@ -55,13 +62,16 @@
           "particle_id": "more_rpg_classes:music_note",
           "origin": "CENTER",
           "shape": "CIRCLE",
-          "count": 4.0,
+          "count": 0.5,
           "min_speed": 0.6,
           "max_speed": 0.8,
           "extent": 0.5,
           "color_rgba": 16777215
         }
-      ]
+      ],
+      "sound": {
+        "id": "bards_rpg:bard_impact"
+      }
     },
     {
       "action": {
@@ -77,13 +87,16 @@
           "particle_id": "more_rpg_classes:music_note",
           "origin": "CENTER",
           "shape": "CIRCLE",
-          "count": 4.0,
+          "count": 0.5,
           "min_speed": 0.6,
           "max_speed": 0.8,
           "extent": 0.5,
           "color_rgba": 16777215
         }
-      ]
+      ],
+      "sound": {
+        "id": "bards_rpg:encore_cooldown_impact"
+      }
     }
   ],
   "cost": {

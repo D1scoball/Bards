@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "A": {
+      "item": "minecraft:gold_ingot"
+    },
     "D": {
       "item": "minecraft:diamond"
     },
@@ -10,8 +13,8 @@
     }
   },
   "pattern": [
-    " DR",
-    "DRD",
+    " AR",
+    "DRA",
     "DD "
   ],
   "result": {

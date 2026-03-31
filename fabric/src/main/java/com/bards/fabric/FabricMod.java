@@ -10,5 +10,6 @@ public final class FabricMod implements ModInitializer {
         BardsMod.init();
         BardsMod.registerEffects();
         BardsMod.registerItems();
+        BardsMod.registerSounds();
     }
 }

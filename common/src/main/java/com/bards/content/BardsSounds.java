@@ -66,7 +66,24 @@ public class BardsSounds {
         return entry;
     }
 
-    //public static final Entry test = add(new Entry("test"));
+    public static final Entry lyre_channel = add(new Entry("lyre_channel").variants(3));
+    public static final Entry lyre_hit = add(new Entry("lyre_hit").variants(3));
+    public static final Entry lyre_release = add(new Entry("lyre_release").variants(1));
+    public static final Entry lute_hit = add(new Entry("lute_hit").variants(2));
+    public static final Entry bard_impact = add(new Entry("bard_impact").variants(3));
+    public static final Entry bard_buff = add(new Entry("bard_buff").variants(3));
+    public static final Entry magical_ballad = add(new Entry("magical_ballad"));
+    public static final Entry encore_channel = add(new Entry("encore_channel"));
+    public static final Entry encore_cooldown_impact = add(new Entry("encore_cooldown_impact"));
+    public static final Entry armys_paeon_buff = add(new Entry("armys_paeon_buff"));
+    public static final Entry armys_paeon_impact = add(new Entry("armys_paeon_impact").variants(3));
+    public static final Entry armys_paeon_release = add(new Entry("armys_paeon_release").variants(3));
+    public static final Entry troubadours_minuet = add(new Entry("troubadours_minuet"));
+    public static final Entry harp_crossbow_pull = add(new Entry("harp_crossbow_pull"));
+    public static final Entry harp_crossbow_shoot = add(new Entry("harp_crossbow_shoot"));
+    public static final Entry harp_crossbow_hit = add(new Entry("harp_crossbow_hit"));
+
+
 
     public static void register() {
         for (var entry: entries) {

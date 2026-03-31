@@ -11,5 +11,9 @@ public class CustomSpellImpacts {
                 Identifier.of(MOD_ID, "armies_paeon_impact"),
                 new ArmiesPaeonImpact()
         );
+        SpellHandlers.registerCustomImpact(
+                Identifier.of(MOD_ID, "spellthief_impact"),
+                new SpellthiefImpact()
+        );
     }
 }

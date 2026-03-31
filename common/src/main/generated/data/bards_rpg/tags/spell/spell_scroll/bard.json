@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:magical_ballad",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:encore",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:armys_paeon",
+      "required": false
+    }
+  ]
+}

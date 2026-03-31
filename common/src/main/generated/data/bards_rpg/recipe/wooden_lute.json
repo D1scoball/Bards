@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "A": {
+      "item": "minecraft:stick"
+    },
     "R": {
       "item": "minecraft:string"
     },
@@ -10,8 +13,8 @@
     }
   },
   "pattern": [
-    " WR",
-    "WRW",
+    " AR",
+    "WRA",
     "WW "
   ],
   "result": {

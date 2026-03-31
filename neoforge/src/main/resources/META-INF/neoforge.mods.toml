@@ -1,31 +1,45 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 #issueTrackerURL = ""
-license = "Insert License Here"
+license = "ARR"
 
 [[mods]]
-modId = "bards-rpg"
+modId = "bards_rpg"
 version = "${version}"
-displayName = "Bards RPG class"
-authors = "Me!"
+displayName = "Bards (RPG Class)"
+authors = "Fichte"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Motivate and strengthen the party with awesome song's and ballads!
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
-[[dependencies.bards-rpg]]
+[[dependencies.bards_rpg]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.bards-rpg]]
+[[dependencies.bards_rpg]]
 modId = "minecraft"
 type = "required"
 versionRange = "[1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.bards_rpg]]
+modId = "spell_engine"
+type = "required"
+versionRange = "(,${spell_engine_version}]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.bards_rpg]]
+modId = "structure_pool_api"
+type = "required"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
 [[mixins]]
-config = "bards-rpg.mixins.json"
+config = "bards_rpg.mixins.json"

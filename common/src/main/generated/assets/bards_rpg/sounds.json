@@ -1,0 +1,95 @@
+{
+  "armys_paeon_buff": {
+    "sounds": [
+      "bards_rpg:armys_paeon_buff"
+    ]
+  },
+  "armys_paeon_impact": {
+    "sounds": [
+      "bards_rpg:armys_paeon_impact_1",
+      "bards_rpg:armys_paeon_impact_2",
+      "bards_rpg:armys_paeon_impact_3"
+    ]
+  },
+  "armys_paeon_release": {
+    "sounds": [
+      "bards_rpg:armys_paeon_release_1",
+      "bards_rpg:armys_paeon_release_2",
+      "bards_rpg:armys_paeon_release_3"
+    ]
+  },
+  "bard_buff": {
+    "sounds": [
+      "bards_rpg:bard_buff_1",
+      "bards_rpg:bard_buff_2",
+      "bards_rpg:bard_buff_3"
+    ]
+  },
+  "bard_impact": {
+    "sounds": [
+      "bards_rpg:bard_impact_1",
+      "bards_rpg:bard_impact_2",
+      "bards_rpg:bard_impact_3"
+    ]
+  },
+  "encore_channel": {
+    "sounds": [
+      "bards_rpg:encore_channel"
+    ]
+  },
+  "encore_cooldown_impact": {
+    "sounds": [
+      "bards_rpg:encore_cooldown_impact"
+    ]
+  },
+  "harp_crossbow_hit": {
+    "sounds": [
+      "bards_rpg:harp_crossbow_hit"
+    ]
+  },
+  "harp_crossbow_pull": {
+    "sounds": [
+      "bards_rpg:harp_crossbow_pull"
+    ]
+  },
+  "harp_crossbow_shoot": {
+    "sounds": [
+      "bards_rpg:harp_crossbow_shoot"
+    ]
+  },
+  "lute_hit": {
+    "sounds": [
+      "bards_rpg:lute_hit_1",
+      "bards_rpg:lute_hit_2"
+    ]
+  },
+  "lyre_channel": {
+    "sounds": [
+      "bards_rpg:lyre_channel_1",
+      "bards_rpg:lyre_channel_2",
+      "bards_rpg:lyre_channel_3"
+    ]
+  },
+  "lyre_hit": {
+    "sounds": [
+      "bards_rpg:lyre_hit_1",
+      "bards_rpg:lyre_hit_2",
+      "bards_rpg:lyre_hit_3"
+    ]
+  },
+  "lyre_release": {
+    "sounds": [
+      "bards_rpg:lyre_release"
+    ]
+  },
+  "magical_ballad": {
+    "sounds": [
+      "bards_rpg:magical_ballad"
+    ]
+  },
+  "troubadours_minuet": {
+    "sounds": [
+      "bards_rpg:troubadours_minuet"
+    ]
+  }
+}

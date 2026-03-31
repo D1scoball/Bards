@@ -7,9 +7,7 @@ import net.minecraft.util.Identifier;
 import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.ConfigFile;
 import net.spell_engine.api.config.EffectConfig;
-import net.spell_engine.api.effect.CustomStatusEffect;
-import net.spell_engine.api.effect.Effects;
-import net.spell_engine.api.effect.Synchronized;
+import net.spell_engine.api.effect.*;
 import net.spell_engine.api.entity.SpellEngineAttributes;
 import net.spell_power.api.SpellSchools;
 
@@ -27,7 +25,7 @@ public class BardsEffects {
 
     public static Effects.Entry BALLAD = add(new Effects.Entry(Identifier.of(MOD_ID, "ballad"),
             "Ballad",
-            "Increases Attack Damage & Spell Power.",
+            "Increases Attack Damage, Ranged Damage & Spell Power.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
             new EffectConfig(
                     List.of(
@@ -38,6 +36,11 @@ public class BardsEffects {
                             ),
                             new AttributeModifier(
                                     EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(),
+                                    0.025F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "ranged_weapon:damage",
                                     0.025F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
@@ -53,7 +56,7 @@ public class BardsEffects {
                     List.of(
                             new AttributeModifier(
                                     SpellEngineAttributes.DAMAGE_TAKEN.id.toString(),
-                                    -0.05F,
+                                    -0.03F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
@@ -77,12 +80,83 @@ public class BardsEffects {
                     )
             )
     ));
+    public static Effects.Entry NATURES_MINNE = add(new Effects.Entry(Identifier.of(MOD_ID, "natures_minne"),
+            "Natures Minne",
+            "Increases Healing taken.",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    SpellEngineAttributes.HEALING_TAKEN.id.toString(),
+                                    0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static Effects.Entry CRESCENDO = add(new Effects.Entry(Identifier.of(MOD_ID, "crescendo"),
+            "Crescendo",
+            "Stuns the target and increases damage taken.",
+            new CustomStatusEffect(StatusEffectCategory.HARMFUL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    SpellEngineAttributes.DAMAGE_TAKEN.id,
+                                    0.05F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static Effects.Entry VICIOUS_MOCKERY = add(new Effects.Entry(Identifier.of(MOD_ID, "vicious_mockery"),
+            "Vicious Mockery",
+            "Decreases Attack Damage, Ranged Damage & Spell Power.",
+            new CustomStatusEffect(StatusEffectCategory.HARMFUL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    SpellSchools.GENERIC.id,
+                                    -0.05F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(),
+                                    -0.05F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "ranged_weapon:damage",
+                                    -0.05F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static Effects.Entry HARMFUL_WARDENS_PAEAN = add(new Effects.Entry(Identifier.of(MOD_ID, "wardens_paean_harmful"),
+            "Warden's Paean",
+            "Removes a beneficial status effect when applied, if none is present, the next beneficial status effect wont get applied.",
+            new WardensPaeanHarmfulEffect(StatusEffectCategory.HARMFUL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
+    public static Effects.Entry BENEFICIAL_WARDENS_PAEAN = add(new Effects.Entry(Identifier.of(MOD_ID, "wardens_paean_beneficial"),
+            "Warden's Paean",
+            "Removes a harmful status effect when applied, if none is present, the next harmful status effect wont get applied.",
+            new WardensPaeanBeneficialEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                    )
+            )
+    ));
 
 
     public static void register(ConfigFile.Effects config) {
         for (var entry : entries) {
             Synchronized.configure(entry.effect, true);
         }
+        ActionImpairing.configure(CRESCENDO.effect, EntityActionsAllowed.STUN);
         Effects.register(entries, config.effects);
 
     }

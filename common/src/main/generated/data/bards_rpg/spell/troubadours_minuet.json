@@ -7,14 +7,19 @@
     "cast": {
       "duration": 5.0,
       "channel_ticks": 10,
-      "animation": "bards_rpg:lute_channel",
+      "animation": {
+        "id": "spell_engine:one_handed_area_charge"
+      },
       "movement_speed": 1.5,
+      "sound": {
+        "id": "bards_rpg:troubadours_minuet"
+      },
       "particles": [
         {
           "particle_id": "more_rpg_classes:music_note",
           "origin": "FEET",
           "shape": "WIDE_PIPE",
-          "count": 2.0,
+          "count": 0.5,
           "min_speed": 0.4,
           "max_speed": 0.5,
           "extent": 2.0,
@@ -35,8 +40,22 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.5
+          "spell_power_coefficient": 0.65
         }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_spell_burst",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 10.0,
+          "min_speed": 0.5,
+          "max_speed": 0.5,
+          "color_rgba": 2399052287
+        }
+      ],
+      "sound": {
+        "id": "bards_rpg:bard_impact"
       }
     },
     {
@@ -48,27 +67,40 @@
           "amplifier": 1,
           "amplifier_cap": 3,
           "amplifier_cap_power_multiplier": 0.1,
+          "refresh_duration": false,
           "apply_mode": "ADD"
         }
       },
       "particles": [
         {
-          "particle_id": "spell_engine:magic_spell_burst",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 10.0,
-          "min_speed": 0.3,
-          "max_speed": 0.5,
-          "color_rgba": 2399052287
-        },
-        {
           "particle_id": "more_rpg_classes:music_note",
           "origin": "CENTER",
           "shape": "CIRCLE",
-          "count": 4.0,
+          "count": 0.5,
           "min_speed": 0.6,
           "max_speed": 0.8,
           "extent": 0.5,
+          "color_rgba": 2399052287
+        }
+      ]
+    },
+    {
+      "school": "spell_power:healing",
+      "action": {
+        "type": "HEAL",
+        "heal": {
+          "spell_power_coefficient": 0.2
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_heal_decelerate",
+          "origin": "CENTER",
+          "shape": "WIDE_PIPE",
+          "count": 5.0,
+          "min_speed": 0.1,
+          "max_speed": 0.3,
+          "extent": 1.0,
           "color_rgba": 2399052287
         }
       ]
