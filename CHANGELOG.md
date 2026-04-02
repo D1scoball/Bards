@@ -2,6 +2,14 @@
 - Update to Spell Engine Version 1.9.*
 - Added "Ranged Weapon API" as a new dependency!
 - Fixed issues with the Hat-Armor Models conflicting with the player's head model
+To Do:
+- Add missing spells
+- Add missing Assets
+- Add Harp Crossbow Assets
+- Change Lute Item holding stance
+- Improve Lyre Item holding stance
+- Add cast & release Animations for puncture, generic bard spell cast & release & , harp crossbow bard spell cast & release
+- Add Missing Spell & generic Sound Effects
 
 # 0.1.0 - 1.21.1
 - Bard's Beta!

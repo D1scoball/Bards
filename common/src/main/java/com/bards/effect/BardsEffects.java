@@ -9,6 +9,7 @@ import net.spell_engine.api.config.ConfigFile;
 import net.spell_engine.api.config.EffectConfig;
 import net.spell_engine.api.effect.*;
 import net.spell_engine.api.entity.SpellEngineAttributes;
+import net.spell_power.api.SpellPowerMechanics;
 import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ public class BardsEffects {
                     )
             )
     ));
-
     public static Effects.Entry TROUBADOURS_MINUET = add(new Effects.Entry(Identifier.of(MOD_ID, "troubadours_minuet"),
             "Troubadours Minuet",
             "Reduces damage taken.",
@@ -57,6 +57,37 @@ public class BardsEffects {
                             new AttributeModifier(
                                     SpellEngineAttributes.DAMAGE_TAKEN.id.toString(),
                                     -0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static float critChanceIncrease = 0.005F;
+    public static float critDamageIncrease = 0.02F;
+    public static Effects.Entry WANDERERS_MINUET = add(new Effects.Entry(Identifier.of(MOD_ID, "wanderers_minuet"),
+            "Wanderer's Minuet",
+            "Increases Critical Chance & Damage.",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    SpellPowerMechanics.CRITICAL_CHANCE.id,
+                                    critChanceIncrease,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    SpellPowerMechanics.CRITICAL_DAMAGE.id,
+                                    critDamageIncrease,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "critical_strike:chance",
+                                    critChanceIncrease,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "critical_strike:damage",
+                                    critDamageIncrease,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
@@ -89,6 +120,36 @@ public class BardsEffects {
                             new AttributeModifier(
                                     SpellEngineAttributes.HEALING_TAKEN.id.toString(),
                                     0.03F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static float haste_increase = 0.01F;
+    public static Effects.Entry SONG_OF_CELERITY = add(new Effects.Entry(Identifier.of(MOD_ID, "song_of_celerity"),
+            "Song of Celerity",
+            "Increases Movement Speed & all Haste Attributes",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    0.02F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    haste_increase,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    SpellPowerMechanics.HASTE.id,
+                                    haste_increase,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    "ranged_weapon:haste",
+                                    haste_increase,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )
