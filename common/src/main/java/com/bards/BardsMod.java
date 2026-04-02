@@ -2,6 +2,7 @@ package com.bards;
 
 import com.bards.config.Default;
 import com.bards.config.TweaksConfig;
+import com.bards.content.BardParticles;
 import com.bards.content.BardsSounds;
 import com.bards.content.CustomSpellImpacts;
 import com.bards.effect.BardsEffects;
@@ -94,5 +95,9 @@ public final class BardsMod {
 
     public static void registerSounds() {
         BardsSounds.register();
+    }
+
+    public static void registerParticles() {
+        BardParticles.register();
     }
 }

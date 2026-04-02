@@ -23,5 +23,8 @@ public final class NeoForgeMod {
         event.register(RegistryKeys.STATUS_EFFECT, reg -> {
             BardsMod.registerEffects();
         });
+        event.register(RegistryKeys.PARTICLE_TYPE, reg -> {
+            BardsMod.registerParticles();
+        });
     }
 }
