@@ -68,13 +68,23 @@ public class BardAdvancementProvider implements DataProvider {
                 "Path of the Bard",
                 "Bard's Stories",
                 Identifier.of("more_rpg_content", "root"),
-                MOD_ID + ":bard_spell_book",
+                MOD_ID + ":item/spell_scroll/bard",
                 AdvancementFrame.TASK,
                 true, true, false, null,
                 SpellEngineCriteriaType.SPELL_BOOK_CREATION,
-                MOD_ID + ":bard"
+                MOD_ID + "::spell_book/bard"
         ));
-
+        addEntry(new Entry(
+                id("spell_cast_bard_book"),
+                "Songwriter",
+                "Use a Skill from the Bard's Stories Book",
+                id("spell_novice_bard"),
+                MOD_ID + ":item/spell_book/bard",
+                AdvancementFrame.TASK,
+                true, true, false, null,
+                SpellEngineCriteriaType.SPELL_CAST,
+                "#" + MOD_ID + ":spell_book/bard"
+        ));
         addEntry(new Entry(
                 id("spell_novice_bard"),
                 "The Troubadour!",
@@ -84,9 +94,8 @@ public class BardAdvancementProvider implements DataProvider {
                 AdvancementFrame.TASK,
                 true, true, false, null,
                 SpellEngineCriteriaType.ONE_SPELL_BOUND,
-                "#" + MOD_ID + ":bard"
+                "#" + MOD_ID + ":spell_book/bard"
         ));
-
         addEntry(new Entry(
                 id("spell_master_bard"),
                 "The Motivator",
@@ -96,20 +105,9 @@ public class BardAdvancementProvider implements DataProvider {
                 AdvancementFrame.GOAL,
                 true, true, false, null,
                 SpellEngineCriteriaType.ALL_SPELLS_BOUND,
-                "#" + MOD_ID + ":bard"
+                "#" + MOD_ID + ":spell_book/bard"
         ));
 
-        addEntry(new Entry(
-                id("spell_cast_bard_book"),
-                "Songwriter",
-                "Use a Skill from the Bard's Stories Book",
-                id("spell_novice_bard"),
-                MOD_ID + ":golden_lyre",
-                AdvancementFrame.TASK,
-                true, true, false, null,
-                SpellEngineCriteriaType.SPELL_CAST,
-                "#" + MOD_ID + ":bard"
-        ));
     }
 
     public BardAdvancementProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {

@@ -79,9 +79,14 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
 
             translationBuilder.add("item.bards_rpg.bard_spell_book","");
             translationBuilder.add("item.bards_rpg.bard_spell_scroll","");
-            Weapons.entries.forEach(entry ->
+            Weapons.meleeEntries.forEach(entry ->
                     translationBuilder.add(entry.item().getTranslationKey(), entry.translatedName())
             );
+            Weapons.rangedEntries.forEach(entry ->
+                    translationBuilder.add(entry.item().getTranslationKey(), entry.translatedName())
+            );
+            translationBuilder.add(com.bards.item.HarpCrossbowItem.TOOLTIP_KEY,
+                    "Half Musical Instrument and fully deadly weapon, the Harp Crossbow shoots multiple arrows");
             BardsSpells.entries.forEach(entry -> {
                 var id = entry.id();
                 translationBuilder.add("spell." + id.getNamespace() + "." + id.getPath() + ".name" , entry.title());
@@ -112,6 +117,9 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             }
             // Equipment Set
             translationBuilder.add("equipment_set." + MOD_ID + ".storyteller", "The Storyteller");
+            // Spellthief messages
+            translationBuilder.add("message." + MOD_ID + ".spellthief.spell_stolen", "Stole and cast %s from %s");
+            translationBuilder.add("message." + MOD_ID + ".spellthief.effect_stolen", "Stole %s from %s");
         }
     }
 
@@ -203,17 +211,17 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                     RPGSeriesItemTags.ArmorMetaType.MAGIC,
                     armorTagOptions2
             );
-            generateWeaponTags(Weapons.entries.stream()
+            generateWeaponTags(Weapons.meleeEntries.stream()
                     .filter(entry -> entry.name().toLowerCase().contains("rapier"))
                     .toList());
             generateBardWeaponTags(
-                    Weapons.entries.stream()
+                    Weapons.meleeEntries.stream()
                             .filter(entry -> entry.name().toLowerCase().contains("lute"))
                             .toList(),
                     BardTags.LUTES
             );
             generateBardWeaponTags(
-                    Weapons.entries.stream()
+                    Weapons.meleeEntries.stream()
                             .filter(entry -> entry.name().toLowerCase().contains("lyre"))
                             .toList(),
                     BardTags.LYRES

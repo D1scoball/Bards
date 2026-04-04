@@ -11,6 +11,10 @@
     {
       "id": "bards_rpg:armys_paeon",
       "required": false
+    },
+    {
+      "id": "bards_rpg:crescendo",
+      "required": false
     }
   ]
 }

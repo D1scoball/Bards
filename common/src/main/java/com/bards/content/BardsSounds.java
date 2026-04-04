@@ -80,7 +80,7 @@ public class BardsSounds {
     public static final Entry armys_paeon_release = add(new Entry("armys_paeon_release").variants(3));
     public static final Entry troubadours_minuet = add(new Entry("troubadours_minuet"));
     public static final Entry harp_crossbow_pull = add(new Entry("harp_crossbow_pull"));
-    public static final Entry harp_crossbow_shoot = add(new Entry("harp_crossbow_shoot"));
+    public static final Entry harp_crossbow_shoot = add(new Entry("harp_crossbow_shoot").variants(4));
     public static final Entry harp_crossbow_hit = add(new Entry("harp_crossbow_hit"));
 
 

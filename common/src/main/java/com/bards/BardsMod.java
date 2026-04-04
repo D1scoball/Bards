@@ -1,5 +1,6 @@
 package com.bards;
 
+import com.bards.config.BardItemConfig;
 import com.bards.config.Default;
 import com.bards.config.TweaksConfig;
 import com.bards.content.BardParticles;
@@ -26,7 +27,7 @@ import static com.bards.compat.CompatLoadingCheck.armoryLoadCheck;
 
 public final class BardsMod {
     public static final String MOD_ID = "bards_rpg";
-    public static ConfigManager<ConfigFile.Equipment> itemConfig = new ConfigManager<>
+    public static ConfigManager<BardItemConfig> itemConfig = new ConfigManager<BardItemConfig>
             ("equipment", Default.itemConfig)
             .builder()
             .setDirectory(MOD_ID)
@@ -66,13 +67,14 @@ public final class BardsMod {
     }
 
     public static void registerItems() {
+        if (itemConfig.value == null) itemConfig.value = new BardItemConfig();
         Group.BARDS = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(Armors.troubadourArmorSet.armorSet().head))
                 .displayName(Text.translatable("itemGroup.bards_rpg.general"))
                 .build();
         Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.BARDS);
+        Weapons.register(itemConfig.value.ranged_weapons,itemConfig.value.melee_weapons);
         Armors.register(itemConfig.value.armor_sets);
-        Weapons.register(itemConfig.value.weapons);
         if (armoryLoadCheck()) {
             FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(modContainer -> {
                 ResourceManagerHelper.registerBuiltinResourcePack(

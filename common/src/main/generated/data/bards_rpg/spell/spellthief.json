@@ -6,6 +6,10 @@
   "passive": {
     "triggers": [
       {
+        "type": "MELEE_IMPACT",
+        "chance": 0.2
+      },
+      {
         "type": "SPELL_IMPACT_SPECIFIC",
         "chance": 0.2,
         "spell": {
@@ -13,6 +17,26 @@
         },
         "impact": {
           "impact_type": "DAMAGE"
+        }
+      },
+      {
+        "type": "SPELL_IMPACT_SPECIFIC",
+        "chance": 0.2,
+        "spell": {
+          "type": "ACTIVE"
+        },
+        "impact": {
+          "impact_type": "HEAL"
+        }
+      },
+      {
+        "type": "SPELL_IMPACT_SPECIFIC",
+        "chance": 0.2,
+        "spell": {
+          "type": "ACTIVE"
+        },
+        "impact": {
+          "impact_type": "STATUS_EFFECT"
         }
       }
     ]
@@ -30,6 +54,14 @@
         "type": "CUSTOM",
         "custom": {
           "intent": "HARMFUL",
+          "handler": "bards_rpg:spellthief_impact"
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "CUSTOM",
+        "custom": {
           "handler": "bards_rpg:spellthief_impact"
         }
       }

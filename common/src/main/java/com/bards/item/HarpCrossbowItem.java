@@ -10,21 +10,34 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class HarpCrossbowItem extends CustomCrossbow {
     public HarpCrossbowItem(Settings settings, RangedConfig config, Supplier<Ingredient> repairIngredientSupplier) {
         super(settings, config, repairIngredientSupplier);
+    }
+
+    public static final String TOOLTIP_KEY = "item.bards_rpg.harp_crossbow.tooltip";
+
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        super.appendTooltip(stack, context, tooltip, type);
+        tooltip.add(Text.translatable(TOOLTIP_KEY));
     }
 
     @Override
@@ -47,7 +60,7 @@ public class HarpCrossbowItem extends CustomCrossbow {
         if (world.isClient()) return;
 
         Identifier itemId = Registries.ITEM.getId(stack.getItem());
-        boolean isLightning = itemId.getPath().equals("lightning_harp_crossbow");
+        boolean isLightning = itemId.getPath().equals("unique_harp_crossbow_0");
 
         Vec3d look = shooter.getRotationVector();
         Vec3d up = new Vec3d(0, 1, 0);
@@ -57,12 +70,15 @@ public class HarpCrossbowItem extends CustomCrossbow {
         }
 
         Vec3d eyePos = shooter.getEyePos();
-        float[] offsets = isLightning ? new float[]{-1.0f, -0.5f, 0.5f, 1.0f} : new float[]{-0.5f, 0.5f};
+        float[] offsets = isLightning ? new float[]{-1.75f, -0.75f, 0.75f, 1.75f} : new float[]{-0.75f, 0.75f};
+
+        final boolean creativeMode = shooter instanceof PlayerEntity player && player.getAbilities().creativeMode;
+        final ItemStack fireworkStackFinal = fireworkStack;
 
         for (float offset : offsets) {
             Vec3d spawnPos = eyePos.add(right.multiply(offset));
             if (isFirework) {
-                FireworkRocketEntity rocket = new FireworkRocketEntity(world, fireworkStack.copy(), shooter,
+                FireworkRocketEntity rocket = new FireworkRocketEntity(world, fireworkStackFinal.copy(), shooter,
                         spawnPos.x, spawnPos.y, spawnPos.z, true);
                 rocket.setVelocity(look.x * speed, look.y * speed, look.z * speed);
                 world.spawnEntity(rocket);
@@ -71,11 +87,9 @@ public class HarpCrossbowItem extends CustomCrossbow {
                         Items.ARROW.getDefaultStack(), stack);
                 arrow.setOwner(shooter);
                 arrow.setVelocity(look.x * speed, look.y * speed, look.z * speed);
-                if (shooter instanceof PlayerEntity player && player.getAbilities().creativeMode) {
+                if (creativeMode) {
                     arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
                 }
-                arrow.setCritical(true);
-                world.spawnEntity(arrow);
             }
         }
 

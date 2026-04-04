@@ -6,7 +6,30 @@
   "active": {},
   "release": {
     "animation": {
-      "id": "spell_engine:one_handed_area_release"
+      "id": "bards_rpg:sing_release",
+      "overrides": [
+        {
+          "equipment": {
+            "slot": "MAINHAND",
+            "item": "#bards_rpg:lyres"
+          },
+          "id": "bards_rpg:lyre_release"
+        },
+        {
+          "equipment": {
+            "slot": "MAINHAND",
+            "item": "#bards_rpg:lutes"
+          },
+          "id": "bards_rpg:lute_release"
+        },
+        {
+          "equipment": {
+            "slot": "MAINHAND",
+            "item": "#bards_rpg:harp_crossbows"
+          },
+          "id": "bards_rpg:harp_release"
+        }
+      ]
     },
     "particles": [
       {

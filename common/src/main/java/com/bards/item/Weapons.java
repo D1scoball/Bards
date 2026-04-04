@@ -2,7 +2,6 @@ package com.bards.item;
 
 import com.bards.BardsMod;
 import com.bards.content.BardsSpells;
-import net.fabric_extras.ranged_weapon.api.CustomCrossbow;
 import net.fabric_extras.ranged_weapon.api.RangedConfig;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
@@ -17,12 +16,12 @@ import net.spell_engine.api.config.WeaponConfig;
 import net.spell_engine.api.spell.container.SpellContainers;
 import net.spell_engine.rpg_series.item.Equipment;
 import net.spell_engine.api.item.weapon.StaffItem;
+import net.spell_engine.rpg_series.item.RangedWeapon;
 import net.spell_engine.rpg_series.item.Weapon;
 import net.spell_engine.api.item.weapon.SpellSwordItem;
 import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -30,6 +29,8 @@ import static com.bards.BardsMod.MOD_ID;
 
 public class Weapons {
     public static final ArrayList<Weapon.Entry> meleeEntries = new ArrayList<>();
+    public static final ArrayList<RangedWeapon.Entry> rangedEntries = new ArrayList<>();
+
     private static Weapon.Entry meleeEntry(String name, Weapon.CustomMaterial material, Weapon.Factory factory, WeaponConfig defaults, Equipment.WeaponType category) {
         var entry = new Weapon.Entry(MOD_ID, name, material, factory, defaults, category);
         if (entry.isRequiredModInstalled()) {
@@ -38,69 +39,7 @@ public class Weapons {
         }
         return entry;
     }
-    public static final ArrayList<RangedEntry> rangedEntries = new ArrayList<>();
-    public interface RangedFactory {
-        Item create(Item.Settings settings, RangedConfig config, Supplier<Ingredient> repairIngredientSupplier);
-    }
 
-    public static final class RangedEntry {
-        private final Identifier id;
-        private final RangedFactory factory;
-        private final RangedConfig defaults;
-        private final Supplier<Ingredient> repairIngredientSupplier;
-        private final int durability;
-        public List<Identifier> spells = null;
-        private String translatedName = null;
-
-        public Item item;
-
-        public Equipment.LootProperties lootProperties = Equipment.LootProperties.EMPTY;
-        public Equipment.WeaponType weaponType = Equipment.WeaponType.SHORT_BOW;
-
-        public RangedEntry(Identifier id, RangedFactory factory, RangedConfig defaults, Supplier<Ingredient> repairIngredientSupplier, int durability) {
-            this.id = id;
-            this.factory = factory;
-            this.defaults = defaults;
-            this.repairIngredientSupplier = repairIngredientSupplier;
-            this.durability = durability;
-        }
-
-        public Identifier id() {
-            return id;
-        }
-
-        public Item create(Item.Settings settings, RangedConfig config) {
-            this.item = factory.create(
-                    settings.maxDamage(durability),
-                    config,
-                    repairIngredientSupplier
-            );
-            return this.item;
-        }
-
-        public Item item() {
-            return item;
-        }
-
-        public RangedEntry weaponType(Equipment.WeaponType weaponType) {
-            this.weaponType = weaponType;
-            return this;
-        }
-
-        public RangedEntry spell(Identifier spellId) {
-            spells = List.of(spellId);
-            return this;
-        }
-
-        public RangedEntry translatedName(String translatedName) {
-            this.translatedName = translatedName;
-            return this;
-        }
-
-        public String translatedName() {
-            return translatedName;
-        }
-    }
 
     private static Supplier<Ingredient> ingredient(String idString, boolean requirement, Item fallback) {
         var id = Identifier.of(idString);
@@ -218,23 +157,29 @@ public class Weapons {
             .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T3_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of(3));
     ///HARP CROSSBOW
-    private static RangedEntry harpCrossbow(String name, int durability, Supplier<Ingredient> repairIngredientSupplier, RangedConfig defaults) {
-        var entry = new RangedEntry(Identifier.of(MOD_ID, name), HarpCrossbowItem::new, defaults, repairIngredientSupplier, durability);
+    private static RangedWeapon.Entry harpCrossbow(String name, Equipment.Tier tier, Supplier<Ingredient> repairIngredientSupplier, RangedConfig defaults) {
+        var entry = new RangedWeapon.Entry(Identifier.of(MOD_ID, name), tier, HarpCrossbowItem::new, defaults, repairIngredientSupplier, Equipment.WeaponType.RAPID_CROSSBOW);
         rangedEntries.add(entry);
         return entry;
     }
-    private static final float pullTime_rapidCrossbow = 0;
-    private static final float pullTime_heavyCrossbow = 1.75F - 1F;
-    private static final float velocity_rapidCrossbow = 0F;
-    private static final float velocity_heavyCrossbow = 0.5F;
-    
-    public static float rapid_crossbow_damage = 10.5F;
-    public static float heavy_crossbow_damage = 17.0F;
+    // Pull time in seconds added on top of the base crossbow pull time (Rapid=0F, Heavy=0.75F)
+    private static final float PULL_TIME_HARP_CROSSBOW = 0.2F;
+    private static final float VELOCITY_HARP_CROSSBOW = 0F;
+    // ~15% damage penalty vs Rapid Crossbow per tier (extra 2 critical arrows compensate)
+    public static final RangedWeapon.Entry harp_crossbow = harpCrossbow("harp_crossbow",
+            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
+            new RangedConfig(7.5F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            .translatedName("Harp Crossbow");
+    public static final RangedWeapon.Entry netherite_harp_crossbow = harpCrossbow("netherite_harp_crossbow",
+            Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
+            new RangedConfig(8.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            .translatedName("Netherite Harp Crossbow");
+
 
     /// REGISTRY
     private static final float rapier_t5_attack_damage = 6.7F;
     private static final float lute_t5_attack_damage = 10;
-    public static void register(Map<String, WeaponConfig> configs) {
+    public static void register(Map<String, RangedConfig> rangedConfig, Map<String, WeaponConfig> meleeConfig) {
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(BETTER_NETHER)) {
             var repair = ingredient("betternether:nether_ruby", FabricLoader.getInstance().isModLoaded(BETTER_NETHER), Items.NETHERITE_INGOT);
             rapier("ruby_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), rapier_t5_attack_damage)
@@ -245,6 +190,9 @@ public class Weapons {
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .loot(Equipment.LootProperties.of(4));
+            harpCrossbow("ruby_harp_crossbow",Equipment.Tier.TIER_4,repair,
+                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .translatedName("Heavenly Harp Crossbow");
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(BETTER_END)) {
             var repair = ingredient("betterend:aeternium_ingot", FabricLoader.getInstance().isModLoaded(BETTER_END), Items.NETHERITE_INGOT);
@@ -272,6 +220,9 @@ public class Weapons {
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .loot(Equipment.LootProperties.of("aether"));
+            harpCrossbow("aether_harp_crossbow",Equipment.Tier.TIER_4,repair,
+                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .translatedName("Divine Harp Crossbow").loot(-1, "aether");
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(LNE) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("ender_dragon_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), rapier_t5_attack_damage)
@@ -308,38 +259,69 @@ public class Weapons {
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .rarity = Rarity.RARE;
+            harpCrossbow("elder_guardian_harp_crossbow",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.PRISMARINE_SHARD),
+                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .translatedName("Atlantis Harp Crossbow")
+                    ///CHANGE PASSIVE
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
+
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(ARSENAL) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("unique_rapier_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), rapier_t5_attack_damage)
                     .translatedName("Singing Blade")
                     .loot(Equipment.LootProperties.of(5))
+                    .withAdditionalSpell("arsenal:radiance_melee")
+                    .rarity = Rarity.RARE;
+            rapier("unique_rapier_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), rapier_t5_attack_damage)
+                    .translatedName("Duelist's Rapier")
+                    .loot(Equipment.LootProperties.of(5))
+                    ///CHANGE PASSIVE
+                    .withAdditionalSpell("")
                     .rarity = Rarity.RARE;
             lute("unique_lute_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.REDSTONE_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Lute of Ruby Verdict")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
+                    .withAdditionalSpell(BardsSpells.melody_of_the_meteor.id().toString())
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lute("unique_lute_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), lute_t5_attack_damage)
                     .translatedName("Spellthief's Lute")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
+                    .withAdditionalSpell(BardsSpells.spellthief.id().toString())
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Apollo")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
+                    //CHANGE PASSIVE
+                    .withAdditionalSpell("")
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
                     .translatedName("Lyre of Antecael")
                     .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
                     .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
+                    //CHANGE PASSIVE
+                    .withAdditionalSpell("")
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
+            harpCrossbow("unique_harp_crossbow_0",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT),
+                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .translatedName("Lightning Harp Crossbow")
+                    ///CHANGE PASSIVE
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
+            harpCrossbow("unique_harp_crossbow_1",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT),
+                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .translatedName("Starshot Harp Crossbow")
+                    .lootTheme("arsenal:divine")
+                    ///CHANGE PASSIVE
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
         }
 
-        Weapon.register(configs, meleeEntries, Group.KEY);
+        Weapon.register(meleeConfig, meleeEntries, Group.KEY);
+        RangedWeapon.register(rangedConfig, rangedEntries, Group.KEY);
     }
 }

@@ -3,7 +3,7 @@
   "criteria": {
     "cast": {
       "conditions": {
-        "spell": "#bards_rpg:bard"
+        "spell": "#bards_rpg:spell_book/bard"
       },
       "trigger": "spell_engine:spell_cast"
     }
@@ -16,7 +16,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "id": "bards_rpg:golden_lyre"
+      "id": "bards_rpg:item/spell_book/bard"
     },
     "show_toast": true,
     "title": {

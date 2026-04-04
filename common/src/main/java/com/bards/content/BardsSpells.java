@@ -4,7 +4,6 @@ import com.bards.effect.BardsEffects;
 import com.bards.tags.BardTags;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.util.Identifier;
-import net.more_rpg_classes.sounds.MRPGLibSounds;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.Spell;
@@ -15,8 +14,8 @@ import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
 import net.spell_engine.fx.SpellEngineSounds;
+import net.spell_engine.internals.SpellTriggers;
 import net.spell_engine.internals.target.SpellTarget;
-import net.spell_power.api.SpellPowerMechanics;
 import net.spell_power.api.SpellSchools;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,6 +52,29 @@ public class BardsSpells {
     private static Entry add(Entry entry) {
         entries.add(entry);
         return entry;
+    }
+
+    public static Spell.Trigger meleeImpactTrigger(float triggerChance) {
+        Spell.Trigger trigger = new Spell.Trigger();
+        trigger.chance = triggerChance;
+        trigger.type = Spell.Trigger.Type.MELEE_IMPACT;
+        return trigger;
+    }
+    public static Spell.Trigger arrowImpactTrigger(float triggerChance) {
+        Spell.Trigger trigger = new Spell.Trigger();
+        trigger.type = Spell.Trigger.Type.ARROW_IMPACT;
+        trigger.chance = triggerChance;
+        return trigger;
+    }
+    public static Spell.Trigger spellImpatSpecificTrigger(float triggerChance, Spell.Impact.Action.Type spellImpactType) {
+        Spell.Trigger trigger = new Spell.Trigger();
+        trigger.type = Spell.Trigger.Type.SPELL_IMPACT_SPECIFIC;
+        trigger.chance = triggerChance;
+        trigger.spell = new Spell.Trigger.SpellCondition();
+        trigger.spell.type = Spell.Type.ACTIVE;
+        trigger.impact = new Spell.Trigger.ImpactCondition();
+        trigger.impact.impact_type = spellImpactType.toString();
+        return trigger;
     }
 
 
@@ -787,27 +809,30 @@ public class BardsSpells {
         spell.school = SpellSchools.ARCANE;
         spell.range = 7F;
 
-        var trigger = new Spell.Trigger();
-        trigger.type = Spell.Trigger.Type.SPELL_IMPACT_SPECIFIC;
-        trigger.chance = 0.2F;
-        trigger.impact = new Spell.Trigger.ImpactCondition();
-        trigger.impact.impact_type = Spell.Impact.Action.Type.DAMAGE.toString();
-        trigger.spell = new Spell.Trigger.SpellCondition();
-        trigger.spell.type = Spell.Type.ACTIVE;
-        spell.passive.triggers = List.of(trigger);
+        float trigger_chance = 0.2F;
+        spell.passive.triggers = List.of(meleeImpactTrigger(trigger_chance),
+                spellImpatSpecificTrigger(trigger_chance,Spell.Impact.Action.Type.DAMAGE),
+                spellImpatSpecificTrigger(trigger_chance,Spell.Impact.Action.Type.HEAL),
+                spellImpatSpecificTrigger(trigger_chance,Spell.Impact.Action.Type.STATUS_EFFECT));
 
         spell.target.type = Spell.Target.Type.AREA;
         spell.target.area = new Spell.Target.Area();
         spell.target.area.include_caster = true;
         spell.target.area.angle_degrees = 360.0F;
 
-        var custom = new Spell.Impact();
-        custom.action = new Spell.Impact.Action();
-        custom.action.custom = new Spell.Impact.Action.Custom();
-        custom.action.type = Spell.Impact.Action.Type.CUSTOM;
-        custom.action.custom.intent = SpellTarget.Intent.HARMFUL;
-        custom.action.custom.handler = "bards_rpg:spellthief_impact";
-        spell.impacts = List.of(custom);
+        var spellTheftHarmful = new Spell.Impact();
+        spellTheftHarmful.action = new Spell.Impact.Action();
+        spellTheftHarmful.action.custom = new Spell.Impact.Action.Custom();
+        spellTheftHarmful.action.type = Spell.Impact.Action.Type.CUSTOM;
+        spellTheftHarmful.action.custom.intent = SpellTarget.Intent.HARMFUL;
+        spellTheftHarmful.action.custom.handler = "bards_rpg:spellthief_impact";
+
+        var spellTheftHelpful = new Spell.Impact();
+        spellTheftHelpful.action = new Spell.Impact.Action();
+        spellTheftHelpful.action.custom = new Spell.Impact.Action.Custom();
+        spellTheftHelpful.action.type = Spell.Impact.Action.Type.CUSTOM;
+        spellTheftHelpful.action.custom.handler = "bards_rpg:spellthief_impact";
+        spell.impacts = List.of(spellTheftHarmful, spellTheftHelpful);
 
         SpellBuilder.Cost.cooldown(spell,5.0F);
         spell.cost.cooldown.hosting_item = false;

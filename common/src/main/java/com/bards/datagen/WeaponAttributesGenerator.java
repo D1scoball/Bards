@@ -26,7 +26,7 @@ public class WeaponAttributesGenerator implements DataProvider {
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
-        for (Weapon.Entry entry : Weapons.entries) {
+        for (Weapon.Entry entry : Weapons.meleeEntries) {
             if (!entry.id().getPath().contains("rapier")) {
                 continue;
             }
@@ -35,7 +35,7 @@ public class WeaponAttributesGenerator implements DataProvider {
             Path path = pathResolver.resolveJson(entry.id());
             futures.add(DataProvider.writeToPath(writer, json, path));
         }
-        for (Weapon.Entry entry : Weapons.entries) {
+        for (Weapon.Entry entry : Weapons.meleeEntries) {
             if (!entry.id().getPath().contains("lute")) {
                 continue;
             }
@@ -44,7 +44,7 @@ public class WeaponAttributesGenerator implements DataProvider {
             Path path = pathResolver.resolveJson(entry.id());
             futures.add(DataProvider.writeToPath(writer, json, path));
         }
-        for (Weapon.Entry entry : Weapons.entries) {
+        for (Weapon.Entry entry : Weapons.meleeEntries) {
             if (!entry.id().getPath().contains("lyre")) {
                 continue;
             }

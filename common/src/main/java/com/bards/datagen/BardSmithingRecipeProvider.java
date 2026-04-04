@@ -51,7 +51,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
         // ====================
         // BETTERNETHER (Ruby)
         // ====================
-        var rubyRapier = Weapons.entries.stream()
+        var rubyRapier = Weapons.meleeEntries.stream()
                 .filter(e -> e.id().getPath().equals("ruby_rapier"))
                 .findFirst().map(e -> e.item()).orElse(null);
 
@@ -65,7 +65,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                     "betternether"
             );
         }
-        var rubyLute = Weapons.entries.stream()
+        var rubyLute = Weapons.meleeEntries.stream()
                 .filter(e -> e.id().getPath().equals("ruby_lute"))
                 .findFirst().map(e -> e.item()).orElse(null);
 
@@ -133,7 +133,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
             // ====================
             // LOOT N EXPLORE -UPGRADES
             // ====================
-            var glacialrapier = Weapons.entries.stream()
+            var glacialrapier = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("glacial_rapier"))
                     .findFirst().map(e -> e.item()).orElse(null);
 
@@ -148,7 +148,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                 );
             }
 
-            var elderGuardianrapier = Weapons.entries.stream()
+            var elderGuardianrapier = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("elder_guardian_rapier"))
                     .findFirst().map(e -> e.item()).orElse(null);
 
@@ -163,7 +163,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                 );
             }
 
-            var elderGuardianLyre = Weapons.entries.stream()
+            var elderGuardianLyre = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("elder_guardian_lyre"))
                     .findFirst().map(e -> e.item()).orElse(null);
 
@@ -178,7 +178,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                 );
             }
 
-            var enderDragonrapier = Weapons.entries.stream()
+            var enderDragonrapier = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("ender_dragon_rapier"))
                     .findFirst().map(e -> e.item()).orElse(null);
 
@@ -192,7 +192,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                         "loot_n_explore"
                 );
             }
-            var enderDragonLute = Weapons.entries.stream()
+            var enderDragonLute = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("ender_dragon_lute"))
                     .findFirst().map(e -> e.item()).orElse(null);
 
@@ -207,7 +207,7 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                 );
             }
 
-            var witherrapier = Weapons.entries.stream()
+            var witherrapier = Weapons.meleeEntries.stream()
                     .filter(e -> e.id().getPath().equals("wither_rapier"))
                     .findFirst().map(e -> e.item()).orElse(null);
 

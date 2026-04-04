@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Default {
-    public final static ConfigFile.Equipment itemConfig;
+    public final static BardItemConfig itemConfig;
     public final static StructurePoolConfig villageConfig;
     static {
-        itemConfig = new ConfigFile.Equipment();
+        itemConfig = new BardItemConfig();
         villageConfig = new StructurePoolConfig();
         var weight = 3;
         var limit = 1;

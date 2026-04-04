@@ -47,6 +47,10 @@
     {
       "id": "bards_rpg:unique_rapier_0",
       "required": false
+    },
+    {
+      "id": "bards_rpg:unique_rapier_1",
+      "required": false
     }
   ]
 }

@@ -54,7 +54,10 @@
   },
   "harp_crossbow_shoot": {
     "sounds": [
-      "bards_rpg:harp_crossbow_shoot"
+      "bards_rpg:harp_crossbow_shoot_1",
+      "bards_rpg:harp_crossbow_shoot_2",
+      "bards_rpg:harp_crossbow_shoot_3",
+      "bards_rpg:harp_crossbow_shoot_4"
     ]
   },
   "lute_hit": {

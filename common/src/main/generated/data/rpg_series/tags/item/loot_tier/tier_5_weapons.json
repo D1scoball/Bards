@@ -21,6 +21,10 @@
       "required": false
     },
     {
+      "id": "bards_rpg:unique_rapier_1",
+      "required": false
+    },
+    {
       "id": "bards_rpg:ender_dragon_lute",
       "required": false
     },

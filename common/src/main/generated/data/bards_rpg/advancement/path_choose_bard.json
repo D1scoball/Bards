@@ -3,7 +3,7 @@
   "criteria": {
     "book": {
       "conditions": {
-        "spell_pool": "bards_rpg:bard"
+        "spell_pool": "bards_rpg::spell_book/bard"
       },
       "trigger": "spell_engine:spell_book_creation"
     }
@@ -16,7 +16,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "id": "bards_rpg:bard_spell_book"
+      "id": "bards_rpg:item/spell_scroll/bard"
     },
     "show_toast": true,
     "title": {

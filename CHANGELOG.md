@@ -2,6 +2,8 @@
 - Update to Spell Engine Version 1.9.*
 - Added "Ranged Weapon API" as a new dependency!
 - Fixed issues with the Hat-Armor Models conflicting with the player's head model
+- Moved the custom SpellThief Impact to the More RPG Library Mod 
+- Heavily Improved the Custom SpellThief Impact for the SpellThief Lute
 To Do:
 - Add missing spells
 - Add missing Assets
