@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bards_rpg:block/music_stand"
+    }
+  }
+}

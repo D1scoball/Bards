@@ -1,6 +1,0 @@
-{
-  "parent": "bards_rpg:item/aether_harp_crossbow",
-  "textures": {
-    "layer0": "bards_rpg:item/bow_pulling/aether_harp_crossbow_pulling_1"
-  }
-}

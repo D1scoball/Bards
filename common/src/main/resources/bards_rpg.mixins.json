@@ -10,6 +10,8 @@
     "ModelLoaderMixin"
   ],
   "mixins": [
+    "DiscordantNoteMixin",
+    "LuthierVillagerMixin",
     "WardensPaeanMixin"
   ],
   "injectors": {

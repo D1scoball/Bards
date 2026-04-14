@@ -1,5 +1,6 @@
 package com.bards.datagen;
 
+import com.bards.block.BardBlocks;
 import com.bards.content.BardsSounds;
 import com.bards.content.BardsSpells;
 import com.bards.effect.BardsEffects;
@@ -71,6 +72,10 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
         @Override
         public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, FabricLanguageProvider.TranslationBuilder translationBuilder) {
             translationBuilder.add(Group.translationKey, "Bards");
+            BardBlocks.all.forEach(entry ->
+                    translationBuilder.add(entry.block().getTranslationKey(), entry.translation())
+            );
+            translationBuilder.add("entity.minecraft.villager.bards_rpg.luthier", "Luthier");
 
             translationBuilder.add("item." + MOD_ID + ".spell_book/bard", "Bard's Stories");
             translationBuilder.add("item.bards_rpg.spell_book/bard.spell_binding.description",
@@ -87,7 +92,7 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             );
             translationBuilder.add(com.bards.item.HarpCrossbowItem.TOOLTIP_KEY,
                     "Half Musical Instrument and fully deadly weapon, the Harp Crossbow shoots multiple arrows");
-            BardsSpells.entries.forEach(entry -> {
+            BardsSpells.entries.stream().filter(entry -> !entry.id().getPath().startsWith("helper/")).forEach(entry -> {
                 var id = entry.id();
                 translationBuilder.add("spell." + id.getNamespace() + "." + id.getPath() + ".name" , entry.title());
                 translationBuilder.add("spell." + id.getNamespace() + "." + id.getPath() + ".description" , entry.description());
@@ -117,9 +122,6 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             }
             // Equipment Set
             translationBuilder.add("equipment_set." + MOD_ID + ".storyteller", "The Storyteller");
-            // Spellthief messages
-            translationBuilder.add("message." + MOD_ID + ".spellthief.spell_stolen", "Stole and cast %s from %s");
-            translationBuilder.add("message." + MOD_ID + ".spellthief.effect_stolen", "Stole %s from %s");
         }
     }
 
@@ -226,9 +228,17 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                             .toList(),
                     BardTags.LYRES
             );
+            var rangedEntries = Weapons.rangedEntries.stream().map(entry ->
+                    new RPGSeriesDataGen.BowEntry(entry.id(), entry.category, entry.lootProperties)
+            ).toList();
+            generateBowTags(rangedEntries);
+
             var twoModels = getOrCreateTagBuilder(BardTags.TWO_MODEL_INSTRUMENT);
             twoModels.addOptionalTag(BardTags.LUTES);
             twoModels.addOptionalTag(BardTags.LYRES);
+
+            var harpCrossbowTag = getOrCreateTagBuilder(BardTags.HARP_CROSSBOWS);
+            Weapons.rangedEntries.forEach(entry -> harpCrossbowTag.addOptional(entry.id()));
 
             var spellInfinityTag = getOrCreateTagBuilder(SpellEngineItemTags.ENCHANTABLE_SPELL_INFINITY);
             spellInfinityTag.addOptionalTag(BardTags.LUTES);
@@ -295,6 +305,32 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
                     weaponGroupTag.addOptional(entry.id());
                 }
             });
+
+            var songsTagKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "songs"));
+            var songsTag = getOrCreateTagBuilder(songsTagKey);
+            songsTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lyre"));
+            songsTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lute"));
+
+            var dragonLuteKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/dragon_lute"));
+            var dragonLuteTag = getOrCreateTagBuilder(dragonLuteKey);
+            dragonLuteTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lute"));
+            var spellthiefLuteKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/spellthief_lute"));
+            var spellthiefTag = getOrCreateTagBuilder(spellthiefLuteKey);
+            spellthiefTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lute"));
+            var rubyLuteKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/ruby_verdict_lute"));
+            var rubyTag = getOrCreateTagBuilder(rubyLuteKey);
+            rubyTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lute"));
+
+            var oceanLyreKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/ocean_lyre"));
+            var oceanLyreTag = getOrCreateTagBuilder(oceanLyreKey);
+            oceanLyreTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lyre"));
+            var apolloLyreKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/apollo_lyre"));
+            var apolloLyreTag = getOrCreateTagBuilder(apolloLyreKey);
+            apolloLyreTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lyre"));
+            var antecaelLyreKey = TagKey.of(SpellRegistry.KEY, Identifier.of(MOD_ID, "weapon/antecael_lyre"));
+            var antecaelLyreTag = getOrCreateTagBuilder(antecaelLyreKey);
+            antecaelLyreTag.addOptionalTag(Identifier.of(MOD_ID, "weapon/lyre"));
+
         }
     }
 

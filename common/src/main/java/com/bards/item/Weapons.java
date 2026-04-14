@@ -4,6 +4,7 @@ import com.bards.BardsMod;
 import com.bards.content.BardsSpells;
 import net.fabric_extras.ranged_weapon.api.RangedConfig;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
@@ -11,6 +12,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
+import net.more_rpg_classes.custom.MrpgLibSpells;
 import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.WeaponConfig;
 import net.spell_engine.api.spell.container.SpellContainers;
@@ -65,26 +67,39 @@ public class Weapons {
     private static final float rapier_attack_speed = -2.0F;
     private static Weapon.Entry rapier(String name, Weapon.CustomMaterial material, float damage) {
         return meleeEntry(name, material, SpellSwordItem::new, new WeaponConfig(damage, rapier_attack_speed), Equipment.WeaponType.SWORD)
-                .spellContainer(SpellContainers.forMeleeWeapon().withSpellId(BardsSpells.puncture.id()));
+                .spellContainer(SpellContainers.forMeleeWeapon().withSpellId(MrpgLibSpells.puncture.id()));
     }
+    // Base spell power per tier (index 0 = first tier, 1 = second, etc.)
+    private static final float[] BASE_SPELL_POWER = { 3.5F, 4.0F, 4.5F, 5.0F, 5.0F };
+
+    private enum Instrument {
+        LUTE(1.0F, 1.0F),
+        LYRE(0.5F, 1.5F),
+        HARP(1.25F, 0.75F);
+        final float arcaneMult, healingMult;
+        Instrument(float a, float h) { arcaneMult = a; healingMult = h; }
+    }
+
+    private static float spellPower(int tier, Instrument type, boolean arcane) {
+        float base = BASE_SPELL_POWER[Math.min(tier, BASE_SPELL_POWER.length - 1)];
+        float mult = arcane ? type.arcaneMult : type.healingMult;
+        return Math.round(base * mult * 2) / 2.0F;
+    }
+
     private static final float lute_attack_speed = -3.0F;
-    private static Weapon.Entry lute(String name, Weapon.CustomMaterial material, float damage) {
+    private static Weapon.Entry lute(String name, Weapon.CustomMaterial material, float damage, int tier) {
         return meleeEntry(name, material, StaffItem::new, new WeaponConfig(damage, lute_attack_speed), Equipment.WeaponType.DAMAGE_STAFF)
-                .spellContainer(SpellContainers.forMagicWeapon()).withSpellChoices("bards_rpg:weapon/lute");
-    }
-    private static Weapon.Entry special_lute(String name, Weapon.CustomMaterial material, float damage) {
-        return meleeEntry(name, material, StaffItem::new, new WeaponConfig(damage, lute_attack_speed), Equipment.WeaponType.DAMAGE_STAFF)
-                .spellContainer(SpellContainers.forMagicWeapon());
+                .spellContainer(SpellContainers.forMagicWeapon()).withSpellChoices("bards_rpg:weapon/lute")
+                .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, spellPower(tier, Instrument.LUTE, true)))
+                .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, spellPower(tier, Instrument.LUTE, false)));
     }
     private static final float lyre_attack_speed = -2.2F;
     private static final float lyre_attack_damage = 3.0F;
-    private static Weapon.Entry lyre(String name, Weapon.CustomMaterial material) {
+    private static Weapon.Entry lyre(String name, Weapon.CustomMaterial material, int tier) {
         return meleeEntry(name, material, StaffItem::new, new WeaponConfig(lyre_attack_damage, lyre_attack_speed), Equipment.WeaponType.HEALING_STAFF)
-                .spellContainer(SpellContainers.forMagicWeapon()).withSpellChoices("bards_rpg:weapon/lyre");
-    }
-    private static Weapon.Entry special_lyre(String name, Weapon.CustomMaterial material) {
-        return meleeEntry(name, material, StaffItem::new, new WeaponConfig(lyre_attack_damage, lyre_attack_speed), Equipment.WeaponType.HEALING_STAFF)
-                .spellContainer(SpellContainers.forMagicWeapon());
+                .spellContainer(SpellContainers.forMagicWeapon()).withSpellChoices("bards_rpg:weapon/lyre")
+                .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, spellPower(tier, Instrument.LYRE, true)))
+                .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, spellPower(tier, Instrument.LYRE, false)));
     }
     /// RAPIERS
     public static final Weapon.Entry golden_rapier = rapier("golden_rapier",
@@ -104,75 +119,60 @@ public class Weapons {
             .translatedName("Netherite Rapier")
             .loot(Equipment.LootProperties.of(3));
     /// LUTES
-    private static final float T1_LUTE_POWER = 3.5F;
-    private static final float T2_LUTE_POWER = 4F;
-    private static final float T3_LUTE_POWER = 4.5F;
-    private static final float T4_LUTE_POWER = 5F;
-
     public static final Weapon.Entry wooden_lute = lute("wooden_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 4.0F)
+            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.IRON_INGOT)), 4.0F, 0)
             .translatedName("Wooden Lute")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_LUTE_POWER))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T1_LUTE_POWER))
             .loot(Equipment.LootProperties.of(1));
     public static final Weapon.Entry diamond_lute = lute("diamond_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 6.0F)
+            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 6.0F, 1)
             .translatedName("Diamond Lute")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_LUTE_POWER))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T2_LUTE_POWER))
             .loot(Equipment.LootProperties.of(2));
     public static final Weapon.Entry netherite_lute = lute("netherite_lute",
-            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 8.0F)
+            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 8.0F, 2)
             .translatedName("Netherite Lute")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T3_LUTE_POWER))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T3_LUTE_POWER))
             .loot(Equipment.LootProperties.of(3));
     /// LYRES
-    private static final float LYRE_ARCANE_POWER_MULTIPLIER = 0.5F;
-    private static final float T1_LYRE_ARCANE_POWER = (Math.round((T1_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T2_LYRE_ARCANE_POWER = (Math.round((T2_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T3_LYRE_ARCANE_POWER = (Math.round((T3_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T4_LYRE_ARCANE_POWER = (Math.round((T4_LUTE_POWER * LYRE_ARCANE_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float LYRE_HEALING_POWER_MULTIPLIER = 1.5F;
-    private static final float T1_LYRE_HEALING_POWER = (Math.round((T1_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T2_LYRE_HEALING_POWER = (Math.round((T2_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T3_LYRE_HEALING_POWER = (Math.round((T3_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
-    private static final float T4_LYRE_HEALING_POWER = (Math.round((T4_LUTE_POWER * LYRE_HEALING_POWER_MULTIPLIER)*10) / 10.0F);
     public static final Weapon.Entry golden_lyre = lyre("golden_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)))
+            Weapon.CustomMaterial.matching(ToolMaterials.IRON, () -> Ingredient.ofItems(Items.GOLD_INGOT)), 0)
             .translatedName("Golden Lyre")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T1_LYRE_ARCANE_POWER ))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T1_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of("golden"));
     public static final Weapon.Entry diamond_lyre = lyre("diamond_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)))
+            Weapon.CustomMaterial.matching(ToolMaterials.DIAMOND, () -> Ingredient.ofItems(Items.DIAMOND)), 1)
             .translatedName("Diamond Lyre")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T2_LYRE_ARCANE_POWER ))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T2_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of(2));
     public static final Weapon.Entry netherite_lyre = lyre("netherite_lyre",
-            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)))
+            Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.NETHERITE_INGOT)), 2)
             .translatedName("Netherite Lyre")
-            .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T3_LYRE_ARCANE_POWER ))
-            .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T3_LYRE_HEALING_POWER))
             .loot(Equipment.LootProperties.of(3));
     ///HARP CROSSBOW
-    private static RangedWeapon.Entry harpCrossbow(String name, Equipment.Tier tier, Supplier<Ingredient> repairIngredientSupplier, RangedConfig defaults) {
-        var entry = new RangedWeapon.Entry(Identifier.of(MOD_ID, name), tier, HarpCrossbowItem::new, defaults, repairIngredientSupplier, Equipment.WeaponType.RAPID_CROSSBOW);
-        rangedEntries.add(entry);
-        return entry;
-    }
     // Pull time in seconds added on top of the base crossbow pull time (Rapid=0F, Heavy=0.75F)
     private static final float PULL_TIME_HARP_CROSSBOW = 0.2F;
     private static final float VELOCITY_HARP_CROSSBOW = 0F;
-    // ~15% damage penalty vs Rapid Crossbow per tier (extra 2 critical arrows compensate)
+    // ~20% damage penalty vs Rapid Crossbow per tier (extra 2 arrows + spell power compensate)
+    public static float penaltyMultiplier = 0.8F;
+    private static final float[] RAPID_CROSSBOW_DAMAGE = { 7.5F, 8.0F, 9.5F, 10.5F, 10.5F };
+    private static float rangedDamage(int tier) {
+        float base = RAPID_CROSSBOW_DAMAGE[Math.min(tier, RAPID_CROSSBOW_DAMAGE.length - 1)];
+        return Math.round(base * penaltyMultiplier * 10) / 10.0F;
+    }
+
+    private static RangedWeapon.Entry harpCrossbow(String name, Equipment.Tier tier, Supplier<Ingredient> repairIngredientSupplier) {
+        var entry = new RangedWeapon.Entry(Identifier.of(MOD_ID, name), tier, HarpCrossbowItem::new,
+                new RangedConfig(rangedDamage(Equipment.Tier.values().length), PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW)
+                        .withAttribute(SpellSchools.ARCANE.id, EntityAttributeModifier.Operation.ADD_VALUE, spellPower(tier.getNumber(), Instrument.HARP, true))
+                        .withAttribute(SpellSchools.HEALING.id, EntityAttributeModifier.Operation.ADD_VALUE, spellPower(tier.getNumber(), Instrument.HARP, false))
+
+                , repairIngredientSupplier, Equipment.WeaponType.RAPID_CROSSBOW);
+        rangedEntries.add(entry);
+        return entry;
+    }
+
+
     public static final RangedWeapon.Entry harp_crossbow = harpCrossbow("harp_crossbow",
-            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT),
-            new RangedConfig(7.5F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT))
             .translatedName("Harp Crossbow");
     public static final RangedWeapon.Entry netherite_harp_crossbow = harpCrossbow("netherite_harp_crossbow",
-            Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT),
-            new RangedConfig(8.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT))
             .translatedName("Netherite Harp Crossbow");
 
 
@@ -185,13 +185,10 @@ public class Weapons {
             rapier("ruby_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), rapier_t5_attack_damage)
                     .translatedName("Ruby Rapier")
                     .loot(Equipment.LootProperties.of(4));
-            lute("ruby_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage)
+            lute("ruby_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage, 3)
                     .translatedName("Ruby Lute")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .loot(Equipment.LootProperties.of(4));
-            harpCrossbow("ruby_harp_crossbow",Equipment.Tier.TIER_4,repair,
-                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            harpCrossbow("ruby_harp_crossbow",Equipment.Tier.TIER_4,repair)
                     .translatedName("Heavenly Harp Crossbow");
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(BETTER_END)) {
@@ -199,10 +196,8 @@ public class Weapons {
             rapier("aeternium_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), rapier_t5_attack_damage)
                     .translatedName("Aeternium Rapier")
                     .loot(Equipment.LootProperties.of(4));
-            lyre("aeternium_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
+            lyre("aeternium_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), 3)
                     .translatedName("Aeternium Lyre")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .loot(Equipment.LootProperties.of(4));
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(AETHER) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
@@ -210,115 +205,90 @@ public class Weapons {
             rapier("aether_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), rapier_t5_attack_damage)
                     .translatedName("Valkyrie Rapier")
                     .loot(Equipment.LootProperties.of("aether"));
-            lute("aether_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage)
+            lute("aether_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), lute_t5_attack_damage, 3)
                     .translatedName("Angelic Lute")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
                     .loot(Equipment.LootProperties.of("aether"));
-            lyre("aether_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair))
+            lyre("aether_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, repair), 3)
                     .translatedName("Valkyrie Lyre")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
                     .loot(Equipment.LootProperties.of("aether"));
-            harpCrossbow("aether_harp_crossbow",Equipment.Tier.TIER_4,repair,
-                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            harpCrossbow("aether_harp_crossbow",Equipment.Tier.TIER_4,repair)
                     .translatedName("Divine Harp Crossbow").loot(-1, "aether");
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(LNE) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("ender_dragon_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Dragon's Rapier")
                     .withAdditionalSpell("loot_n_explore:dragonclaw")
-                    .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("elder_guardian_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Coral Rapier")
                     .withAdditionalSpell("loot_n_explore:waterbomb")
-                    .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("wither_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BONE)), rapier_t5_attack_damage)
                     .translatedName("Withered Rapier")
                     .withAdditionalSpell("loot_n_explore:wither_pulse")
-                    .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
             rapier("glacial_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BLUE_ICE)), rapier_t5_attack_damage)
                     .translatedName("Glacial Rapier")
                     .withAdditionalSpell("loot_n_explore:avalanche")
-                    .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lute("ender_dragon_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), lute_t5_attack_damage)
+            lute("ender_dragon_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), lute_t5_attack_damage, 3)
                     .translatedName("Dragon Lute")
-                    .withSpellChoices("bards_rpg:weapon/dragon_lyre")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
-                    .loot(Equipment.LootProperties.of(5))
+                    .withSpellChoices("bards_rpg:weapon/dragon_lute")
+                    /// ADD PASSIVE
+                    .withAdditionalSpell("")
                     .rarity = Rarity.RARE;
-            lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)))
+            lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), 3)
                     .translatedName("Siren's Lyre")
-                    .loot(Equipment.LootProperties.of(5))
                     .withSpellChoices("bards_rpg:weapon/ocean_lyre")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
+                    .withAdditionalSpell(MrpgLibSpells.sirens_tears.id().toString())
                     .rarity = Rarity.RARE;
-            harpCrossbow("elder_guardian_harp_crossbow",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.PRISMARINE_SHARD),
-                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            harpCrossbow("elder_guardian_harp_crossbow",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.PRISMARINE_SHARD))
                     .translatedName("Atlantis Harp Crossbow")
-                    ///CHANGE PASSIVE
-                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of(MrpgLibSpells.reef_arrows.id().toString())));
 
         }
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(ARSENAL) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("unique_rapier_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), rapier_t5_attack_damage)
                     .translatedName("Singing Blade")
-                    .loot(Equipment.LootProperties.of(5))
+                    .loot(Equipment.LootProperties.of(5, "divine"))
                     .withAdditionalSpell("arsenal:radiance_melee")
                     .rarity = Rarity.RARE;
             rapier("unique_rapier_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), rapier_t5_attack_damage)
                     .translatedName("Duelist's Rapier")
                     .loot(Equipment.LootProperties.of(5))
-                    ///CHANGE PASSIVE
-                    .withAdditionalSpell("")
+                    .withAdditionalSpell(MrpgLibSpells.duelists_focus.id().toString())
                     .rarity = Rarity.RARE;
-            lute("unique_lute_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.REDSTONE_BLOCK)), lute_t5_attack_damage)
+            lute("unique_lute_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.REDSTONE_BLOCK)), lute_t5_attack_damage, 3)
                     .translatedName("Lute of Ruby Verdict")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
+                    .withSpellChoices("bards_rpg:weapon/ruby_verdict_lute")
                     .withAdditionalSpell(BardsSpells.melody_of_the_meteor.id().toString())
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lute("unique_lute_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), lute_t5_attack_damage)
+            lute("unique_lute_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.IRON_BLOCK)), lute_t5_attack_damage, 3)
                     .translatedName("Spellthief's Lute")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LUTE_POWER))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LUTE_POWER))
+                    .withSpellChoices("bards_rpg:weapon/spellthief_lute")
                     .withAdditionalSpell(BardsSpells.spellthief.id().toString())
                     .loot(Equipment.LootProperties.of(5))
                     .rarity = Rarity.RARE;
-            lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
+            lyre("unique_lyre_0", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), 3)
                     .translatedName("Lyre of Apollo")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
-                    //CHANGE PASSIVE
-                    .withAdditionalSpell("")
-                    .loot(Equipment.LootProperties.of(5))
+                    .withSpellChoices("bards_rpg:weapon/apollo_lyre")
+                    .withAdditionalSpell("arsenal:radiance_spell")
+                    .loot(Equipment.LootProperties.of(5, "divine"))
                     .rarity = Rarity.RARE;
-            lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)))
+            lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), 3)
                     .translatedName("Lyre of Antecael")
-                    .attribute(AttributeModifier.bonus(SpellSchools.ARCANE.id, T4_LYRE_ARCANE_POWER ))
-                    .attribute(AttributeModifier.bonus(SpellSchools.HEALING.id, T4_LYRE_HEALING_POWER))
-                    //CHANGE PASSIVE
-                    .withAdditionalSpell("")
-                    .loot(Equipment.LootProperties.of(5))
+                    .withSpellChoices("bards_rpg:weapon/antecael_lyre")
+                    .withAdditionalSpell(BardsSpells.solstice_blessing.id().toString())
+                    .loot(Equipment.LootProperties.of(5, "elven"))
                     .rarity = Rarity.RARE;
-            harpCrossbow("unique_harp_crossbow_0",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT),
-                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+            harpCrossbow("unique_harp_crossbow_0",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT))
                     .translatedName("Lightning Harp Crossbow")
-                    ///CHANGE PASSIVE
-                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
-            harpCrossbow("unique_harp_crossbow_1",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT),
-                    new RangedConfig(9.0F, PULL_TIME_HARP_CROSSBOW, VELOCITY_HARP_CROSSBOW))
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of(MrpgLibSpells.lightning_strike_ranged.id().toString())));
+            harpCrossbow("unique_harp_crossbow_1",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT))
                     .translatedName("Starshot Harp Crossbow")
-                    .lootTheme("arsenal:divine")
-                    ///CHANGE PASSIVE
-                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of("")));
+                    .loot(5, "divine")
+                    .spellContainer(SpellContainers.forRangedWeapon().withSpellId(Identifier.of(BardsSpells.starshots.id().toString())));
         }
 
         Weapon.register(meleeConfig, meleeEntries, Group.KEY);

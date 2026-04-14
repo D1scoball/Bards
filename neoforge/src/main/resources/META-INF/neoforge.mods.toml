@@ -6,7 +6,7 @@ license = "ARR"
 [[mods]]
 modId = "bards_rpg"
 version = "${version}"
-displayName = "Bards (RPG Class)"
+displayName = "Bards (RPG Series Plus)"
 authors = "Fichte"
 description = '''
 Motivate and strengthen the party with awesome song's and ballads!

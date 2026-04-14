@@ -48,6 +48,13 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                 Items.NETHERITE_INGOT,
                 Weapons.netherite_lute.item()
         );
+        createSimpleSmithingRecipe(
+                "netherite_harp_crossbow",
+                Weapons.harp_crossbow.item(),
+                Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Items.NETHERITE_INGOT,
+                Weapons.netherite_harp_crossbow.item()
+        );
         // ====================
         // BETTERNETHER (Ruby)
         // ====================
@@ -76,6 +83,21 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                     Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
                     Identifier.of("betternether", "nether_ruby"),
                     rubyRapier,
+                    "betternether"
+            );
+        }
+
+        var rubyHarpCrossbow = Weapons.rangedEntries.stream()
+                .filter(e -> e.id().getPath().equals("ruby_harp_crossbow"))
+                .findFirst().map(e -> e.item()).orElse(null);
+
+        if (rubyHarpCrossbow != null) {
+            createSmithingTransformRecipe(
+                    "ruby_harp_crossbow",
+                    Weapons.netherite_harp_crossbow.item(),
+                    Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                    Identifier.of("betternether", "nether_ruby"),
+                    rubyHarpCrossbow,
                     "betternether"
             );
         }
@@ -174,6 +196,21 @@ public class BardSmithingRecipeProvider extends SmithingRecipeGenerator {
                         Identifier.of("loot_n_explore", "guardian_upgrade_smithing_template"),
                         Identifier.of("loot_n_explore", "elder_guardian_eye"),
                         elderGuardianrapier,
+                        "loot_n_explore"
+                );
+            }
+
+            var elderGuardianHarpCrossbow = Weapons.rangedEntries.stream()
+                    .filter(e -> e.id().getPath().equals("elder_guardian_harp_crossbow"))
+                    .findFirst().map(e -> e.item()).orElse(null);
+
+            if (elderGuardianHarpCrossbow != null) {
+                createSmithingTransformRecipe(
+                        "elder_guardian_harp_crossbow",
+                        Weapons.netherite_harp_crossbow.item(),
+                        Identifier.of("loot_n_explore", "guardian_upgrade_smithing_template"),
+                        Identifier.of("loot_n_explore", "elder_guardian_eye"),
+                        elderGuardianHarpCrossbow,
                         "loot_n_explore"
                 );
             }

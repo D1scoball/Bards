@@ -15,5 +15,9 @@ public class CustomSpellImpacts {
                 Identifier.of(MOD_ID, "spellthief_impact"),
                 new SpellthiefImpact()
         );
+        SpellHandlers.registerCustomImpact(
+                Identifier.of(MOD_ID, "secret_sonata_impact"),
+                new SecretSonataImpact()
+        );
     }
 }

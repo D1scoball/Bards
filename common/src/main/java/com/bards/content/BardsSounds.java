@@ -83,6 +83,10 @@ public class BardsSounds {
     public static final Entry harp_crossbow_shoot = add(new Entry("harp_crossbow_shoot").variants(4));
     public static final Entry harp_crossbow_hit = add(new Entry("harp_crossbow_hit"));
 
+    public static final Entry luthier_song_vitality   = add(new Entry("luthier_song_vitality"));
+    public static final Entry luthier_song_swiftness  = add(new Entry("luthier_song_swiftness"));
+    public static final Entry luthier_song_resilience = add(new Entry("luthier_song_resilience"));
+
 
 
     public static void register() {

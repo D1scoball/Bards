@@ -1,0 +1,40 @@
+package com.bards.effect;
+
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
+
+public class HymnOfTheGoldenLightEffect extends StatusEffect {
+    private final float absorptionPerLevel;
+
+    protected HymnOfTheGoldenLightEffect(StatusEffectCategory category, int color, float absorptionPerLevel) {
+        super(category, color);
+        this.absorptionPerLevel = absorptionPerLevel;
+    }
+
+    private float effectContribution(int amplifier) {
+        return absorptionPerLevel * (amplifier + 1);
+    }
+
+    @Override
+    public void onApplied(LivingEntity entity, int amplifier) {
+        float contribution = effectContribution(amplifier);
+        if (entity.getAbsorptionAmount() < contribution) {
+            entity.setAbsorptionAmount(contribution);
+        }
+    }
+
+    @Override
+    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+        return duration % 40 == 0;
+    }
+
+    @Override
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+        float contribution = effectContribution(amplifier);
+        if (entity.getAbsorptionAmount() < contribution) {
+            entity.setAbsorptionAmount(contribution);
+        }
+        return true;
+    }
+}

@@ -3,6 +3,7 @@ package com.bards.effect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WardensPaeanBeneficialEffect extends StatusEffect {
     public static final Set<UUID> PENDING_REMOVAL = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    public static final Set<UUID> PENDING_DECREMENT = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    public static final Set<UUID> DECREMENTING = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     protected WardensPaeanBeneficialEffect(StatusEffectCategory category, int color) {
         super(category, color);
@@ -20,10 +23,15 @@ public class WardensPaeanBeneficialEffect extends StatusEffect {
     @Override
     public void onApplied(LivingEntity entity, int amplifier) {
         if (entity.getWorld().isClient()) return;
+        if (DECREMENTING.remove(entity.getUuid())) return;
         for (var instance : new ArrayList<>(entity.getStatusEffects())) {
             if (!instance.getEffectType().value().isBeneficial()) {
                 entity.removeStatusEffect(instance.getEffectType());
-                PENDING_REMOVAL.add(entity.getUuid());
+                if (amplifier == 0) {
+                    PENDING_REMOVAL.add(entity.getUuid());
+                } else {
+                    PENDING_DECREMENT.add(entity.getUuid());
+                }
                 return;
             }
         }
@@ -38,6 +46,17 @@ public class WardensPaeanBeneficialEffect extends StatusEffect {
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (PENDING_REMOVAL.remove(entity.getUuid())) {
             entity.removeStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+        } else if (PENDING_DECREMENT.remove(entity.getUuid())) {
+            var current = entity.getStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+            if (current != null) {
+                DECREMENTING.add(entity.getUuid());
+                entity.removeStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+                entity.addStatusEffect(new StatusEffectInstance(
+                    BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry,
+                    current.getDuration(),
+                    current.getAmplifier() - 1
+                ));
+            }
         }
         return true;
     }

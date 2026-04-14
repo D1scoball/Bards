@@ -1,5 +1,6 @@
 package com.bards;
 
+import com.bards.block.BardBlocks;
 import com.bards.config.BardItemConfig;
 import com.bards.config.Default;
 import com.bards.config.TweaksConfig;
@@ -9,6 +10,8 @@ import com.bards.content.CustomSpellImpacts;
 import com.bards.effect.BardsEffects;
 import com.bards.item.Armors;
 import com.bards.item.Group;
+import com.bards.worldgen.villages.BardVillagerProfessions;
+import com.bards.worldgen.villages.BardVillagerTrades;
 import com.bards.item.Weapons;
 import net.fabric_extras.structure_pool.api.StructurePoolConfig;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -93,6 +96,26 @@ public final class BardsMod {
     }
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);
+    }
+
+    public static void registerBlocks() {
+        BardBlocks.register();
+    }
+
+    public static void registerVillagePoi() {
+        BardVillagerProfessions.registerPoiTypes();
+    }
+
+    public static void registerVillageProfessions() {
+        BardVillagerProfessions.registerProfessions();
+    }
+
+    public static void registerVillageSchedules() {
+        BardVillagerTrades.registerSchedule();
+    }
+
+    public static void registerVillageTrades() {
+        BardVillagerTrades.registerTrades();
     }
 
     public static void registerSounds() {

@@ -1,6 +1,8 @@
 package com.bards.mixin;
 
 import com.bards.effect.BardsEffects;
+import com.bards.effect.WardensPaeanBeneficialEffect;
+import com.bards.effect.WardensPaeanHarmfulEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -18,13 +20,35 @@ public abstract class WardensPaeanMixin {
         if (entity.getWorld().isClient()) return;
 
         if (effect.getEffectType().value().isBeneficial() && entity.hasStatusEffect(BardsEffects.HARMFUL_WARDENS_PAEAN.entry)) {
-            entity.removeStatusEffect(BardsEffects.HARMFUL_WARDENS_PAEAN.entry);
+            var current = entity.getStatusEffect(BardsEffects.HARMFUL_WARDENS_PAEAN.entry);
+            if (current != null && current.getAmplifier() > 0) {
+                WardensPaeanHarmfulEffect.DECREMENTING.add(entity.getUuid());
+                entity.removeStatusEffect(BardsEffects.HARMFUL_WARDENS_PAEAN.entry);
+                entity.addStatusEffect(new StatusEffectInstance(
+                    BardsEffects.HARMFUL_WARDENS_PAEAN.entry,
+                    current.getDuration(),
+                    current.getAmplifier() - 1
+                ));
+            } else {
+                entity.removeStatusEffect(BardsEffects.HARMFUL_WARDENS_PAEAN.entry);
+            }
             cir.setReturnValue(false);
             return;
         }
 
         if (!effect.getEffectType().value().isBeneficial() && entity.hasStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry)) {
-            entity.removeStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+            var current = entity.getStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+            if (current != null && current.getAmplifier() > 0) {
+                WardensPaeanBeneficialEffect.DECREMENTING.add(entity.getUuid());
+                entity.removeStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+                entity.addStatusEffect(new StatusEffectInstance(
+                    BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry,
+                    current.getDuration(),
+                    current.getAmplifier() - 1
+                ));
+            } else {
+                entity.removeStatusEffect(BardsEffects.BENEFICIAL_WARDENS_PAEAN.entry);
+            }
             cir.setReturnValue(false);
         }
     }

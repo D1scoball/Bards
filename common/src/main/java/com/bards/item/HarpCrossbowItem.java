@@ -16,13 +16,14 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.spell_engine.internals.SpellTriggers;
+import net.spell_engine.internals.arrow.ArrowExtension;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -89,6 +90,10 @@ public class HarpCrossbowItem extends CustomCrossbow {
                 arrow.setVelocity(look.x * speed, look.y * speed, look.z * speed);
                 if (creativeMode) {
                     arrow.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+                }
+                world.spawnEntity(arrow);
+                if (shooter instanceof PlayerEntity player) {
+                    SpellTriggers.onArrowShot((ArrowExtension)(Object) arrow, player, false);
                 }
             }
         }

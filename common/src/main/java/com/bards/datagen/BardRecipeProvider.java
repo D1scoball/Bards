@@ -121,6 +121,19 @@ public class BardRecipeProvider extends FabricRecipeProvider {
                 'R', "betterend:crystal_shards",
                 "betterend");
 
+        // ==========================================
+        // HARP CROSSBOWS
+        // ==========================================
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, Weapons.harp_crossbow.item())
+                .pattern("G G")
+                .pattern("SCS")
+                .pattern("G G")
+                .input('G', Items.GOLD_INGOT)
+                .input('S', Items.STRING)
+                .input('C', Items.CROSSBOW)
+                .criterion(hasItem(Items.CROSSBOW), conditionsFromItem(Items.CROSSBOW))
+                .offerTo(exporter, Identifier.of(MOD_ID, "harp_crossbow"));
+
         // MISC
         var bardBook = getOrFallback(Identifier.of(MOD_ID, "bard_spell_book"), Items.WRITTEN_BOOK);
         ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, bardBook)
