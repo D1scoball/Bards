@@ -208,7 +208,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "x":-0.9775599837303162
+                    "x":3.299344062805176
                 }
             },
             {
@@ -216,7 +216,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "x":-0.9775599837303162
+                    "x":3.299344062805176
                 }
             },
             {
@@ -224,7 +224,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "z":1.7645280361175537
+                    "z":2.254499912261963
                 }
             },
             {
@@ -232,7 +232,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "z":1.7645280361175537
+                    "z":2.254499912261963
                 }
             },
             {
@@ -240,7 +240,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "y":-2.263155937194824
+                    "y":-0.06380009651184082
                 }
             },
             {
@@ -248,7 +248,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "y":-2.263155937194824
+                    "y":-0.06380009651184082
                 }
             },
             {
@@ -256,7 +256,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "pitch":0.2894733250141144
+                    "pitch":-0.2894733250141144
                 }
             },
             {
@@ -264,7 +264,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "pitch":0.2894733250141144
+                    "pitch":-0.2894733250141144
                 }
             },
             {
@@ -288,7 +288,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "roll":1.8861075639724731
+                    "roll":-1.8861075639724731
                 }
             },
             {
@@ -296,7 +296,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem":{
-                    "roll":1.8861075639724731
+                    "roll":-1.8861075639724731
                 }
             }
         ]
