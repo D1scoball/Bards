@@ -119,16 +119,17 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 0, -0.01]
+			"translation": [0, 3, -0.01]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 0, -0.01]
+			"translation": [0, 3, -0.01]
 		}
 	},
 	"groups": [
 		{
 			"name": "group",
 			"origin": [8, 8, 8],
+			"scope": 0,
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8]
 		}

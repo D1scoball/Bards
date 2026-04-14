@@ -84,12 +84,10 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [-180, 0, 0],
-			"translation": [0, 6, 1.5]
+			"translation": [0, -10.5, 1.5]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [-180, 0, 0],
-			"translation": [0, 6, 1.5]
+			"translation": [0, -10.5, 1.5]
 		},
 		"firstperson_righthand": {
 			"translation": [0, -8, 0]
@@ -102,6 +100,7 @@
 		{
 			"name": "group",
 			"origin": [8, 8, 8],
+			"scope": 0,
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5]
 		}
