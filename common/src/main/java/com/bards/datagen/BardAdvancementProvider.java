@@ -133,7 +133,22 @@ public class BardAdvancementProvider implements DataProvider {
         // Display
         JsonObject display = new JsonObject();
         JsonObject icon = new JsonObject();
-        icon.addProperty("id", entry.iconItemName().contains(":") ? entry.iconItemName() : MOD_ID + ":" + entry.iconItemName());
+        String iconName = entry.iconItemName().contains(":") ? entry.iconItemName() : MOD_ID + ":" + entry.iconItemName();
+        if (iconName.contains("item/spell_book/")) {
+            icon.addProperty("id", "spell_engine:spell_book");
+            JsonObject components = new JsonObject();
+            components.addProperty("spell_engine:item_model", iconName);
+            icon.add("components", components);
+        }
+        else if (iconName.contains("item/spell_scroll/")) {
+            icon.addProperty("id", "spell_engine:spell_scroll");
+            JsonObject components = new JsonObject();
+            components.addProperty("spell_engine:item_model", iconName);
+            icon.add("components", components);
+        }
+        else {
+            icon.addProperty("id", iconName);
+        }
         display.add("icon", icon);
         display.add("title", createTranslatable(entry.titleKey()));
         display.add("description", createTranslatable(entry.descriptionKey()));

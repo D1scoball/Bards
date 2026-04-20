@@ -66,7 +66,7 @@ public class BardsEffects {
     public static float critChanceIncrease = 0.005F;
     public static Effects.Entry WANDERERS_MINUET = add(new Effects.Entry(Identifier.of(MOD_ID, "wanderers_minuet"),
             "Wanderer's Minuet",
-            "Increases Critical Chance & Damage.",
+            "Increases Critical Chance.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
             new EffectConfig(
                     List.of(
@@ -163,7 +163,13 @@ public class BardsEffects {
                                     EntityAttributes_RangedWeapon.DAMAGE.id.toString(),
                                     -0.05F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            ),
+                            new AttributeModifier(
+                                    SpellEngineAttributes.DAMAGE_TAKEN.id.toString(),
+                                    0.05F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
+
                     )
             )
     ));
@@ -278,6 +284,20 @@ public class BardsEffects {
                             new AttributeModifier(
                                     EntityAttributes_RangedWeapon.DAMAGE.id.toString(),
                                     dragonSlayerMultiplier,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static Effects.Entry ECLIPSE_MANTLE = add(new Effects.Entry(Identifier.of(MOD_ID, "eclipse_mantle"),
+            "Eclipse Mantle",
+            "Increases Evasion",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9999ff),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    SpellEngineAttributes.EVASION_CHANCE.id.toString(),
+                                    0.15F,
                                     EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                             )
                     )

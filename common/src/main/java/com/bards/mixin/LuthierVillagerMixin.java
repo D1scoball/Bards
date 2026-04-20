@@ -140,7 +140,7 @@ public abstract class LuthierVillagerMixin {
         List<PlayerEntity> nearbyPlayers = serverWorld.getEntitiesByClass(PlayerEntity.class, effectBox, p -> true);
         for (PlayerEntity player : nearbyPlayers) {
             player.addStatusEffect(new StatusEffectInstance(
-                    song.effect(), 3600, song.effectAmplifier(), false, true, true
+                    song.effect(), 200, song.effectAmplifier(), false, true, true
             ));
         }
     }

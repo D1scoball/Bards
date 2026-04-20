@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:troubadours_minuet",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:wanderers_minuet",
+      "required": false
+    }
+  ]
+}

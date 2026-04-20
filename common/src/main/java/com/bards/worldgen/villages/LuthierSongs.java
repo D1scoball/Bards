@@ -5,7 +5,6 @@ import com.bards.effect.BardsEffects;
 import com.bards.item.Weapons;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 

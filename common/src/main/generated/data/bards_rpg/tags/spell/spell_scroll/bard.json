@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:magical_ballad",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:vicious_mockery",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:wardens_paean",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:encore",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:armys_paeon",
+      "required": false
+    },
+    {
+      "id": "bards_rpg:crescendo",
+      "required": false
+    }
+  ]
+}

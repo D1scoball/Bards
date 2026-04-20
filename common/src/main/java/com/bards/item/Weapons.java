@@ -217,25 +217,24 @@ public class Weapons {
         if (BardsMod.tweaksConfig.value.ignore_items_required_mods || FabricLoader.getInstance().isModLoaded(LNE) || FabricLoader.getInstance().isDevelopmentEnvironment()) {
             rapier("ender_dragon_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Dragon's Rapier")
-                    .withAdditionalSpell("loot_n_explore:dragonclaw")
+                    .withAdditionalSpell(MrpgLibSpells.dragonclaw_melee.id().toString())
                     .rarity = Rarity.RARE;
             rapier("elder_guardian_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), rapier_t5_attack_damage)
                     .translatedName("Coral Rapier")
-                    .withAdditionalSpell("loot_n_explore:waterbomb")
+                    .withAdditionalSpell(MrpgLibSpells.waterbomb_melee.id().toString())
                     .rarity = Rarity.RARE;
             rapier("wither_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BONE)), rapier_t5_attack_damage)
                     .translatedName("Withered Rapier")
-                    .withAdditionalSpell("loot_n_explore:wither_pulse")
+                    .withAdditionalSpell(MrpgLibSpells.wither_pulse_melee.id().toString())
                     .rarity = Rarity.RARE;
             rapier("glacial_rapier", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.BLUE_ICE)), rapier_t5_attack_damage)
                     .translatedName("Glacial Rapier")
-                    .withAdditionalSpell("loot_n_explore:avalanche")
+                    .withAdditionalSpell(MrpgLibSpells.avalanche_melee.id().toString())
                     .rarity = Rarity.RARE;
             lute("ender_dragon_lute", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.AMETHYST_SHARD)), lute_t5_attack_damage, 3)
                     .translatedName("Dragon Lute")
                     .withSpellChoices("bards_rpg:weapon/dragon_lute")
-                    /// ADD PASSIVE
-                    .withAdditionalSpell("")
+                    .withAdditionalSpell(MrpgLibSpells.dragonslayers_fury.id().toString())
                     .rarity = Rarity.RARE;
             lyre("elder_guardian_lyre", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.PRISMARINE_SHARD)), 3)
                     .translatedName("Siren's Lyre")
@@ -279,7 +278,7 @@ public class Weapons {
             lyre("unique_lyre_1", Weapon.CustomMaterial.matching(ToolMaterials.NETHERITE, () -> Ingredient.ofItems(Items.GOLD_BLOCK)), 3)
                     .translatedName("Lyre of Antecael")
                     .withSpellChoices("bards_rpg:weapon/antecael_lyre")
-                    .withAdditionalSpell(BardsSpells.solstice_blessing.id().toString())
+                    .withAdditionalSpell(BardsSpells.eclipse_mantle.id().toString())
                     .loot(Equipment.LootProperties.of(5, "elven"))
                     .rarity = Rarity.RARE;
             harpCrossbow("unique_harp_crossbow_0",Equipment.Tier.TIER_5,() -> Ingredient.ofItems(Items.NETHERITE_INGOT))

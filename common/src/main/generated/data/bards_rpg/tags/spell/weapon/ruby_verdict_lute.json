@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:secret_sonata",
+      "required": false
+    },
+    {
+      "id": "#bards_rpg:weapon/lute",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:canticle_of_the_tides",
+      "required": false
+    },
+    {
+      "id": "#bards_rpg:weapon/lyre",
+      "required": false
+    }
+  ]
+}

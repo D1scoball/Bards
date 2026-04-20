@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:crossbow"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "G G",
+    "SCS",
+    "G G"
+  ],
+  "result": {
+    "count": 1,
+    "id": "bards_rpg:harp_crossbow"
+  }
+}

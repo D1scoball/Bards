@@ -5,6 +5,7 @@ import com.bards.tags.BardTags;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.Identifier;
+import net.more_rpg_classes.custom.SpellBuilderHelper;
 import net.spell_engine.api.datagen.SpellBuilder;
 import net.spell_engine.api.render.LightEmission;
 import net.spell_engine.api.spell.ExternalSpellSchools;
@@ -612,7 +613,14 @@ public class BardsSpells {
         var id = Identifier.of(MOD_ID, "vicious_mockery");
         var effect = BardsEffects.VICIOUS_MOCKERY;
         var title = "Vicious Mockery";
-        var description = "";
+        var description = "Throw a string of insults at a target, taunting it, damaging it by {damage} and decreasing it's offensive power and increasing incoming damage by {bonus} per stack. " +
+                "Stacking up to {effect_amplifier_cap} times.";
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifier = effect.config().firstModifier();
+            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
+            return args.description()
+                    .replace("{bonus}", bonus);
+        };
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -641,8 +649,8 @@ public class BardsSpells {
                 musicImpactParticles(0.5F).extent(0.5F).color(spellColor),
                 new ParticleBatch(
                         "more_rpg_classes:rage_particle",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        5, 0.5F, 0.8F).color(spellColor).extent(0.25F)
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        10, 0.5F, 0.8F).color(spellColor).extent(0.25F)
 
         };
         //damage.sound = new Sound("");
@@ -657,13 +665,14 @@ public class BardsSpells {
         SpellBuilder.Cost.cooldown(spell, 15);
         spell.cost.cooldown.proportional = true;
 
-        return new Entry(id, spell, title, description).book(Book.BARD);
+        return new Entry(id, spell, title, description).book(Book.BARD).mutator(mutator);
     }
     public static final Entry wardens_paean = add(wardens_paean());
     private static Entry wardens_paean() {
         var id = Identifier.of(MOD_ID, "wardens_paean");
         var title = "Warden's Paean";
-        var description = "";
+        var description = "The next applied status effects (up to {effect_amplifier_cap_1}), for {effect_duration_1} seconds get removed. " +
+                "Beneficial Effects from Enemies, Harmful Effects from allies.";
 
         var spell = SpellBuilder.createSpellActive();
         spell.school = SpellSchools.ARCANE;
@@ -771,7 +780,7 @@ public class BardsSpells {
     private static Entry armys_paeon() {
         var id = Identifier.of(MOD_ID, "armys_paeon");
         var title = "Army's Paeon";
-        var description = "Buff nearby allies for {effect_duration} sec, enhance their strength if you damage enemies. The effect can be stacked {amplifier_cap} times.";
+        var description = "Buff nearby allies for {effect_duration} sec, enhance their strength if you damage enemies. The effect can be stacked {effect_amplifier_cap} times.";
         var stashEffect = BardsEffects.ARMYS_PAEON_STASH;
         var buffEffect = BardsEffects.ARMYS_PAEON;
 
@@ -821,7 +830,7 @@ public class BardsSpells {
         spell.impacts = List.of(buff);
 
         SpellBuilder.Cost.exhaust(spell, 0.2F);
-        SpellBuilder.Cost.cooldown(spell, 10);
+        SpellBuilder.Cost.cooldown(spell, 30);
 
         return new Entry(id, spell, title, description).book(Book.BARD);
     }
@@ -849,6 +858,7 @@ public class BardsSpells {
         spell.learn = new Spell.Learn();
 
         spell.release = new Spell.Release();
+        spell.release.animation = bardReleaseAnimation();
         spell.release.particles = new ParticleBatch[]{
                 musicParticles(4.0F).color(spellColor).extent(2.0F)
         };
@@ -861,7 +871,7 @@ public class BardsSpells {
 
         var projectile = new Spell.ProjectileData();
         projectile.homing_angle = 0F;
-        projectile.perks.pierce = 3;
+        projectile.perks.pierce = 99;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
         projectile.client_data.travel_particles = new ParticleBatch[] {
@@ -872,7 +882,7 @@ public class BardsSpells {
         projectile.client_data.model.rotate_degrees_per_tick = 0F;
         projectile.client_data.model.rotate_degrees_offset = 0F;
         projectile.client_data.model.light_emission = LightEmission.RADIATE;
-        projectile.hitbox = new Spell.ProjectileData.HitBox(3.0F, 0.6F);
+        projectile.hitbox = new Spell.ProjectileData.HitBox(3.0F, 0.8F);
         spell.deliver.projectile.projectile = projectile;
 
         var damage = SpellBuilder.Impacts.damage(1.0F, 0.0F);
@@ -896,12 +906,12 @@ public class BardsSpells {
                 musicImpactParticles(0.5F).extent(0.5F).color(spellColor)
         };
         //CHANGE SOUND
-        debuff.sound = new Sound(BardsSounds.bard_buff.id());
+    //    debuff.sound = new Sound(BardsSounds.bard_buff.id());
 
         spell.impacts = List.of(damage, debuff);
 
         SpellBuilder.Cost.exhaust(spell, 0.2F);
-        SpellBuilder.Cost.cooldown(spell, 10);
+        SpellBuilder.Cost.cooldown(spell, 35);
 
         return new Entry(id, spell, title, description).mutator(mutator).book(Book.BARD);
     }
@@ -1157,18 +1167,25 @@ public class BardsSpells {
 
         return new Entry(id, spell, title, description);
     }
-    public static Entry solstice_blessing = add(solstice_blessing());
-    private static Entry solstice_blessing() {
-        var id = Identifier.of(MOD_ID, "solstice_blessing");
-        var title = "Solstice Blessing";
-        var description = "On effect applied: {trigger_chance} chance to heal your ally by {heal} hearts.";
+    public static Entry eclipse_mantle = add(eclipse_mantle());
+    private static Entry eclipse_mantle() {
+        var id = Identifier.of(MOD_ID, "eclipse_mantle");
+        var effect = BardsEffects.ECLIPSE_MANTLE;
+        var title = "Eclipse Mantle";
+        var description = "On effect applied: {trigger_chance} chance to heal your ally by {heal} hearts and increase evasion chance by {bonus}.";
         var spell = SpellBuilder.createSpellPassive();
         spell.school = SpellSchools.HEALING;
         spell.range = 2F;
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifier = effect.config().firstModifier();
+            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
+            return args.description()
+                    .replace("{bonus}", bonus);
+        };
 
         var trigger = new Spell.Trigger();
         trigger.type = Spell.Trigger.Type.SPELL_IMPACT_SPECIFIC;
-        trigger.chance = 0.25F;
+        trigger.chance = 0.2F;
         trigger.impact = new Spell.Trigger.ImpactCondition();
         trigger.impact.impact_type = Spell.Impact.Action.Type.STATUS_EFFECT.toString();
         trigger.spell = new Spell.Trigger.SpellCondition();
@@ -1177,19 +1194,15 @@ public class BardsSpells {
 
         spell.target.type = Spell.Target.Type.FROM_TRIGGER;
 
-        var heal = new Spell.Impact();
-        heal.action = new Spell.Impact.Action();
-        heal.action.type = Spell.Impact.Action.Type.HEAL;
-        heal.action.heal = new Spell.Impact.Action.Heal();
-        heal.action.heal.spell_power_coefficient = 0.25F;
-        heal.particles = new ParticleBatch[]{
+        var buff = SpellBuilder.Impacts.effectSet(effect.id.toString(), 5,1);
+        buff.particles = new ParticleBatch[]{
                 new ParticleBatch( SpellEngineParticles.MagicParticles.get(
                         SpellEngineParticles.MagicParticles.Shape.SPARK,
                         SpellEngineParticles.MagicParticles.Motion.DECELERATE
                         ).id().toString(),
                         ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
                         20, 0.1F, 0.1F)
-                        .color(Color.WHITE.toRGBA()),
+                        .color(SpellBuilderHelper.MAGENTA.toRGBA()),
                 new ParticleBatch(
                         SpellEngineParticles.MagicParticles.get(
                                 SpellEngineParticles.MagicParticles.Shape.HOLY,
@@ -1197,15 +1210,15 @@ public class BardsSpells {
                         ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         15, 0.2F, 0.25F)
-                        .color(GOLD.toRGBA())
+                        .color(SpellBuilderHelper.MAGENTA.toRGBA()),
         };
-        heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_3.id().toString());
-        spell.impacts = List.of(heal);
+        var heal = SpellBuilder.Impacts.heal(0.25F);
+        spell.impacts = List.of(buff, heal);
 
-        SpellBuilder.Cost.cooldown(spell,5.0F);
+        SpellBuilder.Cost.cooldown(spell,10.0F);
         spell.cost.cooldown.hosting_item = false;
 
-        return new Entry(id, spell, title, description);
+        return new Entry(id, spell, title, description).mutator(mutator);
     }
     
     public static final Color STARSHOT_COLOR = GOLD.blend(Color.WHITE, 0.5F);

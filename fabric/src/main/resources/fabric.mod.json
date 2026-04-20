@@ -36,7 +36,8 @@
     "spell_engine": "*",
     "spell_power": ">=1.2.0",
     "more_rpg_classes": ">=2.2.0-1.21.1",
-    "structure_pool_api": "*"
+    "structure_pool_api": "*",
+    "ranged_weapon_api": "*"
   },
   "suggests": {
     "another-mod": "*"

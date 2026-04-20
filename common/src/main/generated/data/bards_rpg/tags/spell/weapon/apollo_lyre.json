@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:hymn_of_the_golden_light",
+      "required": false
+    },
+    {
+      "id": "#bards_rpg:weapon/lyre",
+      "required": false
+    }
+  ]
+}

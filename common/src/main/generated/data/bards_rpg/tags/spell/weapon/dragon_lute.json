@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "bards_rpg:tale_of_the_dragonslayer",
+      "required": false
+    },
+    {
+      "id": "#bards_rpg:weapon/lute",
+      "required": false
+    }
+  ]
+}

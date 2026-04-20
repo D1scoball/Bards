@@ -41,5 +41,19 @@ versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.bards_rpg]]
+modId = "ranged_weapon_api"
+type = "required"
+versionRange = "[${ranged_weapon_api_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.bards_rpg]]
+modId = "more_rpg_classes"
+type = "required"
+versionRange = "[${more_rpg_library_version},)"
+ordering = "BEFORE"
+side = "BOTH"
+
 [[mixins]]
 config = "bards_rpg.mixins.json"
