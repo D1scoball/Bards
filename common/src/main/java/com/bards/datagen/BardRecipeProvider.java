@@ -1,5 +1,6 @@
 package com.bards.datagen;
 
+import com.bards.block.BardBlocks;
 import com.bards.item.Armors;
 import com.bards.item.Weapons;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -37,6 +38,19 @@ public class BardRecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+        // ==========================================
+        // BLOCKS
+        // ==========================================
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, BardBlocks.MUSIC_STAND.item())
+                .pattern("G G")
+                .pattern("SBS")
+                .pattern(" T ")
+                .input('T', Items.STICK)
+                .input('S', Items.STRING)
+                .input('G', Items.GOLD_INGOT)
+                .input('B', Items.BOOK)
+                .criterion(hasItem(Items.BOOK), conditionsFromItem(Items.BOOK))
+                .offerTo(exporter, Identifier.of(MOD_ID, "music_stand_block"));
         // ==========================================
         // RAPIERS
         // ==========================================
@@ -125,25 +139,24 @@ public class BardRecipeProvider extends FabricRecipeProvider {
         // HARP CROSSBOWS
         // ==========================================
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, Weapons.harp_crossbow.item())
-                .pattern("G G")
-                .pattern("SCS")
-                .pattern("G G")
-                .input('G', Items.GOLD_INGOT)
+                .pattern("GGG")
+                .pattern("SSS")
+                .pattern("C C")
+                .input('G', Items.STICK)
                 .input('S', Items.STRING)
-                .input('C', Items.CROSSBOW)
-                .criterion(hasItem(Items.CROSSBOW), conditionsFromItem(Items.CROSSBOW))
+                .input('C', Items.TRIPWIRE_HOOK)
+                .criterion(hasItem(Items.TRIPWIRE_HOOK), conditionsFromItem(Items.TRIPWIRE_HOOK))
                 .offerTo(exporter, Identifier.of(MOD_ID, "harp_crossbow"));
-
-        // MISC
-        var bardBook = getOrFallback(Identifier.of(MOD_ID, "bard_spell_book"), Items.WRITTEN_BOOK);
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, bardBook)
-                .input(Items.STRING)
-                .input(Items.GOLD_NUGGET)
-                .input(Items.BOOK)
-                .input(Items.LAPIS_LAZULI)
-                .criterion(hasItem(Items.NOTE_BLOCK), conditionsFromItem(Items.NOTE_BLOCK))
-                .offerTo(exporter);
-
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, Weapons.diamond_harp_crossbow.item())
+                .pattern("DGD")
+                .pattern("SSS")
+                .pattern("C C")
+                .input('G', Items.GOLD_INGOT)
+                .input('D', Items.DIAMOND)
+                .input('S', Items.STRING)
+                .input('C', Items.TRIPWIRE_HOOK)
+                .criterion(hasItem(Items.TRIPWIRE_HOOK), conditionsFromItem(Items.TRIPWIRE_HOOK))
+                .offerTo(exporter, Identifier.of(MOD_ID, "diamond_harp_crossbow"));
         //// ARMOR
         //HATS
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, (Item) Armors.entertainerArmorSet.armorSet().head)
@@ -219,6 +232,7 @@ public class BardRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.RABBIT_HIDE), conditionsFromItem(Items.RABBIT_HIDE))
                 .offerTo(exporter, Identifier.of(Armors.troubadourArmorSet.armorSet().feet.toString()));
     }
+
     private void createConditionalShapedRecipe(RecipeExporter exporter, String name, RecipeCategory category,
                                                String resultId, String[] pattern,
                                                char key, String ingredientId, char key2, String ingredientId2, String requiredMod) {

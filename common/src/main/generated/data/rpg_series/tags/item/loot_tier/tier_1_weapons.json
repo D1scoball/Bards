@@ -7,6 +7,10 @@
     {
       "id": "bards_rpg:wooden_lute",
       "required": false
+    },
+    {
+      "id": "bards_rpg:harp_crossbow",
+      "required": false
     }
   ]
 }

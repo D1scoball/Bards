@@ -3,19 +3,19 @@
   "category": "equipment",
   "key": {
     "C": {
-      "item": "minecraft:crossbow"
+      "item": "minecraft:tripwire_hook"
     },
     "G": {
-      "item": "minecraft:gold_ingot"
+      "item": "minecraft:stick"
     },
     "S": {
       "item": "minecraft:string"
     }
   },
   "pattern": [
-    "G G",
-    "SCS",
-    "G G"
+    "GGG",
+    "SSS",
+    "C C"
   ],
   "result": {
     "count": 1,

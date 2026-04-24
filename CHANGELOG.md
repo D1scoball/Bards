@@ -1,9 +1,13 @@
 # 0.1.1 - 1.21.1
 - Update to Spell Engine Version 1.9.*
+- [IMPORTANT] This mod is still in beta, so sound effects and visuals might be missing
+- Nerfed Armies Paeon Damage multiplier
 - Added "Ranged Weapon API" as a new dependency!
 - Fixed issues with the Hat-Armor Models conflicting with the player's head model
 - Improved some Player Animations
 - Moved the custom SpellThief Impact to the More RPG Library Mod 
+- Added a new Luthier Villager, that sells Bard Equipment (Thx Florian for the Villager-Texture)
+- Added new Structures that get injected in villages "Pub's" (Thx Florian for the Buildings)
 - Heavily Improved the Custom SpellThief Impact for the SpellThief Lute and moved it to the more rpg lib
 - 3x new Spells per Tier (Spell Expansion)
 - T2 Vicious Mockery > Single Target Debuff, Damage and Taunt

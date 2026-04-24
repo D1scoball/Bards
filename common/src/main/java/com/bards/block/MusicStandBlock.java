@@ -5,9 +5,13 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 
 public class MusicStandBlock extends HorizontalFacingBlock {
 
@@ -26,6 +30,16 @@ public class MusicStandBlock extends HorizontalFacingBlock {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
+
+    private static final VoxelShape SHAPE = VoxelShapes.union(
+        Block.createCuboidShape(6, 0, 5, 10, 12, 9),
+        Block.createCuboidShape(1.5, 11, 4, 14.5, 13, 10)
+    );
+
+    @Override
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, net.minecraft.util.math.BlockPos pos, ShapeContext context) {
+        return SHAPE;
     }
 
     @Override

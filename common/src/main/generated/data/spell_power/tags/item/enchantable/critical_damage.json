@@ -7,6 +7,10 @@
     {
       "id": "#bards_rpg:lyres",
       "required": false
+    },
+    {
+      "id": "#bards_rpg:harp_crossbows",
+      "required": false
     }
   ]
 }

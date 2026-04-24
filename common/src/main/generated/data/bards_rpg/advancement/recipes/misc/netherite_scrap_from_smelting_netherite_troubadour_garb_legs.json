@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_note_block": {
+    "has_netherite_troubadour_garb_legs": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:note_block"
+            "items": "bards_rpg:netherite_troubadour_garb_legs"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:written_book"
+        "recipe": "minecraft:netherite_scrap_from_smelting_netherite_troubadour_garb_legs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_note_block"
+      "has_netherite_troubadour_garb_legs"
     ]
   ],
   "rewards": {
     "recipes": [
-      "minecraft:written_book"
+      "minecraft:netherite_scrap_from_smelting_netherite_troubadour_garb_legs"
     ]
   }
 }

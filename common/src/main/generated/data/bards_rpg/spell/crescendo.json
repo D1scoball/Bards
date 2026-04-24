@@ -58,7 +58,7 @@
       "projectile": {
         "homing_angle": 0.0,
         "perks": {
-          "pierce": 99
+          "pierce": 999999
         },
         "hitbox": {
           "width": 3.0,
@@ -66,6 +66,42 @@
         },
         "client_data": {
           "light_level": 12,
+          "travel_particles": [
+            {
+              "particle_id": "spell_engine:magic_spark_decelerate",
+              "origin": "CENTER",
+              "shape": "CIRCLE",
+              "rotation": "LOOK",
+              "roll": 18.0,
+              "count": 5.0,
+              "min_speed": 0.14,
+              "max_speed": 0.15,
+              "extent": 1.5,
+              "color_rgba": 4292280575
+            },
+            {
+              "particle_id": "more_rpg_classes:music_note",
+              "origin": "CENTER",
+              "shape": "SPHERE",
+              "rotation": "LOOK",
+              "roll_offset": 180.0,
+              "count": 2.0,
+              "min_speed": 0.14,
+              "max_speed": 0.15,
+              "extent": 1.5,
+              "color_rgba": 4292280575
+            },
+            {
+              "particle_id": "more_rpg_classes:music_note",
+              "origin": "CENTER",
+              "shape": "SPHERE",
+              "rotation": "LOOK",
+              "count": 1.0,
+              "max_speed": 0.05,
+              "extent": 1.5,
+              "color_rgba": 4292280575
+            }
+          ],
           "model": {
             "model_id": "bards_rpg:spell_projectile/crescendo",
             "light_emission": "RADIATE",
@@ -81,6 +117,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
+          "spell_power_coefficient": 0.8,
           "knockback": 0.0
         }
       },
@@ -105,8 +142,8 @@
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "bards_rpg:ballad",
-          "duration": 8.0,
+          "effect_id": "bards_rpg:crescendo",
+          "duration": 2.5,
           "amplifier": 1,
           "amplifier_cap": 3,
           "amplifier_cap_power_multiplier": 0.15,

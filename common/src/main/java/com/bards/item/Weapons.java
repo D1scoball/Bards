@@ -75,7 +75,7 @@ public class Weapons {
     private enum Instrument {
         LUTE(1.0F, 1.0F),
         LYRE(0.5F, 1.5F),
-        HARP(1.25F, 0.75F);
+        HARP(0.8F, 0.6F);
         final float arcaneMult, healingMult;
         Instrument(float a, float h) { arcaneMult = a; healingMult = h; }
     }
@@ -167,10 +167,12 @@ public class Weapons {
         return entry;
     }
 
-
     public static final RangedWeapon.Entry harp_crossbow = harpCrossbow("harp_crossbow",
-            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT))
+            Equipment.Tier.TIER_1, () -> Ingredient.ofItems(Items.STICK))
             .translatedName("Harp Crossbow");
+    public static final RangedWeapon.Entry diamond_harp_crossbow = harpCrossbow("diamond_harp_crossbow",
+            Equipment.Tier.TIER_2, () -> Ingredient.ofItems(Items.GOLD_INGOT))
+            .translatedName("Diamond Harp Crossbow");
     public static final RangedWeapon.Entry netherite_harp_crossbow = harpCrossbow("netherite_harp_crossbow",
             Equipment.Tier.TIER_3, () -> Ingredient.ofItems(Items.NETHERITE_INGOT))
             .translatedName("Netherite Harp Crossbow");

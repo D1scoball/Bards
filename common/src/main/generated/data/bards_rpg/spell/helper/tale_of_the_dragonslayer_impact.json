@@ -14,13 +14,6 @@
         },
         {
           "type": "ARROW_IMPACT"
-        },
-        {
-          "type": "SPELL_IMPACT_SPECIFIC",
-          "spell": {},
-          "impact": {
-            "impact_type": "DAMAGE"
-          }
         }
       ],
       "consume": 0

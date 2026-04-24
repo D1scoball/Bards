@@ -63,7 +63,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.4
+          "spell_power_coefficient": 0.55
         }
       },
       "particles": [
@@ -88,10 +88,10 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "bards_rpg:canticle_of_the_tides",
+          "duration": 9.0,
           "amplifier": 1,
-          "amplifier_cap": 3,
+          "amplifier_cap": 4,
           "amplifier_cap_power_multiplier": 0.1,
-          "refresh_duration": false,
           "apply_mode": "ADD"
         }
       },

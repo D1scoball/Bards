@@ -5,6 +5,10 @@
       "required": false
     },
     {
+      "id": "bards_rpg:diamond_harp_crossbow",
+      "required": false
+    },
+    {
       "id": "bards_rpg:netherite_harp_crossbow",
       "required": false
     },

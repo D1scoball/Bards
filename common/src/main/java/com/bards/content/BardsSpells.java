@@ -17,7 +17,6 @@ import net.spell_engine.api.util.TriState;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
-import net.spell_engine.fx.SpellEngineSounds;
 import net.spell_engine.internals.target.SpellTarget;
 import net.spell_power.api.SpellSchools;
 import org.jetbrains.annotations.Nullable;
@@ -181,28 +180,28 @@ public class BardsSpells {
         return damage;
     }
     public static Spell.Impact bardSongBuffImpact(long color, String effect, int amplifierCap){
-        var buff = SpellBuilder.Impacts.effectAdd(effect,10,1,amplifierCap);
+        var buff = SpellBuilder.Impacts.effectAdd(effect,9,1,amplifierCap);
         buff.school = SpellSchools.HEALING;
         buff.action.status_effect.amplifier_cap_power_multiplier = 0.1F;
-        buff.action.status_effect.refresh_duration = false;
+        buff.action.status_effect.refresh_duration = true;
         buff.particles = new ParticleBatch[]{
                 musicImpactParticles(0.5F).extent(0.5F).color(color)
         };
         return buff;
+    }
+    public static Spell.Impact bardSongDebuffImpact(long color, String effect, int amplifierCap){
+        var debuff = SpellBuilder.Impacts.effectAdd(effect,9,1,amplifierCap);
+        debuff.action.status_effect.amplifier_cap_power_multiplier = 0.1F;
+        debuff.action.status_effect.refresh_duration = true;
+        debuff.particles = new ParticleBatch[]{
+                musicImpactParticles(0.5F).extent(0.5F).color(color)
+        };
+        return debuff;
     }
     public static Spell.Impact bardSongHealingImpact(float coefficient){
         var heal = SpellBuilder.Impacts.heal(coefficient);
         heal.school = SpellSchools.HEALING;
         return heal;
-    }
-    public static Spell.Impact bardSongDebuffImpact(long color, String effect, int amplifierCap){
-        var buff = SpellBuilder.Impacts.effectAdd(effect,10,1,amplifierCap);
-        buff.action.status_effect.amplifier_cap_power_multiplier = 0.1F;
-        buff.action.status_effect.refresh_duration = false;
-        buff.particles = new ParticleBatch[]{
-                musicImpactParticles(0.5F).extent(0.5F).color(color)
-        };
-        return buff;
     }
     private static Spell.TargetCondition lowHealthCondition() {
         var deadCondition = new Spell.TargetCondition();
@@ -217,6 +216,12 @@ public class BardsSpells {
         return deadCondition;
     }
     /// WEAPON SKILLS
+    public static float songWithoutHealDmg = 0.7F;
+    public static  float songWithHealDmg = 0.55F;
+    public static  float songHealing = 0.2F;
+    public static  int effectCapWithoutHeal = 4;
+    public static  int effectCapWithHeal = 3;
+
     public static final Entry troubadours_minuet = add(troubadours_minuet());
     private static Entry troubadours_minuet() {
         var id = Identifier.of(MOD_ID, "troubadours_minuet");
@@ -234,9 +239,9 @@ public class BardsSpells {
         var bardSong = BardsSounds.troubadours_minuet.id();
 
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.7F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,3);
-        var heal = bardSongHealingImpact(0.2F);
+        var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithHeal);
+        var heal = bardSongHealingImpact(songHealing);
 
         spell.impacts = List.of(damage, buff, heal);
         bardSongWeaponSkillCooldown(spell);
@@ -261,8 +266,8 @@ public class BardsSpells {
         var spellColor = BRIGHT_GREEN.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.5F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,4);
+        var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithoutHeal);
 
         spell.impacts = List.of(damage, buff);
         bardSongWeaponSkillCooldown(spell);
@@ -287,7 +292,7 @@ public class BardsSpells {
 
         spell.active.cast.duration = 5.0F;
         spell.active.cast.movement_speed = 1.5F;
-        spell.active.cast.channel_ticks = 10;
+        spell.active.cast.channel_ticks = 5;
 
         spell.active.cast.animation = bardCastAnimation();
         spell.active.cast.sound =  new Sound(bardSong);
@@ -340,9 +345,9 @@ public class BardsSpells {
         var spellColor = LIME_GREEN.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.4F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,3);
-        var heal = bardSongHealingImpact(0.4F);
+        var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithHeal);
+        var heal = bardSongHealingImpact(songHealing);
 
         spell.impacts = List.of(damage, buff, heal);
         bardSongWeaponSkillCooldown(spell);
@@ -367,8 +372,8 @@ public class BardsSpells {
         var spellColor = BRIGHT_PURPLE.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.5F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,4);
+        var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithoutHeal);
 
         spell.impacts = List.of(damage, buff);
         bardSongWeaponSkillCooldown(spell);
@@ -380,7 +385,7 @@ public class BardsSpells {
     private static Entry discordant_note() {
         var id = Identifier.of(MOD_ID, "discordant_note");
         var title = "Discordant Note";
-        var description = "A Discordant Note that deals {damage} damage to enemies and reduces their offensive stats by {bonus}. Can be stacked {amplifier_cap} time.";
+        var description = "A Discordant Note that deals {damage} damage to enemies and reduces their offensive stats by {bonus}. Can be stacked {effect_amplifier_cap} time.";
         var buffEffect = BardsEffects.DISCORDANT_NOTE;
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = buffEffect.config().firstModifier();
@@ -393,8 +398,8 @@ public class BardsSpells {
         var spellColor = PURPLE.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.8F);
-        var debuff = bardSongDebuffImpact(spellColor,stringEffect,4);
+        var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
+        var debuff = bardSongDebuffImpact(spellColor,stringEffect,effectCapWithoutHeal);
 
         spell.impacts = List.of(damage, debuff);
         bardSongWeaponSkillCooldown(spell);
@@ -406,7 +411,7 @@ public class BardsSpells {
     private static Entry tale_of_the_dragonslayer() {
         var id = Identifier.of(MOD_ID, "tale_of_the_dragonslayer");
         var title = "Tale of the Dragon Slayer";
-        var description = "Tale that deals {damage} damage to enemies. Increases offensive stats for allies by {bonus}, also allies deal additional magic damage. Can be stacked {amplifier_cap} time.";
+        var description = "Tale that deals {damage} damage to enemies. Increases offensive stats for allies by {bonus}, also allies deal additional magic damage with arrows & melee hits. Can be stacked {amplifier_cap} time.";
         var buffEffect = BardsEffects.TALE_OF_THE_DRAGON_SLAYER;
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = buffEffect.config().firstModifier();
@@ -419,8 +424,8 @@ public class BardsSpells {
         var spellColor = Color.ARCANE.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.6F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,4);
+        var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithoutHeal);
 
         spell.impacts = List.of(damage, buff);
         bardSongWeaponSkillCooldown(spell);
@@ -445,9 +450,9 @@ public class BardsSpells {
         var spellColor = GOLD.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.3F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,3);
-        var heal = bardSongHealingImpact(0.2F);
+        var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithHeal);
+        var heal = bardSongHealingImpact(songHealing);
 
         spell.impacts = List.of(damage, buff, heal);
         bardSongWeaponSkillCooldown(spell);
@@ -472,9 +477,9 @@ public class BardsSpells {
         var spellColor = TWILIGHT.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.3F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,4);
-        var heal = bardSongHealingImpact(0.5F);
+        var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithHeal);
+        var heal = bardSongHealingImpact(songHealing);
 
         var conditionBuff = new Spell.TargetCondition();
         conditionBuff.health_percent_above = 0.5F;
@@ -507,8 +512,8 @@ public class BardsSpells {
         var spellColor = BRIGHT_BLUE.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
-        var damage = bardSongDamageImpact(spellColor,0.4F);
-        var buff = bardSongBuffImpact(spellColor,stringEffect,3);
+        var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
+        var buff = bardSongBuffImpact(spellColor,stringEffect,effectCapWithoutHeal);
 
         spell.impacts = List.of(damage, buff);
         bardSongWeaponSkillCooldown(spell);
@@ -562,7 +567,24 @@ public class BardsSpells {
         projectile.perks.pierce = 3;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
+        projectile.client_data.travel_particles = new ParticleBatch[]{
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 5,0.14F,0.15F, 0).extent(1.5F)
+                        .roll(18).color(spellColor),
+                new ParticleBatch(
+                        "more_rpg_classes:music_note",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 2,0.14F,0.15F, 0).rollOffset(180).extent(1.5F)
+                        .color(spellColor),
+                new ParticleBatch(
+                        "more_rpg_classes:music_note",
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 1,0F,0.05F, 0).extent(1.5F)
+                        .color(spellColor),
         };
         projectile.client_data.model = new Spell.ProjectileModel();
         projectile.client_data.model.model_id = "bards_rpg:spell_projectile/magical_ballad";
@@ -871,10 +893,27 @@ public class BardsSpells {
 
         var projectile = new Spell.ProjectileData();
         projectile.homing_angle = 0F;
-        projectile.perks.pierce = 99;
+        projectile.perks.pierce = 999999;
         projectile.client_data = new Spell.ProjectileData.Client();
         projectile.client_data.light_level = 12;
-        projectile.client_data.travel_particles = new ParticleBatch[] {
+        projectile.client_data.travel_particles = new ParticleBatch[]{
+                new ParticleBatch(
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.SPARK,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
+                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 5,0.14F,0.15F, 0).extent(1.5F)
+                        .roll(18).color(spellColor),
+                new ParticleBatch(
+                        "more_rpg_classes:music_note",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 2,0.14F,0.15F, 0).rollOffset(180).extent(1.5F)
+                        .color(spellColor),
+                new ParticleBatch(
+                        "more_rpg_classes:music_note",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        ParticleBatch.Rotation.LOOK, 1,0F,0.05F, 0).extent(1.5F)
+                        .color(spellColor),
         };
         projectile.client_data.model = new Spell.ProjectileModel();
         projectile.client_data.model.model_id = "bards_rpg:spell_projectile/crescendo";
@@ -885,14 +924,14 @@ public class BardsSpells {
         projectile.hitbox = new Spell.ProjectileData.HitBox(3.0F, 0.8F);
         spell.deliver.projectile.projectile = projectile;
 
-        var damage = SpellBuilder.Impacts.damage(1.0F, 0.0F);
+        var damage = SpellBuilder.Impacts.damage(0.8F, 0.0F);
         damage.particles = new ParticleBatch[] {
                 musicImpactParticles(0.5F).extent(0.5F).color(spellColor),
         };
         //CHANGE SOUND
         damage.sound = new Sound(BardsSounds.bard_impact.id());
 
-        var debuff = SpellBuilder.Impacts.effectAdd(BardsEffects.BALLAD.id.toString(),8,1,3);
+        var debuff = SpellBuilder.Impacts.effectAdd(BardsEffects.CRESCENDO.id.toString(),2.5F,1,3);
         debuff.school = SpellSchools.HEALING;
         debuff.action.status_effect.amplifier_cap_power_multiplier = 0.15F;
         debuff.particles = new ParticleBatch[] {
@@ -955,7 +994,7 @@ public class BardsSpells {
 
         spell.impacts = List.of(custom);
 
-        SpellBuilder.Cost.cooldown(spell, 1);
+        SpellBuilder.Cost.cooldown(spell, 1.5F);
 
         return new Entry(id, spell, title, description);
     }
@@ -975,8 +1014,7 @@ public class BardsSpells {
         spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
         spell.deliver.stash_effect.id = stashEffect.id.toString();
         spell.deliver.stash_effect.consume = 0;
-        spell.deliver.stash_effect.triggers = List.of(SpellBuilder.Triggers.meleeAttackImpact(), SpellBuilder.Triggers.arrowHit(),
-                SpellBuilder.Triggers.spellHit(1.0F,null));
+        spell.deliver.stash_effect.triggers = List.of(SpellBuilder.Triggers.meleeAttackImpact(), SpellBuilder.Triggers.arrowHit());
 
         var damage = new Spell.Impact();
         damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
@@ -1065,7 +1103,7 @@ public class BardsSpells {
     private static Entry spellthief() {
         var id = Identifier.of(MOD_ID, "spellthief");
         var title = "Spellthief";
-        var description = "On spell impact: {trigger_chance} chance to steal beneficial status effects and to cast a random spell from the damaged entity.";
+        var description = "On spell impact: {trigger_chance_0} chance to steal beneficial status effects and to cast a random spell from the damaged entity.";
         var spell = SpellBuilder.createSpellPassive();
         spell.school = SpellSchools.ARCANE;
         spell.range = 7F;

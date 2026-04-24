@@ -12,7 +12,14 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.more_rpg_classes.custom.SpellBuilderHelper;
+import net.more_rpg_classes.effect.MRPGCEffects;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
+import net.spell_engine.api.effect.CustomParticleStatusEffect;
+import net.spell_engine.api.render.BuffParticleSpawner;
+import net.spell_engine.api.render.StunParticleSpawner;
+import net.spell_engine.client.util.Color;
+import net.spell_engine.fx.SpellEngineParticles;
 import net.spell_engine.rpg_series.item.Armor;
 import net.spell_engine.client.gui.SpellTooltip;
 
@@ -32,27 +39,54 @@ public class BardClient {
         if (FabricLoader.getInstance().isModLoaded("armory_rpgs") || BardsMod.tweaksConfig.value.ignore_items_required_mods) {
             registerArmorRenderer(Armors.storytellerArmorSet.armorSet(), CustomArmorRenderer::storyteller_armor);
         }
-        registerEffectRenderers();
+        registerEffectParticles();
         CustomModelStatusEffect.register(BardsEffects.ARMYS_PAEON_STASH.effect, new ArmysPaeonCircleRenderer());
         ParticleFactoryRegistry.getInstance().register(BardParticles.SPELL_STOLEN_POPUP, new PopupParticle.Factory());
     }
     private static void registerArmorRenderer(Armor.Set set, Supplier<AzArmorRenderer> armorRendererSupplier) {
         AzArmorRendererRegistry.register(armorRendererSupplier, set.head, set.chest, set.legs, set.feet);
     }
-    private static void registerEffectRenderers() {
-        /*
+    private static void registerEffectParticles() {
         CustomParticleStatusEffect.register(
-                BardsEffects.ARMYS_PAEON_STASH.effect,
-                new BuffParticleSpawner(
-                        new ParticleBatch(
-                                SpellEngineParticles.area_circle_1.id().toString(),
-                                ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.FEET,
-                                1F, 0.3F, 0.8F)
-                                .color(Color.HOLY.toRGBA())
-                                .scale(4.5F)
-                                .followEntity(true)
-                ).withFrequency(30).scaleWithAmplifier(false)
+                BardsEffects.CRESCENDO.effect,
+                new StunParticleSpawner()
         );
-         */
+        CustomParticleStatusEffect.register(
+                BardsEffects.ECLIPSE_MANTLE.effect,
+                new BuffParticleSpawner(
+                        BuffParticleSpawner.defaultBatch(
+                                SpellEngineParticles.area_circle_1.id().toString(),
+                                1,
+                                SpellBuilderHelper.MAGENTA.toRGBA()).followEntity(true)
+                ).invertFrequency().withFrequency(20).scaleWithAmplifier(false)
+        );
+        CustomParticleStatusEffect.register(
+                BardsEffects.HYMN_OF_THE_GOLDEN_LIGHT.effect,
+                new BuffParticleSpawner(
+                        BuffParticleSpawner.defaultBatch(
+                                SpellEngineParticles.area_circle_1.id().toString(),
+                                1,
+                                SpellBuilderHelper.GOLD.toRGBA()).followEntity(true)
+                ).withFrequency(20).scaleWithAmplifier(false)
+        );
+        CustomParticleStatusEffect.register(
+                BardsEffects.BENEFICIAL_WARDENS_PAEAN.effect,
+                new BuffParticleSpawner(
+                        BuffParticleSpawner.defaultBatch(
+                                "more_rpg_classes:music_note",
+                                5,
+                                SpellBuilderHelper.CYAN.toRGBA()).followEntity(true).extent(1)
+                ).withFrequency(10).scaleWithAmplifier(false)
+        );
+        CustomParticleStatusEffect.register(
+                BardsEffects.HARMFUL_WARDENS_PAEAN.effect,
+                new BuffParticleSpawner(
+                        BuffParticleSpawner.defaultBatch(
+                                "more_rpg_classes:music_note",
+                                5,
+                                Color.RAGE.toRGBA()).followEntity(true).extent(1)
+                ).withFrequency(10).scaleWithAmplifier(false)
+        );
+
     }
 }

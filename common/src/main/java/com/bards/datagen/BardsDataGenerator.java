@@ -12,8 +12,13 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
@@ -51,6 +56,7 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(BardVanillaAdvancementProvider::new);
         pack.addProvider(SoundGen::new);
         pack.addProvider(SpellTagGenerator::new);
+        pack.addProvider(UnsmeltGenerator::new);
     }
     public static class SpellGen extends SpellGenerator {
         public SpellGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -122,6 +128,9 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             }
             // Equipment Set
             translationBuilder.add("equipment_set." + MOD_ID + ".storyteller", "The Storyteller");
+            ///Entities
+            translationBuilder.add("entity.minecraft.villager.luthier", "Luthier");
+            translationBuilder.add("entity.minecraft.villager:luthier", "Luthier");
         }
     }
 
@@ -243,18 +252,23 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
             var spellInfinityTag = getOrCreateTagBuilder(SpellEngineItemTags.ENCHANTABLE_SPELL_INFINITY);
             spellInfinityTag.addOptionalTag(BardTags.LUTES);
             spellInfinityTag.addOptionalTag(BardTags.LYRES);
+            spellInfinityTag.addOptionalTag(BardTags.HARP_CROSSBOWS);
             var spellHasteTag = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.HASTE);
             spellHasteTag.addOptionalTag(BardTags.LUTES);
             spellHasteTag.addOptionalTag(BardTags.LYRES);
+            spellHasteTag.addOptionalTag(BardTags.HARP_CROSSBOWS);
             var criticalDamageTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.CRITICAL_DAMAGE);
             criticalDamageTag.addOptionalTag(BardTags.LUTES);
             criticalDamageTag.addOptionalTag(BardTags.LYRES);
+            criticalDamageTag.addOptionalTag(BardTags.HARP_CROSSBOWS);
             var criticalChanceTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.CRITICAL_CHANCE);
             criticalChanceTag.addOptionalTag(BardTags.LUTES);
             criticalChanceTag.addOptionalTag(BardTags.LYRES);
+            criticalChanceTag.addOptionalTag(BardTags.HARP_CROSSBOWS);
             var spellPowerTag  = getOrCreateTagBuilder(SpellPowerTags.Items.Enchantable.SPELL_POWER_GENERIC);
             spellPowerTag.addOptionalTag(BardTags.LUTES);
             spellPowerTag.addOptionalTag(BardTags.LYRES);
+            spellPowerTag.addOptionalTag(BardTags.HARP_CROSSBOWS);
             var unbreakingTag = getOrCreateTagBuilder(ItemTags.DURABILITY_ENCHANTABLE);
             unbreakingTag.addOptionalTag(BardTags.LUTES);
             unbreakingTag.addOptionalTag(BardTags.LYRES);
@@ -333,5 +347,82 @@ public class BardsDataGenerator implements DataGeneratorEntrypoint {
 
         }
     }
+    public static class UnsmeltGenerator extends FabricRecipeProvider {
+        public UnsmeltGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+            super(output, registriesFuture);
+        }
 
+        public static int UNSMELT_TIME = 300;
+
+        @Override
+        public void generate(RecipeExporter exporter) {
+            disassembleArmor(exporter, Armors.entertainerArmorSet.armorSet(), Items.LEATHER);
+            disassembleArmor(exporter, Armors.troubadourArmorSet.armorSet(), Items.GOLD_NUGGET);
+            disassembleArmor(exporter, Armors.netheriteTroubadourArmorSet.armorSet(), Items.NETHERITE_SCRAP);
+
+            disassemble(exporter,
+                    Weapons.meleeEntries.stream()
+                            .filter(entry -> entry.id().getPath().contains("gold"))
+                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                    Items.GOLD_NUGGET);
+            disassemble(exporter,
+                    Weapons.meleeEntries.stream()
+                            .filter(entry -> entry.id().getPath().contains("iron"))
+                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                    Items.IRON_NUGGET);
+            disassemble(exporter,
+                    Weapons.meleeEntries.stream()
+                            .filter(entry -> entry.id().getPath().contains("netherite"))
+                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                    Items.NETHERITE_SCRAP);
+            disassemble(exporter,
+                    Weapons.rangedEntries.stream()
+                            .filter(entry -> entry.id().getPath().contains("diamond"))
+                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                    Items.GOLD_NUGGET);
+            disassemble(exporter,
+                    Weapons.rangedEntries.stream()
+                            .filter(entry -> entry.id().getPath().contains("netherite"))
+                            .map(entry -> (ItemConvertible) entry.item()).toList(),
+                    Items.NETHERITE_SCRAP);
+        }
+
+        private static void disassembleArmor(RecipeExporter exporter, Armor.Set armorSet, Item output) {
+            FabricRecipeProvider.offerSmelting(exporter,
+                    armorSet.pieces(),
+                    RecipeCategory.MISC,
+                    output,
+                    0.1f,
+                    UNSMELT_TIME,
+                    "disassemble"
+            );
+            FabricRecipeProvider.offerBlasting(exporter,
+                    armorSet.pieces(),
+                    RecipeCategory.MISC,
+                    output,
+                    0.1f,
+                    UNSMELT_TIME / 2,
+                    "disassemble"
+            );
+        }
+
+        private static void disassemble(RecipeExporter exporter, List<ItemConvertible> items, Item output) {
+            FabricRecipeProvider.offerSmelting(exporter,
+                    items,
+                    RecipeCategory.MISC,
+                    output,
+                    0.1f,
+                    UNSMELT_TIME,
+                    "disassemble"
+            );
+            FabricRecipeProvider.offerBlasting(exporter,
+                    items,
+                    RecipeCategory.MISC,
+                    output,
+                    0.1f,
+                    UNSMELT_TIME / 2,
+                    "disassemble"
+            );
+        }
+    }
 }
