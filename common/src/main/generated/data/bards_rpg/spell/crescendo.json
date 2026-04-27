@@ -138,7 +138,6 @@
       }
     },
     {
-      "school": "spell_power:healing",
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {

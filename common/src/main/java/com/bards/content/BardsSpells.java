@@ -932,7 +932,6 @@ public class BardsSpells {
         damage.sound = new Sound(BardsSounds.bard_impact.id());
 
         var debuff = SpellBuilder.Impacts.effectAdd(BardsEffects.CRESCENDO.id.toString(),2.5F,1,3);
-        debuff.school = SpellSchools.HEALING;
         debuff.action.status_effect.amplifier_cap_power_multiplier = 0.15F;
         debuff.particles = new ParticleBatch[] {
                 new ParticleBatch(
@@ -1103,7 +1102,7 @@ public class BardsSpells {
     private static Entry spellthief() {
         var id = Identifier.of(MOD_ID, "spellthief");
         var title = "Spellthief";
-        var description = "On spell impact: {trigger_chance_0} chance to steal beneficial status effects and to cast a random spell from the damaged entity.";
+        var description = "On spell impact: {trigger_chance_1} chance to steal beneficial status effects and to cast a random spell from the damaged entity.";
         var spell = SpellBuilder.createSpellPassive();
         spell.school = SpellSchools.ARCANE;
         spell.range = 7F;

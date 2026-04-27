@@ -138,7 +138,7 @@
   "spell.bards_rpg.song_of_celerity.name": "Song of Celerity",
   "spell.bards_rpg.song_of_the_turning_sky.description": "Periodic song that deals {damage} damage to enemies. Heals allies by {heal} if they're below 50%% health. Reduces damage taken by {bonus} per stack if the ally is above 50%% health.",
   "spell.bards_rpg.song_of_the_turning_sky.name": "Song of the Turning Sky",
-  "spell.bards_rpg.spellthief.description": "On spell impact: {trigger_chance_0} chance to steal beneficial status effects and to cast a random spell from the damaged entity.",
+  "spell.bards_rpg.spellthief.description": "On spell impact: {trigger_chance_1} chance to steal beneficial status effects and to cast a random spell from the damaged entity.",
   "spell.bards_rpg.spellthief.name": "Spellthief",
   "spell.bards_rpg.starshots.description": "Arrow hits have {trigger_chance_1} chance to enhance your arrows with astral magic for {stash_duration} sec, dealing extra {damage} magic damage. Your overall pull time is heavily increased by {bonus}. ",
   "spell.bards_rpg.starshots.name": "Astral Shooting",
