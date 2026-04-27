@@ -15,7 +15,7 @@ public class LuthierSongs {
     public record Song(
             String name,
             Item heldInstrument,
-            float noteHue,
+            int noteColor,
             RegistryEntry<StatusEffect> effect,
             int effectAmplifier,
             RegistryEntry<SoundEvent> sound,
@@ -23,6 +23,6 @@ public class LuthierSongs {
     ) {}
 
     public static final List<Song> SONGS = List.of(
-            new Song(BardsEffects.TROUBADOURS_MINUET.title, Weapons.wooden_lute.item(), 0.0f, BardsEffects.TROUBADOURS_MINUET.entry, 0, BardsSounds.troubadours_minuet.entry(), 100)
+            new Song(BardsEffects.TROUBADOURS_MINUET.title, Weapons.wooden_lute.item(), 0xffd700, BardsEffects.TROUBADOURS_MINUET.entry, 0, BardsSounds.troubadours_minuet.entry(), 100)
     );
 }

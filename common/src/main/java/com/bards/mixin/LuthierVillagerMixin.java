@@ -14,7 +14,6 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,7 +25,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.registry.Registries;
 import net.minecraft.village.VillagerData;
+import net.more_rpg_classes.client.particle.MoreParticles;
+import net.more_rpg_classes.client.particle.PopupParticleEffect;
+import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.fx.ParticleHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,6 +50,12 @@ public abstract class LuthierVillagerMixin {
     @Unique private int bards_tickCounter = 0;
     @Unique private long bards_lastSoundTime = -1L;
     @Unique private long bards_hurtUntil = 0L;
+    @Unique private boolean bards_wasPlaying = false;
+
+    @Unique private boolean bards_isReacting = false;
+    @Unique private int bards_reactionTickCount = 0;
+    @Unique private int bards_nearbyLuthierId = -1;
+    @Unique private float bards_spinYaw = 0;
 
     @WrapOperation(
             method = "initBrain",
@@ -63,17 +73,26 @@ public abstract class LuthierVillagerMixin {
     private void onTick(CallbackInfo ci) {
         VillagerEntity villager = (VillagerEntity)(Object)this;
         if (!(villager.getWorld() instanceof ServerWorld serverWorld)) return;
-        if (!villager.getVillagerData().getProfession().equals(BardVillagerProfessions.LUTHIER)) return;
 
         long timeOfDay = serverWorld.getTimeOfDay() % 24000;
-        boolean isPerformanceTime = timeOfDay >= 6000 && timeOfDay < 13000;
+        boolean isPerformanceTime = timeOfDay >= 8500 && timeOfDay < 11000;
 
+        if (villager.getVillagerData().getProfession().equals(BardVillagerProfessions.LUTHIER)) {
+            bards_tickLuthier(villager, serverWorld, isPerformanceTime);
+        } else {
+            bards_tickReaction(villager, serverWorld, isPerformanceTime);
+        }
+    }
+
+    @Unique
+    private void bards_tickLuthier(VillagerEntity villager, ServerWorld serverWorld, boolean isPerformanceTime) {
         if (!isPerformanceTime) {
             if (!villager.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
                 villager.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }
             bards_tickCounter = 0;
             bards_lastSoundTime = -1L;
+            bards_wasPlaying = false;
             return;
         }
 
@@ -129,12 +148,21 @@ public abstract class LuthierVillagerMixin {
             bards_lastSoundTime = currentTime;
         }
 
+        if (!bards_wasPlaying) {
+            bards_wasPlaying = true;
+            var effectKey = song.effect().getKey();
+            if (effectKey.isPresent()) {
+                var popup = new PopupParticleEffect(MoreParticles.POPUP, effectKey.get().getValue(), false, villager.getId());
+                serverWorld.spawnParticles(popup, villager.getX(), villager.getY(), villager.getZ(), 1, 0, 0, 0, 0);
+            }
+        }
+
         if (bards_tickCounter++ % 20 != 0) return;
 
-        double px = villager.getX();
-        double py = villager.getY() + 2.2;
-        double pz = villager.getZ();
-        serverWorld.spawnParticles(ParticleTypes.NOTE, px, py, pz, 0, song.noteHue(), 0.0, 0.0, 1.0);
+        var musicNoteBatch = new ParticleBatch("more_rpg_classes:music_note",
+                ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
+                5, 0.1F, 0.2F).extent(1.0F).color(((long) song.noteColor() << 8) | 0xFFL);
+        ParticleHelper.sendBatches(villager, new ParticleBatch[]{ musicNoteBatch });
 
         Box effectBox = Box.of(villager.getPos(), 8, 4, 8);
         List<PlayerEntity> nearbyPlayers = serverWorld.getEntitiesByClass(PlayerEntity.class, effectBox, p -> true);
@@ -143,6 +171,81 @@ public abstract class LuthierVillagerMixin {
                     song.effect(), 200, song.effectAmplifier(), false, true, true
             ));
         }
+    }
+
+    @Unique
+    private void bards_tickReaction(VillagerEntity villager, ServerWorld serverWorld, boolean isPerformanceTime) {
+        if (bards_reactionTickCount++ % 20 == 0) {
+            if (!isPerformanceTime) {
+                bards_isReacting = false;
+                bards_nearbyLuthierId = -1;
+            } else {
+                VillagerEntity found = bards_findPlayingLuthier(villager, serverWorld);
+                if (found == null) {
+                    bards_isReacting = false;
+                    bards_nearbyLuthierId = -1;
+                } else {
+                    bards_nearbyLuthierId = found.getId();
+                    if (!bards_isReacting) {
+                        bards_isReacting = bards_isNitwit(villager) || villager.getRandom().nextFloat() < 0.65f;
+                    }
+                }
+            }
+        }
+
+        if (!bards_isReacting || bards_nearbyLuthierId < 0) {
+            bards_spinYaw = 0;
+            return;
+        }
+
+        if (!(serverWorld.getEntityById(bards_nearbyLuthierId) instanceof VillagerEntity luthier)) {
+            bards_isReacting = false;
+            bards_nearbyLuthierId = -1;
+            return;
+        }
+
+        boolean isNitwit = bards_isNitwit(villager);
+
+        if (isNitwit) {
+            villager.getNavigation().stop();
+            double ndx = luthier.getX() - villager.getX();
+            double ndz = luthier.getZ() - villager.getZ();
+            float lookYaw = (float)(Math.atan2(-ndx, ndz) * (180.0 / Math.PI));
+            villager.setYaw(lookYaw);
+            villager.setBodyYaw(lookYaw);
+            villager.setHeadYaw(lookYaw);
+        } else {
+            villager.getNavigation().stop();
+            bards_spinYaw += 8.0f;
+            villager.setBodyYaw(bards_spinYaw);
+            villager.setHeadYaw(bards_spinYaw);
+
+            if (bards_reactionTickCount % 30 == 0) {
+                LuthierSongs.Song song = getDailySong(luthier, serverWorld);
+                long color = ((long) song.noteColor() << 8) | 0xFFL;
+                var noteBatch = new ParticleBatch("more_rpg_classes:music_note",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        2, 0.05F, 0.2F).color(color);
+                ParticleHelper.sendBatches(villager, new ParticleBatch[]{ noteBatch });
+            }
+        }
+    }
+
+    @Unique
+    private static boolean bards_isNitwit(VillagerEntity villager) {
+        var id = Registries.VILLAGER_PROFESSION.getId(villager.getVillagerData().getProfession());
+        return id != null && "minecraft".equals(id.getNamespace()) && "nitwit".equals(id.getPath());
+    }
+
+    @Unique
+    private static VillagerEntity bards_findPlayingLuthier(VillagerEntity self, ServerWorld world) {
+        Box searchBox = Box.of(self.getPos(), 20, 8, 20);
+        List<VillagerEntity> nearby = world.getEntitiesByClass(VillagerEntity.class, searchBox,
+                e -> e != self && e.getVillagerData().getProfession().equals(BardVillagerProfessions.LUTHIER));
+        for (VillagerEntity luthier : nearby) {
+            if (self.canSee(luthier)) return luthier;
+        }
+        return null;
     }
 
     @Unique
