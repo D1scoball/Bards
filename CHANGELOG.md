@@ -1,3 +1,9 @@
+# 0.1.2 - 1.21.1
+- attempt to fix Server Crash on Neoforge
+- Improve the Luthier Villager's behaviour
+- Fix some spell translation mutators
+- Fix Crescendo's Debuff scaling with Healing Spell power instead of Arcane
+
 # 0.1.1 - 1.21.1
 - Update to Spell Engine Version 1.9.*
 - [IMPORTANT] This mod is still in beta, so sound effects and visuals might be missing

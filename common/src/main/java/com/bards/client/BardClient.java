@@ -14,7 +14,6 @@ import mod.azure.azurelibarmor.common.render.armor.AzArmorRenderer;
 import mod.azure.azurelibarmor.common.render.armor.AzArmorRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.more_rpg_classes.custom.SpellBuilderHelper;
-import net.more_rpg_classes.effect.MRPGCEffects;
 import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;

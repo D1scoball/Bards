@@ -110,15 +110,6 @@ public class BardsSpells {
         SpellBuilder.Cost.cooldown(spell, 2);
         SpellBuilder.Cost.cooldownGroupWeapon(spell);
     }
-    public static final Color GOLD = Color.from(0xffd700);
-    public static final Color CYAN = Color.from(0x00ffff);
-    public static final Color BRIGHT_GREEN = Color.from(0x8efea1);
-    public static final Color BRIGHT_BLUE = Color.from(0x83f4e6);
-    public static final Color TWILIGHT = Color.from(0xa082ce);
-    public static final Color PURPLE = Color.from(0x7c37f5);
-    public static final Color BRIGHT_PURPLE = Color.from(0xdd6af7);
-    public static final Color LIME_GREEN = Color.from(0xaffe0d);
-
     private static PlayerAnimation bardCastAnimation() {
         return new PlayerAnimation("bards_rpg:sing_channel")
                 .withEquipmentOverride(EquipmentSlot.MAINHAND, "#" + BardTags.LYRES.id().toString(), "bards_rpg:lyre_channel")
@@ -235,7 +226,7 @@ public class BardsSpells {
             return args.description()
                     .replace("{bonus}", bonus);
         };
-        var spellColor = BRIGHT_GREEN.toRGBA();
+        var spellColor = BardSongColors.troubadours_minuet.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
 
         var spell = bardSongSkill(spellColor,bardSong);
@@ -263,7 +254,7 @@ public class BardsSpells {
         };
         ///CHANGE COLOR & SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = BRIGHT_GREEN.toRGBA();
+        var spellColor = BardSongColors.wanderers_minuet.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
@@ -342,7 +333,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = LIME_GREEN.toRGBA();
+        var spellColor = BardSongColors.natures_minne.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
@@ -369,7 +360,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = BRIGHT_PURPLE.toRGBA();
+        var spellColor = BardSongColors.song_of_celerity.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
@@ -395,7 +386,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = PURPLE.toRGBA();
+        var spellColor = BardSongColors.discordant_note.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
@@ -421,7 +412,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = Color.ARCANE.toRGBA();
+        var spellColor = BardSongColors.tale_of_the_dragonslayer.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithoutHealDmg);
@@ -447,7 +438,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = GOLD.toRGBA();
+        var spellColor = BardSongColors.hymn_of_the_golden_light.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
@@ -474,7 +465,7 @@ public class BardsSpells {
         };
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = TWILIGHT.toRGBA();
+        var spellColor = BardSongColors.song_of_the_turning_sky.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
@@ -509,7 +500,7 @@ public class BardsSpells {
 
         ///CHANGE SOUND
         var stringEffect = buffEffect.id.toString();
-        var spellColor = BRIGHT_BLUE.toRGBA();
+        var spellColor = BardSongColors.canticle_of_the_tides.toRGBA();
         var bardSong = BardsSounds.troubadours_minuet.id();
         var spell = bardSongSkill(spellColor,bardSong);
         var damage = bardSongDamageImpact(spellColor,songWithHealDmg);
@@ -746,7 +737,7 @@ public class BardsSpells {
         spell.range = 12;
         spell.tier = 3;
         spell.secondary_archetype = Spell.ExtendedArchetype.ANY;
-        var spellColor = CYAN.toRGBA();
+        var spellColor = SpellBuilderHelper.CYAN.toRGBA();
 
         spell.learn = new Spell.Learn();
 
@@ -775,7 +766,7 @@ public class BardsSpells {
                         ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         30, 0.2F, 0.7F)
-                        .color(CYAN.toRGBA()),
+                        .color(SpellBuilderHelper.CYAN.toRGBA()),
                 musicImpactParticles(0.5F).extent(0.5F).color(spellColor)
         };
         damage.sound = new Sound(BardsSounds.bard_impact.id());
@@ -811,7 +802,7 @@ public class BardsSpells {
         spell.range = 5;
         spell.tier = 4;
         spell.secondary_archetype = Spell.ExtendedArchetype.ANY;
-        var spellColor = GOLD.toRGBA();
+        var spellColor = SpellBuilderHelper.GOLD.toRGBA();
 
         spell.release.animation = bardReleaseAnimation();
         spell.release.particles = new ParticleBatch[]{
@@ -836,7 +827,7 @@ public class BardsSpells {
                         ).id().toString(),
                         ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
                         30, 0.2F, 0.2F)
-                        .color(GOLD.toRGBA()),
+                        .color(SpellBuilderHelper.GOLD.toRGBA()),
                 new ParticleBatch(
                         SpellEngineParticles.area_circle_1.id().toString(),
                         ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.FEET,
@@ -844,7 +835,7 @@ public class BardsSpells {
                         .followEntity(true)
                         .scale(1.0F)
                         .maxAge(0.6F)
-                        .color(GOLD.toRGBA()),
+                        .color(SpellBuilderHelper.GOLD.toRGBA()),
                 musicImpactParticles(0.5F).extent(1.5F).color(spellColor)
         };
         buff.sound = new Sound(BardsSounds.armys_paeon_buff.id());
@@ -875,7 +866,7 @@ public class BardsSpells {
         spell.range = 30;
         spell.tier = 4;
         spell.secondary_archetype = Spell.ExtendedArchetype.ANY;
-        var spellColor = GOLD.toRGBA();
+        var spellColor = SpellBuilderHelper.GOLD.toRGBA();
 
         spell.learn = new Spell.Learn();
 
@@ -965,7 +956,7 @@ public class BardsSpells {
         spell.school = SpellSchools.GENERIC;
         spell.range = 0;
         spell.tier = 1;
-        var spellColor = GOLD.toRGBA();
+        var spellColor = SpellBuilderHelper.GOLD.toRGBA();
 
         spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
         spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
@@ -987,7 +978,7 @@ public class BardsSpells {
                 ).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         20, 0.3F, 0.5F)
-                        .color(GOLD.toRGBA()),
+                        .color(SpellBuilderHelper.GOLD.toRGBA()),
                 musicImpactParticles(0.5F).extent(0.25F).color(spellColor)
         };
 
@@ -1055,7 +1046,7 @@ public class BardsSpells {
                         1, 0, 0)
                         .scale(0.5F)
                         .followEntity(true)
-                        .color(BRIGHT_BLUE.toRGBA())
+                        .color(SpellBuilderHelper.CYAN.toRGBA())
         };
 
         spell.target.type = Spell.Target.Type.AREA;
@@ -1258,7 +1249,7 @@ public class BardsSpells {
         return new Entry(id, spell, title, description).mutator(mutator);
     }
     
-    public static final Color STARSHOT_COLOR = GOLD.blend(Color.WHITE, 0.5F);
+    public static final Color STARSHOT_COLOR = SpellBuilderHelper.GOLD.blend(Color.WHITE, 0.5F);
     public static final Entry starshots = add(starshots());
     private static Entry starshots() {
         var id = Identifier.of(MOD_ID, "starshots");
