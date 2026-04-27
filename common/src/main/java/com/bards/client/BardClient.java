@@ -1,6 +1,7 @@
 package com.bards.client;
 
 import com.bards.BardsMod;
+import com.bards.block.BardBlocks;
 import com.bards.client.armor.CustomArmorRenderer;
 import com.bards.client.effect.ArmysPaeonCircleRenderer;
 import com.bards.client.particle.PopupParticle;
@@ -27,6 +28,7 @@ import java.util.function.Supplier;
 
 public class BardClient {
     public static void init() {
+        BardBlocks.registerClient();
         for (var spell: BardsSpells.entries) {
             if (spell.mutator() != null) {
                 SpellTooltip.addDescriptionMutator(spell.id(), spell.mutator());

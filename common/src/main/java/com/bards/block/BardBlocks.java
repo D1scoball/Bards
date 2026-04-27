@@ -1,13 +1,10 @@
 package com.bards.block;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.enums.NoteBlockInstrument;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -52,6 +49,10 @@ public class BardBlocks {
         ItemGroupEvents.modifyEntriesEvent(com.bards.item.Group.KEY).register(content -> {
             for (var e : all) content.add(e.item());
         });
-        BlockRenderLayerMap.INSTANCE.putBlock(MUSIC_STAND.block(), RenderLayer.getCutout());
+    }
+
+    public static void registerClient() {
+        net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
+                MUSIC_STAND.block(), net.minecraft.client.render.RenderLayer.getCutout());
     }
 }
